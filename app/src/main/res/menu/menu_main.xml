@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+
+        <item
+            android:id="@+id/navigationMenuUser"
+            android:title="@string/str_menu_user_title">
+
+            <menu>
+
+                <group android:checkableBehavior="single">
+
+                    <item
+                        android:id="@+id/navigationMenuMap"
+                        android:icon="@drawable/ic_menu_map"
+                        android:title="@string/str_menu_map" />
+
+                    <item
+                        android:id="@+id/navigationMenuSearch"
+                        android:icon="@drawable/ic_menu_search"
+                        android:title="@string/str_menu_search" />
+
+                    <item
+                        android:id="@+id/navigationMenuFavorites"
+                        android:icon="@drawable/ic_menu_favorites"
+                        android:title="@string/str_menu_favorites" />
+
+                    <item
+                        android:id="@+id/navigationMenuSettings"
+                        android:icon="@drawable/ic_menu_settings"
+                        android:title="@string/str_menu_settings" />
+
+                </group>
+
+            </menu>
+
+        </item>
+
+        <item
+            android:id="@+id/navigationMenuAgency"
+            android:title="@string/str_menu_agency_title"
+            android:visible="false">
+
+            <menu>
+
+
+
+            </menu>
+
+        </item>
+
+</menu>

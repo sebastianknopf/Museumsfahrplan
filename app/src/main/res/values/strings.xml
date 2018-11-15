@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">Museums Fahrplan</string>
+    <string name="str_menu_user_title">Fahrplanauskunft</string>
+    <string name="str_menu_map">Karte</string>
+    <string name="str_menu_search">Suche</string>
+    <string name="str_menu_favorites">Favoriten</string>
+    <string name="str_menu_settings">Einstellungen</string>
+    <string name="str_menu_agency_title">Fahrbetrieb</string>
+</resources>

@@ -1,0 +1,14 @@
+<resources>
+
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="AppTheme.DAY">
+    </style>
+
+    <style name="AppTheme.DAY" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="colorPrimary">@color/colorPrimaryDAY</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDarkDAY</item>
+        <item name="colorAccent">@color/colorAccentDAY</item>
+        <item name="android:windowBackground">@color/windowBackgroundColorDAY</item>
+    </style>
+
+</resources>

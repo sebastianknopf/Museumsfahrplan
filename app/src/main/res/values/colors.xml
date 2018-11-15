@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorBackgroundICON">#308B22</color>
+
+    <color name="colorPrimaryDAY">#075b2c</color>
+    <color name="colorPrimaryDarkDAY">#003002</color>
+    <color name="textColorPrimaryDAY">#232323</color>
+    <color name="colorAccentDAY">#3da428</color>
+    <color name="windowBackgroundColorDAY">#FBFBFB</color>
+</resources>
