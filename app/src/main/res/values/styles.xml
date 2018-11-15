@@ -11,4 +11,8 @@
         <item name="android:windowBackground">@color/windowBackgroundColorDAY</item>
     </style>
 
+    <style name="AppTheme.LAUNCHER" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="android:windowBackground">@drawable/launcher_background</item>
+    </style>
+
 </resources>

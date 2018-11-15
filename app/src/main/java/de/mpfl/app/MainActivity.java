@@ -17,6 +17,9 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        // set theme before doing any other thing
+        this.setTheme(R.style.AppTheme);
+
         super.onCreate(savedInstanceState);
         this.components = DataBindingUtil.setContentView(this, R.layout.activity_main);
 
