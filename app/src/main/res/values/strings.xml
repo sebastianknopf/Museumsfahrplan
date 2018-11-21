@@ -5,5 +5,6 @@
     <string name="str_menu_search">Suche</string>
     <string name="str_menu_favorites">Favoriten</string>
     <string name="str_menu_settings">Einstellungen</string>
+    <string name="str_menu_information">Informationen</string>
     <string name="str_menu_agency_title">Fahrbetrieb</string>
 </resources>
