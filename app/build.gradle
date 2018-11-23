@@ -48,8 +48,7 @@ dependencies {
     // external libraries for mfpl
     implementation 'org.osmdroid:osmdroid-android:6.0.2'
 
-    implementation 'com.squareup.retrofit2:retrofit:2.1.0'
-    implementation 'com.squareup.retrofit2:converter-gson:2.1.0'
+    implementation project(':staticnet')
 
     // required for test implementation
     testImplementation 'junit:junit:4.12'
