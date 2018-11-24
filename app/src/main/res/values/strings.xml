@@ -7,4 +7,13 @@
     <string name="str_menu_settings">Einstellungen</string>
     <string name="str_menu_information">Informationen</string>
     <string name="str_menu_agency_title">Fahrbetrieb</string>
+
+    <string name="open_drawer">open drawer</string>
+    <string name="close_drawer">close drawer</string>
+
+    <string-array name="str_array_information_categories">
+        <item>Allgemeine Informationen</item>
+        <item>Datenschutz</item>
+        <item>OpenSource Lizenzen</item>
+    </string-array>
 </resources>
