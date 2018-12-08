@@ -1,4 +1,12 @@
 <resources>
+    <!-- Default Strings -->
+    <string name="str_enable">Freigeben</string>
+    <string name="str_activate">Aktivieren</string>
+    <string name="str_good_morning">Guten Morgen</string>
+    <string name="str_good_afternoon">Guten Tag</string>
+    <string name="str_goog_evening">Guten Abend</string>
+
+    <!-- MainMenu -->
     <string name="app_name">Museums Fahrplan</string>
     <string name="str_menu_user_title">Fahrplanauskunft</string>
     <string name="str_menu_map">Karte</string>
@@ -8,9 +16,13 @@
     <string name="str_menu_information">Informationen</string>
     <string name="str_menu_agency_title">Fahrbetrieb</string>
 
-    <string name="open_drawer">open drawer</string>
-    <string name="close_drawer">close drawer</string>
+    <!-- MapOverviewFragment -->
+    <string name="str_location_access_error">Leider können wir nicht auf den Standort zugreifen!</string>
+    <string name="str_location_provider_error">Leider ist GPS deaktiviert!</string>
+    <string name="str_zoom_level_hint">Zoomen Sie in die Karte, um mehr zu sehen</string>
+    <string name="str_no_departures_found">Leider wurden keine Abfahrten gefunden!</string>
 
+    <!-- InfoListFragment -->
     <string-array name="str_array_information_categories">
         <item>Allgemeine Informationen</item>
         <item>Datenschutz</item>

@@ -1,21 +1,17 @@
 package de.mpfl.app;
 
 import android.databinding.DataBindingUtil;
-import android.os.Build;
-import android.preference.PreferenceActivity;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
-import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBar;
-import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
-import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.MenuItem;
-import android.view.View;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import de.mpfl.app.databinding.ActivityMainBinding;
 import de.mpfl.app.fragments.FavoritesFragment;
@@ -25,11 +21,13 @@ import de.mpfl.app.fragments.MapOverviewFragment;
 import de.mpfl.app.fragments.PreferencesFragment;
 import de.mpfl.app.fragments.SearchInputFragment;
 import de.mpfl.app.utils.NavigationManager;
+import de.mpfl.app.utils.SettingsManager;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, InfoListFragment.InfoListFragmentListener {
 
     private ActivityMainBinding components;
     private NavigationManager navigationManager;
+    private SettingsManager settingsManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,6 +41,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         // setup navigation manager
         this.navigationManager = new NavigationManager(this, this.components.contentView.getId(), R.drawable.ic_menu_toggle);
 
+        // setup settings manager
+        this.settingsManager = new SettingsManager(this);
+
         // set toolbar as actionbar
         this.setSupportActionBar(this.components.mainToolbar);
 
@@ -52,11 +53,44 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         // select the first item by default
         this.components.navigationView.setCheckedItem(R.id.navigationMenuMap);
         this.onNavigationItemSelected(this.components.navigationView.getMenu().findItem(R.id.navigationMenuMap));
+
+        // set title the first time when starting the app
+        try {
+            Date currentDate = new Date();
+            String currentDateString = new SimpleDateFormat("dd.MM.yyyy").format(currentDate);
+
+            Date morning = new SimpleDateFormat("HH:mm:ss dd.MM.yyyy").parse("00:00:01 " + currentDateString);
+            Date afternoon = new SimpleDateFormat("HH:mm:ss dd.MM.yyyy").parse("11:00:00 " + currentDateString);
+            Date evening = new SimpleDateFormat("HH:mm:ss dd.MM.yyyy").parse("17:00:00 " + currentDateString);
+
+            String titleString = "";
+            if(currentDate.after(morning)) {
+                titleString = this.getString(R.string.str_good_morning);
+
+                if(currentDate.after(afternoon)) {
+                    titleString = this.getString(R.string.str_good_afternoon);
+
+                    if(currentDate.after(evening)) {
+                        titleString = this.getString(R.string.str_goog_evening);
+                    }
+                }
+            }
+
+            this.setTitle(titleString);
+
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
     }
 
     // make navigation manager accessible for further purposes
     public NavigationManager getNavigationManager() {
         return this.navigationManager;
+    }
+
+    // make settings manager accessible for other components
+    public SettingsManager getSettingsManager() {
+        return this.settingsManager;
     }
 
     @Override

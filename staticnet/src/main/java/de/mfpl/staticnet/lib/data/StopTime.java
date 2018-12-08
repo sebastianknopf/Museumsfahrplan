@@ -14,13 +14,13 @@ public final class StopTime {
     private String arrivalTime;
 
     @SerializedName("departure_time")
-    private ChangeType departureTime;
+    private String departureTime;
 
     @SerializedName("pickup_type")
     private ChangeType pickupType;
 
     @SerializedName("drop_off_type")
-    private String dropOffType;
+    private ChangeType dropOffType;
 
     @SerializedName("stop")
     private Stop stop;
@@ -37,7 +37,7 @@ public final class StopTime {
         return arrivalTime;
     }
 
-    public ChangeType getDepartureTime() {
+    public String getDepartureTime() {
         return departureTime;
     }
 
@@ -45,7 +45,7 @@ public final class StopTime {
         return pickupType;
     }
 
-    public String getDropOffType() {
+    public ChangeType getDropOffType() {
         return dropOffType;
     }
 

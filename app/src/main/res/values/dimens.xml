@@ -2,4 +2,8 @@
 <resources>
     <dimen name="text_margin">16dp</dimen>
     <dimen name="default_app_padding">16dp</dimen>
+    <dimen name="default_list_padding">8dp</dimen>
+    <dimen name="default_text_small">13sp</dimen>
+    <dimen name="default_text_medium">16sp</dimen>
+    <dimen name="default_text_large">20sp</dimen>
 </resources>

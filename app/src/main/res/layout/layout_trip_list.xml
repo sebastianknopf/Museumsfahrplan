@@ -1,0 +1,45 @@
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:id="@+id/layProgressView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <ProgressBar
+                android:id="@+id/progressBar"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_margin="16dp"
+                android:layout_centerInParent="true"
+                style="?android:attr/progressBarStyleSmall"/>
+
+        </RelativeLayout>
+
+        <LinearLayout
+            android:id="@+id/layErrorView"
+            android:layout_width="match_parent"
+            android:layout_height="132dp"
+            android:visibility="gone">
+
+            <TextView
+                android:id="@+id/lblErrorText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+        </LinearLayout>
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/rcvTripList"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scrollbars="vertical"
+            android:visibility="gone" />
+
+    </RelativeLayout>
+
+</layout>

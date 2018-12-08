@@ -1,10 +1,45 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools">
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <variable name="fragment" type="de.mpfl.app.fragments.MapOverviewFragment" />
+
+    </data>
 
     <FrameLayout
+        android:id="@+id/fragmentLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:context="de.mpfl.app.fragments.MapOverviewFragment">
+
+        <android.support.design.widget.CoordinatorLayout
+            android:id="@+id/layCoordinatorParent"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <include
+                android:id="@+id/mapViewHolder"
+                layout="@layout/layout_map_view" />
+
+            <include
+                android:id="@+id/bottomSheetHolder"
+                layout="@layout/layout_map_bottom_sheet" />
+
+                <android.support.design.widget.FloatingActionButton
+                    android:id="@+id/fabLocation"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="16dp"
+                    android:layout_marginBottom="56dp"
+                    android:visibility="invisible"
+                    android:onClick="@{fragment::fabLocationClick}"
+                    android:src="@drawable/ic_current_location"
+                    app:layout_anchor="@id/bottomSheetHolder"
+                    app:layout_anchorGravity="top|end" />
+
+        </android.support.design.widget.CoordinatorLayout>
 
     </FrameLayout>
 

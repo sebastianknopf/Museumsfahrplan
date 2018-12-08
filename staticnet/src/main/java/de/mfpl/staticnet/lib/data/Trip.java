@@ -2,6 +2,8 @@ package de.mfpl.staticnet.lib.data;
 
 import com.google.gson.annotations.SerializedName;
 
+import java.util.List;
+
 public final class Trip {
 
     @SerializedName("trip_id")
@@ -36,6 +38,9 @@ public final class Trip {
 
     @SerializedName("shape")
     private Shape shape;
+
+    @SerializedName("stop_times")
+    private List<StopTime> stopTimes;
 
     public String getTripId() {
         return tripId;
@@ -79,6 +84,14 @@ public final class Trip {
 
     public Shape getShape() {
         return shape;
+    }
+
+    public List<StopTime> getStopTimes() {
+        return stopTimes;
+    }
+
+    public void setStopTimes(List<StopTime> stopTimes) {
+        this.stopTimes = stopTimes;
     }
 
     public enum Direction {

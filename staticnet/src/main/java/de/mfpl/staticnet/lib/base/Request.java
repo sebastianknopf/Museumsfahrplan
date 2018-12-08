@@ -97,6 +97,9 @@ public final class Request {
         @SerializedName("include_full_stop_times")
         private boolean includeFullStopTimes;
 
+        @SerializedName("limit")
+        private int limit = 999;
+
         public boolean isIncludeRoutes() {
             return includeRoutes;
         }
@@ -151,12 +154,24 @@ public final class Request {
             return this;
         }
 
+        public int getLimit() {
+            return this.limit;
+        }
+
+        public Options setLimit(int limit) {
+            this.limit = limit;
+            return this;
+        }
+
     }
 
     public final static class Filter {
 
         @SerializedName("date")
         private Date date;
+
+        @SerializedName("time")
+        private String time;
 
         @SerializedName("route_types")
         private int[] routeTypes;
@@ -176,6 +191,15 @@ public final class Request {
 
         public Filter setRouteTypes(int[] routeTypes) {
             this.routeTypes = routeTypes;
+            return this;
+        }
+
+        public String getTime() {
+            return this.time;
+        }
+
+        public Filter setTime(String time) {
+            this.time = time;
             return this;
         }
 

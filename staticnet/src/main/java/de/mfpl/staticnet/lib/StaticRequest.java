@@ -3,8 +3,6 @@ package de.mfpl.staticnet.lib;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
-import java.util.concurrent.TimeUnit;
-
 import de.mfpl.staticnet.lib.base.Container;
 import de.mfpl.staticnet.lib.base.Delivery;
 import de.mfpl.staticnet.lib.base.Request;
@@ -19,7 +17,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public final class StaticRequest {
 
-    private final static String API_ENDPOINT = "https://gtfs.swexp.de/w/";
+    private final static String API_ENDPOINT = "http://gtfs.swexp.de/w/";
 
     private Listener listener;
     private String appId = "";
@@ -29,9 +27,10 @@ public final class StaticRequest {
     private StaticAPI createClient() {
         Gson gson = new GsonBuilder().setLenient().create();
 
+        ///do NOT add custom client! This seems to increase the loading speed significantly!!!
         OkHttpClient okHttpClient = new OkHttpClient.Builder()
-                                        .readTimeout(60, TimeUnit.SECONDS)
-                                        .connectTimeout(60, TimeUnit.SECONDS)
+                                        //.readTimeout(60, TimeUnit.SECONDS)
+                                        //.connectTimeout(60, TimeUnit.SECONDS)
                                         .build();
 
         Retrofit retrofit = new Retrofit.Builder().baseUrl(API_ENDPOINT)
@@ -69,7 +68,6 @@ public final class StaticRequest {
                 public void onResponse(Call<Container> call, Response<Container> response) {
                     if(response.isSuccessful()) {
                         Delivery delivery = response.body().getDelivery();
-
                         if(delivery.getError() == null) {
                             triggerListenerSuccess(delivery);
                         } else {
@@ -112,8 +110,9 @@ public final class StaticRequest {
         }
     }
 
-    public void setListener(Listener listener) {
+    public StaticRequest setListener(Listener listener) {
         this.listener = listener;
+        return this;
     }
 
     public void setAppId(String appId) {
@@ -186,10 +185,11 @@ public final class StaticRequest {
         request.setStopId(stopId);
 
         Request.Options options = new Request.Options();
-        options.setIncludeFullStopTimes(true);
+        //options.setIncludeFullStopTimes(true);
         options.setIncludeStops(true);
         options.setIncludeRoutes(true);
         options.setIncludeAgency(true);
+        options.setLimit(10);
 
         Container requestContainer = this.createRequestContainer(request, options, filter);
 

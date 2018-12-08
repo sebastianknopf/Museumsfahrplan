@@ -1,0 +1,58 @@
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <android.support.constraint.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/default_list_padding"
+        android:background="#eeeeee">
+
+        <TextView
+            android:id="@+id/lblRouteName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/lblAgencyName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/colorAccentDAY"
+            android:textAppearance="@style/TextAppearance.AppCompat.Small"
+            android:visibility="gone"
+            app:layout_constraintTop_toBottomOf="@id/lblRouteName"
+            app:layout_constraintBottom_toTopOf="@id/lblRouteDescription" />
+
+        <TextView
+            android:id="@+id/lblRouteDescription"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="@style/TextAppearance.AppCompat.Small"
+            android:visibility="gone"
+            app:layout_constraintTop_toBottomOf="@id/lblAgencyName"
+            app:layout_constraintBottom_toTopOf="@id/lblDepartureRealtimeText"/>
+
+        <TextView
+            android:id="@+id/lblInfoURL"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/colorAccentDAY"
+            android:visibility="gone"
+            app:layout_constraintTop_toBottomOf="@id/lblRouteDescription"
+            app:layout_constraintLeft_toLeftOf="parent" />
+
+        <TextView
+            android:id="@+id/lblInfoPhone"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/colorAccentDAY"
+            android:layout_marginLeft="11dp"
+            android:visibility="gone"
+            app:layout_constraintTop_toBottomOf="@id/lblRouteDescription"
+            app:layout_constraintLeft_toRightOf="@id/lblInfoURL"/>
+
+
+    </android.support.constraint.ConstraintLayout>
+
+</layout>
