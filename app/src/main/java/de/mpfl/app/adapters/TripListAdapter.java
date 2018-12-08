@@ -25,24 +25,28 @@ public final class TripListAdapter extends RecyclerView.Adapter<RecyclerView.Vie
     private List<Object> items;
 
     public TripListAdapter(List<Trip> tripList) {
-        List<Route> routeList = new ArrayList<>();
+        List<String> routeList = new ArrayList<>();
         for(Trip trip : tripList) {
             if(trip.getRoute() == null) {
                 this.items = new ArrayList<>(tripList);
                 return;
             }
 
-            if(!routeList.contains(trip.getRoute())) {
-                routeList.add(trip.getRoute());
+            if(!routeList.contains(trip.getRoute().getRouteId())) {
+                routeList.add(trip.getRoute().getRouteId());
             }
         }
 
         this.items = new ArrayList<>();
-        for(Route route : routeList) {
-            this.items.add(route);
-
+        for(String route : routeList) {
+            boolean routeIncluded = false;
             for(Trip trip : tripList) {
-                if(trip.getRoute().equals(route)) {
+                if(trip.getRoute().getRouteId().equals(route)) {
+                    if(!routeIncluded) {
+                        this.items.add(trip.getRoute());
+                        routeIncluded = true;
+                    }
+
                     this.items.add(trip);
                 }
             }

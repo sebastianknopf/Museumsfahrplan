@@ -2,7 +2,7 @@ package de.mfpl.staticnet.lib.data;
 
 import com.google.gson.annotations.SerializedName;
 
-public final class Route {
+public final class Route implements Comparable<Route> {
 
     @SerializedName("route_id")
     private String routeId;
@@ -79,6 +79,11 @@ public final class Route {
 
     public Agency getAgency() {
         return agency;
+    }
+
+    @Override
+    public int compareTo(Route route) {
+        return route.getRouteId().equals(this.routeId) ? 0 : 1;
     }
 
     public enum RouteType {

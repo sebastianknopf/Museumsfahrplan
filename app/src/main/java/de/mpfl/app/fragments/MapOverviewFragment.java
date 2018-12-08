@@ -20,7 +20,6 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -218,8 +217,6 @@ public class MapOverviewFragment extends Fragment implements LocationListener, M
         CameraPosition cameraPosition = this.currentMap.getCameraPosition();
 
         if(cameraPosition.zoom > 11.0) {
-            this.dismissSnackbar();
-
             StaticRequest staticRequest = new StaticRequest();
             staticRequest.setAppId(this.getString(R.string.MFPL_APP_ID));
             staticRequest.setApiKey(this.getString(R.string.MFPL_API_KEY));
@@ -243,15 +240,10 @@ public class MapOverviewFragment extends Fragment implements LocationListener, M
 
                 @Override
                 public void onError(Throwable throwable) {
-                    Log.d(TAG, "some error in request...!");
                 }
             }).loadStops(new Position().setLatitude(cameraPosition.target.getLatitude()).setLongitude(cameraPosition.target.getLongitude()), 10000, filter);
         } else {
             this.currentMap.clear();
-
-            if(this.snackbar == null || !this.snackbar.isShown()) {
-                this.displaySnackbar(this.components.fragmentLayout, R.string.str_zoom_level_hint, Snackbar.LENGTH_LONG);
-            }
         }
     }
 
