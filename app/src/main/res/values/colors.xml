@@ -2,9 +2,15 @@
 <resources>
     <color name="colorBackgroundICON">#308B22</color>
 
+    <!-- Theme Colors DAY -->
     <color name="colorPrimaryDAY">#075b2c</color>
     <color name="colorPrimaryDarkDAY">#003002</color>
     <color name="textColorPrimaryDAY">#232323</color>
     <color name="colorAccentDAY">#3da428</color>
     <color name="windowBackgroundColorDAY">#FBFBFB</color>
+
+    <!-- Others -->
+    <color name="colorTextAccent">@color/colorAccentDAY</color>
+    <color name="colorTextLight">#9f9f9f</color>
+    <color name="colorBackgroundLightGray">#fafafa</color>
 </resources>

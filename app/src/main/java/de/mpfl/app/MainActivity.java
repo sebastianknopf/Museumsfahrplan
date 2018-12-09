@@ -53,8 +53,24 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         // select the first item by default
         this.components.navigationView.setCheckedItem(R.id.navigationMenuMap);
         this.onNavigationItemSelected(this.components.navigationView.getMenu().findItem(R.id.navigationMenuMap));
+    }
 
-        // set title the first time when starting the app
+    // make navigation manager accessible for further purposes
+    public NavigationManager getNavigationManager() {
+        return this.navigationManager;
+    }
+
+    // make settings manager accessible for other components
+    public SettingsManager getSettingsManager() {
+        return this.settingsManager;
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        // set title the first time when (re-)starting the app
+        // moved from onCreate to onResume to ensure the display is always correct
         try {
             Date currentDate = new Date();
             String currentDateString = new SimpleDateFormat("dd.MM.yyyy").format(currentDate);
@@ -79,18 +95,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             this.setTitle(titleString);
 
         } catch (ParseException e) {
-            e.printStackTrace();
         }
-    }
-
-    // make navigation manager accessible for further purposes
-    public NavigationManager getNavigationManager() {
-        return this.navigationManager;
-    }
-
-    // make settings manager accessible for other components
-    public SettingsManager getSettingsManager() {
-        return this.settingsManager;
     }
 
     @Override

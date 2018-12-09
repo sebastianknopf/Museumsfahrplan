@@ -49,7 +49,7 @@ public final class BottomSheetActionController {
                     return;
                 }
 
-                TripListAdapter tripListAdapter = new TripListAdapter(tripList);
+                TripListAdapter tripListAdapter = new TripListAdapter(context, tripList);
                 components.tripListHolder.layProgressView.setVisibility(View.GONE);
                 components.tripListHolder.rcvTripList.setVisibility(View.VISIBLE);
 

@@ -7,6 +7,7 @@ import java.util.Date;
 public final class DateTimeFormat {
 
     public final static String DDMMYYYY = "dd.MM.yyyy";
+    public final static String YYYYMMDD = "yyyyMMdd";
     public final static String DDMMYYYY_HHMM = "dd.MM.yyyy HH:mm";
     public final static String HHMM = "HH:mm";
     public final static String HHMMSS = "HH:mm:ss";

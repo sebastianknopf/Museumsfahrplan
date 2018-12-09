@@ -8,14 +8,16 @@
         <RelativeLayout
             android:id="@+id/layProgressView"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="82dp"
+            android:paddingLeft="@dimen/default_app_padding"
+            android:paddingRight="@dimen/default_app_padding">
 
             <ProgressBar
                 android:id="@+id/progressBar"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:layout_margin="16dp"
-                android:layout_centerInParent="true"
+                android:layout_centerHorizontal="true"
                 style="?android:attr/progressBarStyleSmall"/>
 
         </RelativeLayout>
@@ -23,7 +25,9 @@
         <LinearLayout
             android:id="@+id/layErrorView"
             android:layout_width="match_parent"
-            android:layout_height="132dp"
+            android:layout_height="82dp"
+            android:paddingLeft="@dimen/default_app_padding"
+            android:paddingRight="@dimen/default_app_padding"
             android:visibility="gone">
 
             <TextView

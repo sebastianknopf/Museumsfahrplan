@@ -1,5 +1,6 @@
 package de.mpfl.app.adapters;
 
+import android.content.Context;
 import android.databinding.DataBindingUtil;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
@@ -10,6 +11,7 @@ import android.view.ViewGroup;
 import java.util.ArrayList;
 import java.util.List;
 
+import de.mfpl.staticnet.lib.data.Frequency;
 import de.mfpl.staticnet.lib.data.Route;
 import de.mfpl.staticnet.lib.data.Trip;
 import de.mpfl.app.R;
@@ -22,9 +24,12 @@ public final class TripListAdapter extends RecyclerView.Adapter<RecyclerView.Vie
     private final static int TYPE_TRIP = 0;
     private final static int TYPE_ROUTE = 1;
 
+    private Context context;
     private List<Object> items;
 
-    public TripListAdapter(List<Trip> tripList) {
+    public TripListAdapter(Context context, List<Trip> tripList) {
+        this.context = context;
+
         List<String> routeList = new ArrayList<>();
         for(Trip trip : tripList) {
             if(trip.getRoute() == null) {
@@ -87,10 +92,21 @@ public final class TripListAdapter extends RecyclerView.Adapter<RecyclerView.Vie
                 String departureString = DateTimeFormat.from(tripItem.getStopTimes().get(0).getDepartureTime(), DateTimeFormat.HHMMSS).to(DateTimeFormat.HHMM);
                 tripItemViewHolder.components.lblDepartureText.setText(departureString);
 
-                String shortNameString = tripItem.getTripShortName();
-                if(!shortNameString.equals("")) {
+                if(tripItem.getFrequency() != null) {
+                    String stringTripInfo;
+                    if(tripItem.getFrequency().getExactTimes() == Frequency.ExactTimes.YES) {
+                        stringTripInfo = this.context.getString(R.string.str_frequency_exact, String.valueOf(tripItem.getFrequency().getHeadway()));
+                    } else {
+                        stringTripInfo = this.context.getString(R.string.str_frequency_demand, String.valueOf(tripItem.getFrequency().getHeadway()));
+                    }
+
                     tripItemViewHolder.components.lblTripInfo.setVisibility(View.VISIBLE);
-                    tripItemViewHolder.components.lblTripInfo.setText(shortNameString);
+                    tripItemViewHolder.components.lblTripInfo.setText(stringTripInfo);
+                } else if(!tripItem.getTripShortName().equals(""))
+                if(!tripItem.getTripShortName().equals("")) {
+                    String tripInfoString = tripItem.getTripShortName();
+                    tripItemViewHolder.components.lblTripInfo.setVisibility(View.VISIBLE);
+                    tripItemViewHolder.components.lblTripInfo.setText(tripInfoString);
                 }
             }
         } else {
@@ -125,7 +141,7 @@ public final class TripListAdapter extends RecyclerView.Adapter<RecyclerView.Vie
                 }
 
                 routeItemViewHolder.components.lblInfoURL.setVisibility(View.VISIBLE);
-                routeItemViewHolder.components.lblInfoURL.setText(stringRouteInfoURL);
+                routeItemViewHolder.components.lblInfoURL.setText(stringRouteInfoURL.replace("http://", "").replace("https://", ""));
 
                 if(routeItem.getAgency() != null) {
                     if(!routeItem.getAgency().getAgencyPhone().equals("")) {

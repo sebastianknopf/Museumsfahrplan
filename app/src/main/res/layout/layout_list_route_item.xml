@@ -5,7 +5,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="@dimen/default_list_padding"
-        android:background="#eeeeee">
+        android:background="@color/colorBackgroundLightGray">
 
         <TextView
             android:id="@+id/lblRouteName"
@@ -16,19 +16,21 @@
 
         <TextView
             android:id="@+id/lblAgencyName"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textColor="@color/colorAccentDAY"
+            android:textColor="@color/colorTextLight"
             android:textAppearance="@style/TextAppearance.AppCompat.Small"
+            android:paddingBottom="@dimen/default_separation_space"
             android:visibility="gone"
             app:layout_constraintTop_toBottomOf="@id/lblRouteName"
             app:layout_constraintBottom_toTopOf="@id/lblRouteDescription" />
 
         <TextView
             android:id="@+id/lblRouteDescription"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textAppearance="@style/TextAppearance.AppCompat.Small"
+            android:paddingBottom="@dimen/default_separation_space"
             android:visibility="gone"
             app:layout_constraintTop_toBottomOf="@id/lblAgencyName"
             app:layout_constraintBottom_toTopOf="@id/lblDepartureRealtimeText"/>
@@ -37,7 +39,7 @@
             android:id="@+id/lblInfoURL"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@color/colorAccentDAY"
+            android:textColor="@color/colorTextAccent"
             android:visibility="gone"
             app:layout_constraintTop_toBottomOf="@id/lblRouteDescription"
             app:layout_constraintLeft_toLeftOf="parent" />
@@ -46,8 +48,8 @@
             android:id="@+id/lblInfoPhone"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@color/colorAccentDAY"
-            android:layout_marginLeft="11dp"
+            android:textColor="@color/colorTextAccent"
+            android:layout_marginLeft="12dp"
             android:visibility="gone"
             app:layout_constraintTop_toBottomOf="@id/lblRouteDescription"
             app:layout_constraintLeft_toRightOf="@id/lblInfoURL"/>
