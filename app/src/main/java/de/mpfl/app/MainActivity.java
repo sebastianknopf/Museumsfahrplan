@@ -18,12 +18,13 @@ import de.mpfl.app.fragments.FavoritesFragment;
 import de.mpfl.app.fragments.InfoDetailsFragment;
 import de.mpfl.app.fragments.InfoListFragment;
 import de.mpfl.app.fragments.MapOverviewFragment;
+import de.mpfl.app.fragments.OnFragmentInteractionListener;
 import de.mpfl.app.fragments.PreferencesFragment;
 import de.mpfl.app.fragments.SearchInputFragment;
 import de.mpfl.app.utils.NavigationManager;
 import de.mpfl.app.utils.SettingsManager;
 
-public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, InfoListFragment.InfoListFragmentListener {
+public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, OnFragmentInteractionListener {
 
     private ActivityMainBinding components;
     private NavigationManager navigationManager;
@@ -174,27 +175,28 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         super.onBackPressed();
     }
 
-    // called ever time when a info item is selected in info list fragment
     @Override
-    public void onInformationCategorySelected(int categoryIndex) {
-        Fragment infoDetailsFragment = null;
-        switch(categoryIndex) {
-            case 0:
-                infoDetailsFragment = InfoDetailsFragment.newInstance("html_info_default.html");
-                break;
+    public void onFragmentInteraction(Fragment fragment, Bundle arguments) {
+        if(fragment instanceof  InfoListFragment) {
+            Fragment infoDetailsFragment = null;
+            switch(arguments.getInt(InfoListFragment.KEY_INFO_CATEGORY)) {
+                case 0:
+                    infoDetailsFragment = InfoDetailsFragment.newInstance("html_info_default.html");
+                    break;
 
-            case 1:
-                infoDetailsFragment = InfoDetailsFragment.newInstance("html_info_privacy.html");
-                break;
+                case 1:
+                    infoDetailsFragment = InfoDetailsFragment.newInstance("html_info_privacy.html");
+                    break;
 
-            case 2:
-                infoDetailsFragment = InfoDetailsFragment.newInstance("html_info_opensource.html");
-                break;
-        }
+                case 2:
+                    infoDetailsFragment = InfoDetailsFragment.newInstance("html_info_opensource.html");
+                    break;
+            }
 
-        // navigate to desired info fragment with keeping the back stack
-        if(infoDetailsFragment != null) {
-            this.navigationManager.navigateTo(infoDetailsFragment);
+            // navigate to desired info fragment with keeping the back stack
+            if(infoDetailsFragment != null) {
+                this.navigationManager.navigateTo(infoDetailsFragment);
+            }
         }
     }
 }

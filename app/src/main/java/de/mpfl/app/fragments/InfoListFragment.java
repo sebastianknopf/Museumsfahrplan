@@ -16,8 +16,9 @@ import de.mpfl.app.databinding.FragmentInfoListBinding;
 public class InfoListFragment extends Fragment {
 
     public final static String TAG = "InfoListFragment";
+    public final static String KEY_INFO_CATEGORY = "KEY_INFO_CATEGORY";
 
-    private InfoListFragmentListener listener;
+    private OnFragmentInteractionListener listener;
     private FragmentInfoListBinding components;
 
     public InfoListFragment() {
@@ -47,7 +48,10 @@ public class InfoListFragment extends Fragment {
         this.components.lstInfoCategory.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                listener.onInformationCategorySelected(position);
+                Bundle arguments = new Bundle();
+                arguments.putInt(KEY_INFO_CATEGORY, position);
+
+                listener.onFragmentInteraction(InfoListFragment.this, arguments);
             }
         });
 
@@ -58,10 +62,10 @@ public class InfoListFragment extends Fragment {
     public void onAttach(Context context) {
         super.onAttach(context);
 
-        if (context instanceof InfoListFragmentListener) {
-            this.listener = (InfoListFragmentListener) context;
+        if (context instanceof OnFragmentInteractionListener) {
+            this.listener = (OnFragmentInteractionListener) context;
         } else {
-            throw new RuntimeException(context.toString() + " must implement InfoListFragmentListener!");
+            throw new RuntimeException(context.toString() + " must implement OnFragmentInteractionListener!");
         }
     }
 
@@ -69,9 +73,5 @@ public class InfoListFragment extends Fragment {
     public void onDetach() {
         super.onDetach();
         this.listener = null;
-    }
-
-    public interface InfoListFragmentListener {
-        void onInformationCategorySelected(int categoryIndex);
     }
 }
