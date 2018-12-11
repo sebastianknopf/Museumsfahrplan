@@ -25,6 +25,9 @@ public final class Stop {
     @SerializedName("position")
     private Position position;
 
+    @SerializedName("realtime")
+    private Realtime realtime;
+
     public String getStopId() {
         return stopId;
     }
@@ -51,6 +54,10 @@ public final class Stop {
 
     public Position getPosition() {
         return position;
+    }
+
+    public Realtime getRealtime() {
+        return this.realtime;
     }
 
     public enum LocationType {

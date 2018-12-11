@@ -42,6 +42,9 @@ public final class Trip {
     @SerializedName("stop_times")
     private List<StopTime> stopTimes;
 
+    @SerializedName("realtime")
+    private Realtime realtime;
+
     public String getTripId() {
         return tripId;
     }
@@ -90,8 +93,8 @@ public final class Trip {
         return stopTimes;
     }
 
-    public void setStopTimes(List<StopTime> stopTimes) {
-        this.stopTimes = stopTimes;
+    public Realtime getRealtime() {
+        return this.realtime;
     }
 
     public enum Direction {

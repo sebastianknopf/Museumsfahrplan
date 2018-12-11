@@ -37,6 +37,9 @@ public final class Route {
     @SerializedName("agency")
     private Agency agency;
 
+    @SerializedName("realtime")
+    private Realtime realtime;
+
     public String getRouteId() {
         return routeId;
     }
@@ -79,6 +82,10 @@ public final class Route {
 
     public Agency getAgency() {
         return agency;
+    }
+
+    public Realtime getRealtime() {
+        return this.realtime;
     }
 
     public enum RouteType {
