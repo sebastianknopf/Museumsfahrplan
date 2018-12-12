@@ -80,28 +80,28 @@ public final class Request {
     public final static class Options {
 
         @SerializedName("include_agency")
-        private boolean includeAgency;
+        private boolean includeAgency = false;
 
         @SerializedName("include_routes")
-        private boolean includeRoutes;
+        private boolean includeRoutes = false;
 
         @SerializedName("include_stops")
-        private boolean includeStops;
+        private boolean includeStops = false;
 
         @SerializedName("include_places")
-        private boolean includePlaces;
+        private boolean includePlaces = false;
 
         @SerializedName("include_shape")
-        private boolean includeShape;
+        private boolean includeShape = false;
 
         @SerializedName("include_full_stop_times")
-        private boolean includeFullStopTimes;
+        private boolean includeFullStopTimes = false;
 
         @SerializedName("include_realtime")
-        private boolean includeRealtime;
+        private boolean includeRealtime = false;
 
         @SerializedName("limit")
-        private int limit = 999;
+        private int limit = 10;
 
         public boolean isIncludeRoutes() {
             return includeRoutes;
