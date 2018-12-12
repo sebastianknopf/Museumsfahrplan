@@ -137,6 +137,7 @@ public final class StaticRequest {
 
         Request.Options options = new Request.Options();
         options.setIncludeStops(true);
+        options.setIncludeRealtime(true);
 
         Container requestContainer = this.createRequestContainer(request, options, filter);
 
@@ -155,6 +156,7 @@ public final class StaticRequest {
 
         Request.Options options = new Request.Options();
         options.setIncludeRoutes(true);
+        options.setIncludeRealtime(true);
 
         Container requestContainer = this.createRequestContainer(request, options, filter);
 
@@ -189,6 +191,7 @@ public final class StaticRequest {
         options.setIncludeStops(true);
         options.setIncludeRoutes(true);
         options.setIncludeAgency(true);
+        options.setIncludeRealtime(true);
         options.setLimit(10);
 
         Container requestContainer = this.createRequestContainer(request, options, filter);
@@ -207,6 +210,7 @@ public final class StaticRequest {
         options.setIncludeStops(true);
         options.setIncludeRoutes(true);
         options.setIncludeAgency(true);
+        options.setIncludeRealtime(true);
 
         Container requestContainer = this.createRequestContainer(request, options, filter);
 
@@ -225,6 +229,7 @@ public final class StaticRequest {
         options.setIncludeShape(selectShape);
         options.setIncludeRoutes(true);
         options.setIncludeAgency(true);
+        options.setIncludeRealtime(true);
 
         Container requestContainer = this.createRequestContainer(request, options, null);
 

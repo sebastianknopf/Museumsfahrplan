@@ -97,6 +97,9 @@ public final class Request {
         @SerializedName("include_full_stop_times")
         private boolean includeFullStopTimes;
 
+        @SerializedName("include_realtime")
+        private boolean includeRealtime;
+
         @SerializedName("limit")
         private int limit = 999;
 
@@ -160,6 +163,15 @@ public final class Request {
 
         public Options setLimit(int limit) {
             this.limit = limit;
+            return this;
+        }
+
+        public boolean isIncludeRealtime() {
+            return includeRealtime;
+        }
+
+        public Options setIncludeRealtime(boolean includeRealtime) {
+            this.includeRealtime = includeRealtime;
             return this;
         }
 

@@ -92,21 +92,31 @@ public final class TripListAdapter extends RecyclerView.Adapter<RecyclerView.Vie
                 String departureString = DateTimeFormat.from(tripItem.getStopTimes().get(0).getDepartureTime(), DateTimeFormat.HHMMSS).to(DateTimeFormat.HHMM);
                 tripItemViewHolder.components.lblDepartureText.setText(departureString);
 
+                String tripInfoString = null;
                 if(tripItem.getFrequency() != null) {
-                    String stringTripInfo;
                     if(tripItem.getFrequency().getExactTimes() == Frequency.ExactTimes.YES) {
-                        stringTripInfo = this.context.getString(R.string.str_frequency_exact, String.valueOf(tripItem.getFrequency().getHeadway()));
+                        tripInfoString = this.context.getString(R.string.str_frequency_exact, String.valueOf(tripItem.getFrequency().getHeadway()));
                     } else {
-                        stringTripInfo = this.context.getString(R.string.str_frequency_demand, String.valueOf(tripItem.getFrequency().getHeadway()));
+                        tripInfoString = this.context.getString(R.string.str_frequency_demand, String.valueOf(tripItem.getFrequency().getHeadway()));
                     }
 
                     tripItemViewHolder.components.lblTripInfo.setVisibility(View.VISIBLE);
-                    tripItemViewHolder.components.lblTripInfo.setText(stringTripInfo);
-                } else if(!tripItem.getTripShortName().equals(""))
-                if(!tripItem.getTripShortName().equals("")) {
-                    String tripInfoString = tripItem.getTripShortName();
+                    tripItemViewHolder.components.lblTripInfo.setText(tripInfoString);
+                } else if(!tripItem.getTripShortName().equals("")) {
+                    tripInfoString = tripItem.getTripShortName();
                     tripItemViewHolder.components.lblTripInfo.setVisibility(View.VISIBLE);
                     tripItemViewHolder.components.lblTripInfo.setText(tripInfoString);
+                }
+
+                if(tripItem.getRealtime().hasAlerts()) {
+                    tripItemViewHolder.components.imgExceptional.setVisibility(View.VISIBLE);
+
+                    if(tripInfoString == null) {
+                        tripItemViewHolder.components.lblTripInfo.setVisibility(View.VISIBLE);
+                        tripItemViewHolder.components.lblTripInfo.setText(this.context.getString(R.string.str_exceptional));
+                    }
+                } else {
+                    tripItemViewHolder.components.imgExceptional.setVisibility(View.GONE);
                 }
             }
         } else {
@@ -114,6 +124,12 @@ public final class TripListAdapter extends RecyclerView.Adapter<RecyclerView.Vie
             RouteItemViewHolder routeItemViewHolder = (RouteItemViewHolder) viewHolder;
 
             if(routeItem != null) {
+                if(routeItem.getRealtime().hasAlerts()/* || routeItem.getAgency().getRealtime().hasAlerts()*/) {
+                    routeItemViewHolder.components.imgExceptional.setVisibility(View.VISIBLE);
+                } else {
+                    routeItemViewHolder.components.imgExceptional.setVisibility(View.GONE);
+                }
+
                 String stringRouteName = routeItem.getRouteLongName();
                 routeItemViewHolder.components.lblRouteName.setText(stringRouteName);
 

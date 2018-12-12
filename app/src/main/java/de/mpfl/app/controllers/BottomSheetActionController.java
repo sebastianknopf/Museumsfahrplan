@@ -1,4 +1,4 @@
-package de.mpfl.app.layout;
+package de.mpfl.app.controllers;
 
 import android.content.Context;
 import android.support.v7.widget.LinearLayoutManager;

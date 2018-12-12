@@ -22,6 +22,9 @@ public final class Agency {
     @SerializedName("agency_url")
     private String agencyUrl;
 
+    @SerializedName("realtime")
+    private Realtime realtime;
+
     public String getAgencyId() {
         return agencyId;
     }
@@ -44,6 +47,10 @@ public final class Agency {
 
     public String getAgencyUrl() {
         return agencyUrl;
+    }
+
+    public Realtime getRealtime() {
+        return this.realtime;
     }
 
 }

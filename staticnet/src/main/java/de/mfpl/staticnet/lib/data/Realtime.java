@@ -13,4 +13,8 @@ public final class Realtime {
         return alerts;
     }
 
+    public boolean hasAlerts() {
+        return this.alerts != null && this.alerts.size() > 0;
+    }
+
 }

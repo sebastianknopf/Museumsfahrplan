@@ -22,36 +22,47 @@
             android:layout_marginLeft="12dp"
             android:layout_marginRight="6dp"
             android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-            app:layout_constraintBottom_toTopOf="@id/lblTripInfo"
+            app:layout_constraintBottom_toTopOf="@id/layoutTripInfo"
             app:layout_constraintLeft_toRightOf="@id/imgTripType"
             app:layout_constraintRight_toLeftOf="@id/lblDepartureText"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_chainStyle="packed" />
 
-        <!--<ImageView
-            android:id="@+id/imgExceptional"
-            android:layout_width="18dp"
-            android:layout_height="18dp"
-            android:layout_marginLeft="11dp"
-            android:src="@drawable/ic_warning"
-            android:visibility="gone"
-            app:layout_constraintTop_toBottomOf="@id/lblTripName"
-            app:layout_constraintLeft_toRightOf="@id/imgTripType"/>-->
-
-        <TextView
-            android:id="@+id/lblTripInfo"
+        <android.support.constraint.ConstraintLayout
+            android:id="@+id/layoutTripInfo"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginLeft="12dp"
             android:layout_marginRight="6dp"
-            android:visibility="gone"
-            android:textAppearance="@style/TextAppearance.AppCompat.Small"
-            android:textSize="13sp"
             app:layout_constraintTop_toBottomOf="@id/lblTripName"
             app:layout_constraintLeft_toRightOf="@id/imgTripType"
             app:layout_constraintRight_toLeftOf="@id/lblDepartureText"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintVertical_chainStyle="packed" />
+            app:layout_constraintVertical_chainStyle="packed">
+
+            <ImageView
+                android:id="@+id/imgExceptional"
+                android:layout_width="16dp"
+                android:layout_height="16dp"
+                android:layout_marginRight="4dp"
+                android:src="@drawable/ic_warning"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toLeftOf="@id/lblTripInfo"
+                app:layout_constraintBottom_toBottomOf="parent"/>
+
+            <TextView
+                android:id="@+id/lblTripInfo"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:textAppearance="@style/TextAppearance.AppCompat.Small"
+                android:visibility="gone"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintLeft_toRightOf="@id/imgExceptional"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent" />
+
+        </android.support.constraint.ConstraintLayout>
 
         <TextView
             android:id="@+id/lblDepartureText"
@@ -59,7 +70,6 @@
             android:layout_height="wrap_content"
             android:textColor="@color/colorTextAccent"
             android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-            android:text="12:19"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintBottom_toTopOf="@id/lblDepartureRealtimeText"/>

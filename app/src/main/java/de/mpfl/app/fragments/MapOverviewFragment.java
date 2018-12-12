@@ -37,6 +37,7 @@ import com.mapbox.mapboxsdk.maps.OnMapReadyCallback;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 
 import de.mfpl.staticnet.lib.StaticRequest;
 import de.mfpl.staticnet.lib.base.Delivery;
@@ -44,8 +45,8 @@ import de.mfpl.staticnet.lib.base.Request;
 import de.mfpl.staticnet.lib.data.Position;
 import de.mfpl.staticnet.lib.data.Stop;
 import de.mpfl.app.R;
+import de.mpfl.app.controllers.BottomSheetActionController;
 import de.mpfl.app.databinding.FragmentMapOverviewBinding;
-import de.mpfl.app.layout.BottomSheetActionController;
 import de.mpfl.app.utils.LocationRequest;
 import de.mpfl.app.utils.SettingsManager;
 import de.mpfl.app.utils.VectorIconFactory;
@@ -63,6 +64,8 @@ public class MapOverviewFragment extends Fragment implements LocationListener, M
     private MapboxMap currentMap = null;
     private Icon markerIcon = null;
     private Snackbar snackbar = null;
+
+    private List<Stop> currentStopList;
 
     public MapOverviewFragment() {
     }
@@ -229,11 +232,13 @@ public class MapOverviewFragment extends Fragment implements LocationListener, M
                 @Override
                 public void onSuccess(Delivery delivery) {
                     currentMap.clear();
-                    for(Stop stop : delivery.getStops()) {
+                    currentStopList = delivery.getStops();
+
+                    for(int i = 0; i < currentStopList.size(); i++) {
                         currentMap.addMarker(new MarkerOptions()
-                                .position(new LatLng(stop.getPosition().getLatitude(), stop.getPosition().getLongitude()))
-                                .setTitle(stop.getStopName())
-                                .setSnippet(stop.getStopId())
+                                .position(new LatLng(currentStopList.get(i).getPosition().getLatitude(), currentStopList.get(i).getPosition().getLongitude()))
+                                .setTitle(currentStopList.get(i).getStopName())
+                                .setSnippet(String.valueOf(i))
                                 .icon(markerIcon));
                     }
                 }
@@ -251,8 +256,16 @@ public class MapOverviewFragment extends Fragment implements LocationListener, M
     public boolean onMarkerClick(@NonNull Marker marker) {
         this.bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
 
+        Stop selectedStop = this.currentStopList.get(Integer.parseInt(marker.getSnippet()));
+
         this.components.bottomSheetHolder.lblTitle.setText(marker.getTitle());
-        this.components.bottomSheetHolder.getActionController().loadDepartures(marker.getSnippet());
+        if(selectedStop.getRealtime() != null && selectedStop.getRealtime().hasAlerts()) {
+            this.components.bottomSheetHolder.imgExceptional.setVisibility(View.VISIBLE);
+        } else {
+            this.components.bottomSheetHolder.imgExceptional.setVisibility(View.GONE);
+        }
+
+        this.components.bottomSheetHolder.getActionController().loadDepartures(selectedStop.getStopId());
 
         return true;
     }
