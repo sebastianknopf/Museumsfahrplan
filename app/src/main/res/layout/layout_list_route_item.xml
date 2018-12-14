@@ -7,35 +7,12 @@
         android:padding="@dimen/default_list_padding"
         android:background="@color/colorBackgroundLightGray">
 
-        <android.support.constraint.ConstraintLayout
-            android:id="@+id/layoutRouteTitle"
+        <TextView
+            android:id="@+id/lblRouteName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:layout_constraintTop_toTopOf="parent">
-
-            <ImageView
-                android:id="@+id/imgExceptional"
-                android:layout_width="18dp"
-                android:layout_height="18dp"
-                android:layout_marginRight="8dp"
-                android:src="@drawable/ic_warning"
-                android:visibility="gone"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toLeftOf="@id/lblRouteName"
-                app:layout_constraintBottom_toBottomOf="parent" />
-
-            <TextView
-                android:id="@+id/lblRouteName"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintLeft_toRightOf="@id/imgExceptional"
-                app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"/>
-
-        </android.support.constraint.ConstraintLayout>
+            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/lblAgencyName"
@@ -45,7 +22,7 @@
             android:textAppearance="@style/TextAppearance.AppCompat.Small"
             android:paddingBottom="@dimen/default_separation_space"
             android:visibility="gone"
-            app:layout_constraintTop_toBottomOf="@id/layoutRouteTitle"
+            app:layout_constraintTop_toBottomOf="@id/lblRouteName"
             app:layout_constraintBottom_toTopOf="@id/lblRouteDescription" />
 
         <TextView
@@ -63,6 +40,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="@color/colorTextAccent"
+            android:autoLink="web"
             android:visibility="gone"
             app:layout_constraintTop_toBottomOf="@id/lblRouteDescription"
             app:layout_constraintLeft_toLeftOf="parent" />
@@ -73,9 +51,18 @@
             android:layout_height="wrap_content"
             android:textColor="@color/colorTextAccent"
             android:layout_marginLeft="12dp"
+            android:autoLink="phone"
             android:visibility="gone"
             app:layout_constraintTop_toBottomOf="@id/lblRouteDescription"
             app:layout_constraintLeft_toRightOf="@id/lblInfoURL"/>
+
+        <ListView
+            android:id="@+id/lstRouteAlerts"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:visibility="gone"
+            app:layout_constraintTop_toBottomOf="@id/lblInfoURL"/>
 
 
     </android.support.constraint.ConstraintLayout>

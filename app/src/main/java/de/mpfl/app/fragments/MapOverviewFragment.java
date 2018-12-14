@@ -45,6 +45,7 @@ import de.mfpl.staticnet.lib.base.Request;
 import de.mfpl.staticnet.lib.data.Position;
 import de.mfpl.staticnet.lib.data.Stop;
 import de.mpfl.app.R;
+import de.mpfl.app.adapters.AlertListAdapter;
 import de.mpfl.app.controllers.BottomSheetActionController;
 import de.mpfl.app.databinding.FragmentMapOverviewBinding;
 import de.mpfl.app.utils.LocationRequest;
@@ -260,9 +261,11 @@ public class MapOverviewFragment extends Fragment implements LocationListener, M
 
         this.components.bottomSheetHolder.lblTitle.setText(marker.getTitle());
         if(selectedStop.getRealtime() != null && selectedStop.getRealtime().hasAlerts()) {
-            this.components.bottomSheetHolder.imgExceptional.setVisibility(View.VISIBLE);
+            AlertListAdapter adapter = new AlertListAdapter(this.getContext(), selectedStop.getRealtime().getAlerts());
+            this.components.bottomSheetHolder.lstStopAlerts.setVisibility(View.VISIBLE);
+            this.components.bottomSheetHolder.lstStopAlerts.setAdapter(adapter);
         } else {
-            this.components.bottomSheetHolder.imgExceptional.setVisibility(View.GONE);
+            this.components.bottomSheetHolder.lstStopAlerts.setVisibility(View.GONE);
         }
 
         this.components.bottomSheetHolder.getActionController().loadDepartures(selectedStop.getStopId());

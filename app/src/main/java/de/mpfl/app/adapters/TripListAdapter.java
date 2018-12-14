@@ -124,10 +124,12 @@ public final class TripListAdapter extends RecyclerView.Adapter<RecyclerView.Vie
             RouteItemViewHolder routeItemViewHolder = (RouteItemViewHolder) viewHolder;
 
             if(routeItem != null) {
-                if(routeItem.getRealtime().hasAlerts()/* || routeItem.getAgency().getRealtime().hasAlerts()*/) {
-                    routeItemViewHolder.components.imgExceptional.setVisibility(View.VISIBLE);
+                if(routeItem.getRealtime().hasAlerts() || routeItem.getAgency().getRealtime().hasAlerts()) {
+                    AlertListAdapter adapter = new AlertListAdapter(this.context, routeItem.getRealtime().getAlerts());
+                    routeItemViewHolder.components.lstRouteAlerts.setVisibility(View.VISIBLE);
+                    routeItemViewHolder.components.lstRouteAlerts.setAdapter(adapter);
                 } else {
-                    routeItemViewHolder.components.imgExceptional.setVisibility(View.GONE);
+                    routeItemViewHolder.components.lstRouteAlerts.setVisibility(View.GONE);
                 }
 
                 String stringRouteName = routeItem.getRouteLongName();
