@@ -6,9 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.databinding.DataBindingUtil;
-import android.location.Criteria;
 import android.location.Location;
-import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.provider.Settings;
@@ -25,6 +23,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GoogleApiAvailability;
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationCallback;
+import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationResult;
+import com.google.android.gms.location.LocationServices;
 import com.mapbox.mapboxsdk.Mapbox;
 import com.mapbox.mapboxsdk.annotations.Icon;
 import com.mapbox.mapboxsdk.annotations.Marker;
@@ -48,12 +53,11 @@ import de.mpfl.app.R;
 import de.mpfl.app.adapters.AlertListAdapter;
 import de.mpfl.app.controllers.BottomSheetActionController;
 import de.mpfl.app.databinding.FragmentMapOverviewBinding;
-import de.mpfl.app.utils.LocationRequest;
 import de.mpfl.app.utils.SettingsManager;
 import de.mpfl.app.utils.VectorIconFactory;
 
 
-public class MapOverviewFragment extends Fragment implements LocationListener, MapboxMap.OnCameraIdleListener, MapboxMap.OnMarkerClickListener {
+public class MapOverviewFragment extends Fragment implements MapboxMap.OnCameraIdleListener, MapboxMap.OnMarkerClickListener {
 
     public final static String TAG ="MapOverviewFragment";
 
@@ -61,7 +65,9 @@ public class MapOverviewFragment extends Fragment implements LocationListener, M
 
     private FragmentMapOverviewBinding components;
     private BottomSheetBehavior bottomSheetBehavior;
-    private LocationManager locationManager;
+    private FusedLocationProviderClient locationProviderClient;
+    private LocationCallback locationCallback;
+
     private MapboxMap currentMap = null;
     private Icon markerIcon = null;
     private Snackbar snackbar = null;
@@ -82,7 +88,17 @@ public class MapOverviewFragment extends Fragment implements LocationListener, M
         super.onCreate(savedInstanceState);
 
         this.markerIcon = VectorIconFactory.fromVectorDrawable(this.getContext(), R.drawable.ic_marker);
-        this.locationManager = (LocationManager) this.getContext().getSystemService(Context.LOCATION_SERVICE);
+        this.locationProviderClient = LocationServices.getFusedLocationProviderClient(this.getContext());
+        this.locationCallback = new LocationCallback() {
+            @Override
+            public void onLocationResult(LocationResult locationResult) {
+                if (locationResult == null || locationResult.getLocations().size() == 0) {
+                    return;
+                }
+
+                moveMapToPosition(locationResult.getLocations().get(0), 0);
+            }
+        };
     }
 
     @Override
@@ -99,7 +115,11 @@ public class MapOverviewFragment extends Fragment implements LocationListener, M
                 currentMap.addOnCameraIdleListener(MapOverviewFragment.this);
                 currentMap.setOnMarkerClickListener(MapOverviewFragment.this);
 
-                moveMapToLastPosition();
+                SettingsManager settingsManager = new SettingsManager(getContext());
+                Location lastMapLocation = settingsManager.getLastMapPosition();
+                if(lastMapLocation != null) {
+                    moveMapToPosition(lastMapLocation, settingsManager.getLastMapZoomlevel());
+                }
             }
         });
 
@@ -148,48 +168,30 @@ public class MapOverviewFragment extends Fragment implements LocationListener, M
 
         // check permissions and try to achieve them
         // do this only here (and not in onResume!) cause it will display a dialog
-        this.checkRequiredPermissions();
+        this.checkEnvironmentConditions();
     }
 
-    @SuppressLint("MissingPermission")
     @Override
     public void onResume() {
         super.onResume();
 
-        this.checkGPSStatus();
-        this.locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 1000, this);
-
-        // check network status
-        if(!this.checkNetworkStatus()) {
-            return;
-        }
-
-        // check gps status
-        if(!this.checkGPSStatus()) {
-            return;
-        }
+        this.components.mapViewHolder.mapView.onResume();
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        this.dismissSnackbar();
 
-        this.locationManager.removeUpdates(this);
+        this.dismissSnackbar();
+        this.components.mapViewHolder.mapView.onPause();
     }
 
     @Override
     public void onStop() {
         super.onStop();
 
-        CameraPosition cameraPosition = this.currentMap.getCameraPosition();
-        Location currentMapLocation = new Location(LocationManager.GPS_PROVIDER);
-        currentMapLocation.setLatitude(cameraPosition.target.getLatitude());
-        currentMapLocation.setLongitude(cameraPosition.target.getLongitude());
-
-        SettingsManager settingsManager = new SettingsManager(this.getContext());
-        settingsManager.setLastMapLocation(currentMapLocation);
-        settingsManager.setLastMapZoomlevel(cameraPosition.zoom);
+        // don't call this here... it sucks
+        //this.components.mapViewHolder.mapView.onStop();
     }
 
     @Override
@@ -199,26 +201,17 @@ public class MapOverviewFragment extends Fragment implements LocationListener, M
     }
 
     @Override
-    public void onLocationChanged(Location location){
-    }
-
-    @Override
-    public void onStatusChanged(String provider, int status, Bundle extras) {
-    }
-
-    @Override
-    public void onProviderEnabled(String provider) {
-        this.dismissSnackbar();
-    }
-
-    @Override
-    public void onProviderDisabled(String provider) {
-        this.checkGPSStatus();
-    }
-
-    @Override
     public void onCameraIdle() {
         CameraPosition cameraPosition = this.currentMap.getCameraPosition();
+
+        // store last location every time when camera idle is active
+        Location currentMapLocation = new Location(LocationManager.GPS_PROVIDER);
+        currentMapLocation.setLatitude(cameraPosition.target.getLatitude());
+        currentMapLocation.setLongitude(cameraPosition.target.getLongitude());
+
+        SettingsManager settingsManager = new SettingsManager(this.getContext());
+        settingsManager.setLastMapLocation(currentMapLocation);
+        settingsManager.setLastMapZoomlevel(cameraPosition.zoom);
 
         if(cameraPosition.zoom > 11.0) {
             StaticRequest staticRequest = new StaticRequest();
@@ -247,7 +240,7 @@ public class MapOverviewFragment extends Fragment implements LocationListener, M
                 @Override
                 public void onError(Throwable throwable) {
                 }
-            }).loadStops(new Position().setLatitude(cameraPosition.target.getLatitude()).setLongitude(cameraPosition.target.getLongitude()), 10000, filter);
+            }).loadStops(new Position().setLatitude(cameraPosition.target.getLatitude()).setLongitude(cameraPosition.target.getLongitude()), 15000, filter);
         } else {
             this.currentMap.clear();
         }
@@ -290,50 +283,12 @@ public class MapOverviewFragment extends Fragment implements LocationListener, M
                 }
             });
         } else {
-            this.checkRequiredPermissions();
+            this.checkEnvironmentConditions();
         }
     }
 
     @SuppressLint("MissingPermission")
     public void fabLocationClick(View view) {
-        this.checkGPSStatus();
-        this.moveMapToCurrentPosition();
-    }
-
-    private boolean checkPermission(String permissionName) {
-        return ContextCompat.checkSelfPermission(this.getActivity(), permissionName) == PackageManager.PERMISSION_GRANTED;
-    }
-
-    private void requestPermission(int requestCode, String permissionName) {
-        requestPermissions(new String[] {permissionName}, requestCode);
-    }
-
-    private void checkRequiredPermissions() {
-        // check location permission
-        if(!this.checkPermission(Manifest.permission.ACCESS_FINE_LOCATION)) {
-            // eventually hide fab
-            this.components.fabLocation.hide();
-
-            // try to request the missing permission
-            this.requestPermission(PERMISSION_ACCESS_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION);
-            return;
-        }
-
-        // this is only executed if the required permissions are granted
-        this.components.fabLocation.show();
-
-        CoordinatorLayout.LayoutParams params = (CoordinatorLayout.LayoutParams) this.components.fabLocation.getLayoutParams();
-        FloatingActionButton.Behavior behavior = (FloatingActionButton.Behavior) params.getBehavior();
-        if(behavior != null) {
-            behavior.setAutoHideEnabled(true);
-        }
-    }
-
-    private boolean checkNetworkStatus() {
-        return true;
-    }
-
-    private boolean checkGPSStatus() {
         LocationManager locationManager = (LocationManager) this.getContext().getSystemService(Context.LOCATION_SERVICE);
         if(!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) && !locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)) {
             this.displaySnackbar(this.components.fragmentLayout, R.string.str_location_provider_error, Snackbar.LENGTH_INDEFINITE, R.string.str_activate, new View.OnClickListener() {
@@ -344,9 +299,52 @@ public class MapOverviewFragment extends Fragment implements LocationListener, M
                 }
             });
 
-            return false;
-        } else {
-            return true;
+            return;
+        }
+
+        this.dismissSnackbar();
+
+        try {
+            LocationRequest locationRequest = new LocationRequest();
+            locationRequest.setNumUpdates(1);
+            locationRequest.setPriority(LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY);
+
+            this.locationProviderClient.requestLocationUpdates(locationRequest, this.locationCallback, null);
+        } catch(SecurityException e) {
+        }
+    }
+
+    private boolean checkPermission(String permissionName) {
+        return ContextCompat.checkSelfPermission(this.getActivity(), permissionName) == PackageManager.PERMISSION_GRANTED;
+    }
+
+    private void requestPermission(int requestCode, String permissionName) {
+        requestPermissions(new String[] {permissionName}, requestCode);
+    }
+
+    private void checkEnvironmentConditions() {
+        // check location permission
+        if(!this.checkPermission(Manifest.permission.ACCESS_FINE_LOCATION)) {
+            // eventually hide fab
+            this.components.fabLocation.hide();
+
+            // try to request the missing permission
+            this.requestPermission(PERMISSION_ACCESS_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION);
+            return;
+        }
+
+        GoogleApiAvailability googleApiAvailability = GoogleApiAvailability.getInstance();
+        if(googleApiAvailability.isGooglePlayServicesAvailable(this.getContext()) != ConnectionResult.SUCCESS) {
+            return;
+        }
+
+        // this is only executed if the required permissions are granted
+        this.components.fabLocation.show();
+
+        CoordinatorLayout.LayoutParams params = (CoordinatorLayout.LayoutParams) this.components.fabLocation.getLayoutParams();
+        FloatingActionButton.Behavior behavior = (FloatingActionButton.Behavior) params.getBehavior();
+        if(behavior != null) {
+            behavior.setAutoHideEnabled(true);
         }
     }
 
@@ -371,37 +369,14 @@ public class MapOverviewFragment extends Fragment implements LocationListener, M
         }
     }
 
-    private void moveMapToLastPosition() {
-        SettingsManager settingsManager = new SettingsManager(this.getContext());
-        Location lastMapLocation = settingsManager.getLastMapPosition();
-        if(lastMapLocation != null) {
-            this.moveMapToPosition(lastMapLocation, settingsManager.getLastMapZoomlevel());
-        } else {
-            this.moveMapToCurrentPosition();
-        }
-    }
-
-    private void moveMapToCurrentPosition() {
-        Criteria criteria = new Criteria();
-        criteria.setPowerRequirement(Criteria.POWER_MEDIUM);
-        criteria.setAccuracy(Criteria.ACCURACY_MEDIUM);
-        criteria.setSpeedRequired(false);
-        criteria.setAltitudeRequired(false);
-        criteria.setBearingRequired(false);
-        criteria.setCostAllowed(false);
-
-        String locationProvider = this.locationManager.getBestProvider(criteria, true);
-        new LocationRequest(this.getActivity(), new LocationRequest.OnLocationReceivedListener() {
-            @Override
-            public void onLocationReceived(Location location) {
-                moveMapToPosition(location, 13.0);
-            }
-        }).getLocationOnce(locationProvider);
-    }
-
     private void moveMapToPosition(Location location, double zoomLevel) {
-        if(currentMap != null) {
+        if(currentMap != null && location != null) {
+            if(zoomLevel == 0) {
+                zoomLevel = 13.0;
+            }
+
             CameraPosition cameraPosition = new CameraPosition.Builder().target(new LatLng(location.getLatitude(), location.getLongitude())).zoom(zoomLevel).build();
+
             currentMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition), 2000);
         }
     }

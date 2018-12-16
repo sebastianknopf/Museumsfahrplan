@@ -57,7 +57,7 @@ dependencies {
 
     // external libraries for mfpl
     implementation 'com.mapbox.mapboxsdk:mapbox-android-sdk:6.7.1'
-    //implementation group: 'dnsjava', name: 'dnsjava', version: '2.1.7'
+    implementation 'com.google.android.gms:play-services-location:15.0.1'
 
     implementation project(':staticnet')
 
