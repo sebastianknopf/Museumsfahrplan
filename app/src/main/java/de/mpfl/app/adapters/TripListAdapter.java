@@ -86,37 +86,47 @@ public final class TripListAdapter extends RecyclerView.Adapter<RecyclerView.Vie
             TripItemViewHolder tripItemViewHolder = (TripItemViewHolder) viewHolder;
 
             if(tripItem != null) {
+                // display route icon depending on route type
+                Route.RouteType routeType = tripItem.getRoute().getRouteType();
+                if(routeType == Route.RouteType.RAIL) {
+                    tripItemViewHolder.components.imgTripType.setImageDrawable(context.getDrawable(R.drawable.ic_route_railway));
+                } else if(routeType == Route.RouteType.TRAM || routeType == Route.RouteType.SUBWAY) {
+                    tripItemViewHolder.components.imgTripType.setImageDrawable(context.getDrawable(R.drawable.ic_route_tram));
+                } else if(routeType == Route.RouteType.BUS) {
+                    tripItemViewHolder.components.imgTripType.setImageDrawable(context.getDrawable(R.drawable.ic_route_bus));
+                } else if(routeType == Route.RouteType.FERRY) {
+                    tripItemViewHolder.components.imgTripType.setImageDrawable(context.getDrawable(R.drawable.ic_route_ferry));
+                } else if(routeType == Route.RouteType.FUNICULAR) {
+                    tripItemViewHolder.components.imgTripType.setImageDrawable(context.getDrawable(R.drawable.ic_route_funicular));
+                }
+
                 String headsignString = tripItem.getTripHeadsign();
                 tripItemViewHolder.components.lblTripName.setText(headsignString);
 
                 String departureString = DateTimeFormat.from(tripItem.getStopTimes().get(0).getDepartureTime(), DateTimeFormat.HHMMSS).to(DateTimeFormat.HHMM);
                 tripItemViewHolder.components.lblDepartureText.setText(departureString);
 
-                String tripInfoString = null;
-                if(tripItem.getFrequency() != null) {
-                    if(tripItem.getFrequency().getExactTimes() == Frequency.ExactTimes.YES) {
-                        tripInfoString = this.context.getString(R.string.str_frequency_exact, String.valueOf(tripItem.getFrequency().getHeadway()));
-                    } else {
-                        tripInfoString = this.context.getString(R.string.str_frequency_demand, String.valueOf(tripItem.getFrequency().getHeadway()));
-                    }
-
+                // trip short name / trip info
+                if(!tripItem.getTripShortName().equals("")) {
                     tripItemViewHolder.components.lblTripInfo.setVisibility(View.VISIBLE);
-                    tripItemViewHolder.components.lblTripInfo.setText(tripInfoString);
-                } else if(!tripItem.getTripShortName().equals("")) {
-                    tripInfoString = tripItem.getTripShortName();
-                    tripItemViewHolder.components.lblTripInfo.setVisibility(View.VISIBLE);
-                    tripItemViewHolder.components.lblTripInfo.setText(tripInfoString);
+                    tripItemViewHolder.components.lblTripInfo.setText(tripItem.getTripShortName());
                 }
 
-                if(tripItem.getRealtime().hasAlerts()) {
-                    tripItemViewHolder.components.imgExceptional.setVisibility(View.VISIBLE);
-
-                    if(tripInfoString == null) {
-                        tripItemViewHolder.components.lblTripInfo.setVisibility(View.VISIBLE);
-                        tripItemViewHolder.components.lblTripInfo.setText(this.context.getString(R.string.str_exceptional));
+                // frequency info text
+                if(tripItem.getFrequency() != null) {
+                    tripItemViewHolder.components.lblTripInfo.setVisibility(View.VISIBLE);
+                    if(tripItem.getFrequency().getExactTimes() == Frequency.ExactTimes.YES) {
+                        tripItemViewHolder.components.lblTripInfo.setText(this.context.getString(R.string.str_frequency_exact, String.valueOf(tripItem.getFrequency().getHeadway())));
+                    } else {
+                        tripItemViewHolder.components.lblTripInfo.setText(this.context.getString(R.string.str_frequency_demand, String.valueOf(tripItem.getFrequency().getHeadway())));
                     }
+                }
+
+                // alert info
+                if(tripItem.getRealtime().hasAlerts()) {
+                    tripItemViewHolder.components.layoutTripAdditionalInfo.setVisibility(View.VISIBLE);
                 } else {
-                    tripItemViewHolder.components.imgExceptional.setVisibility(View.GONE);
+                    tripItemViewHolder.components.layoutTripAdditionalInfo.setVisibility(View.GONE);
                 }
             }
         } else {

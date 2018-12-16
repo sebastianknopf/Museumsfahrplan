@@ -1,5 +1,6 @@
 <resources>
     <!-- Default Strings -->
+    <string name="str_placeholder">Placeholder Text</string>
     <string name="str_enable">Freigeben</string>
     <string name="str_activate">Aktivieren</string>
     <string name="str_good_morning">Guten Morgen</string>
@@ -23,7 +24,7 @@
     <string name="str_no_departures_found">Leider wurden keine Abfahrten gefunden!</string>
     <string name="str_frequency_exact">Alle %s Minuten</string>
     <string name="str_frequency_demand">Etwa alle %s Minuten und bei Bedarf</string>
-    <string name="str_exceptional">Aktuelle Informationen!</string>
+    <string name="str_exceptional">Es liegen aktuelle Meldungen vor!</string>
     <string name="str_see_more">Weitere Informationen</string>
     <string name="str_invalid_url">Ungültige URL!</string>
 
