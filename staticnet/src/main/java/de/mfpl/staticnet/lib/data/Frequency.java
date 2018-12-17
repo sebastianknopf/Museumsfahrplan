@@ -16,6 +16,12 @@ public final class Frequency {
     @SerializedName("exact_times")
     private ExactTimes exactTimes;
 
+    @SerializedName("trip_time")
+    private String tripTime;
+
+    @SerializedName("trip_date")
+    private String tripDate;
+
     public String getStartTime() {
         return startTime;
     }
@@ -30,6 +36,14 @@ public final class Frequency {
 
     public ExactTimes getExactTimes() {
         return exactTimes;
+    }
+
+    public String getTripTime() {
+        return tripTime;
+    }
+
+    public String getTripDate() {
+        return tripDate;
     }
 
     public enum ExactTimes {
