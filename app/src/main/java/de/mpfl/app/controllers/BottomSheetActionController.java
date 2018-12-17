@@ -2,6 +2,9 @@ package de.mpfl.app.controllers;
 
 import android.content.Context;
 import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 
 import java.text.SimpleDateFormat;
@@ -15,8 +18,11 @@ import de.mfpl.staticnet.lib.data.Trip;
 import de.mpfl.app.R;
 import de.mpfl.app.adapters.TripListAdapter;
 import de.mpfl.app.databinding.LayoutMapBottomSheetBinding;
+import de.mpfl.app.listeners.OnTripItemClickListener;
 
 public final class BottomSheetActionController {
+
+    private List<Trip> currentTripList;
 
     private Context context;
     private LayoutMapBottomSheetBinding components;
@@ -41,15 +47,26 @@ public final class BottomSheetActionController {
         staticRequest.setListener(new StaticRequest.Listener() {
             @Override
             public void onSuccess(Delivery delivery) {
-                List<Trip> tripList = delivery.getTrips();
-                if(tripList.size() == 0) {
+                currentTripList = delivery.getTrips();
+                if(currentTripList.size() == 0) {
                     components.tripListHolder.layProgressView.setVisibility(View.GONE);
                     components.tripListHolder.layErrorView.setVisibility(View.VISIBLE);
                     components.tripListHolder.lblErrorText.setText(context.getString(R.string.str_no_departures_found));
                     return;
                 }
 
-                TripListAdapter tripListAdapter = new TripListAdapter(context, tripList);
+                TripListAdapter tripListAdapter = new TripListAdapter(context, currentTripList);
+                tripListAdapter.setOnTripItemClickListener(new OnTripItemClickListener() {
+                    @Override
+                    public void onTripItemClick(Trip tripItem) {
+                        // pass through the clicked trip item
+                        OnTripItemClickListener parentListener = components.getOnTripItemClickListener();
+                        if(parentListener != null) {
+                            parentListener.onTripItemClick(tripItem);
+                        }
+                    }
+                });
+
                 components.tripListHolder.layProgressView.setVisibility(View.GONE);
                 components.tripListHolder.rcvTripList.setVisibility(View.VISIBLE);
 

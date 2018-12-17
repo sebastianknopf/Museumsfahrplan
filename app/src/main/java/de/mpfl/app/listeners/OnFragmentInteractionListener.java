@@ -1,4 +1,4 @@
-package de.mpfl.app.fragments;
+package de.mpfl.app.listeners;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;

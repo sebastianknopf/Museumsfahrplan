@@ -18,6 +18,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -49,10 +50,13 @@ import de.mfpl.staticnet.lib.base.Delivery;
 import de.mfpl.staticnet.lib.base.Request;
 import de.mfpl.staticnet.lib.data.Position;
 import de.mfpl.staticnet.lib.data.Stop;
+import de.mfpl.staticnet.lib.data.Trip;
 import de.mpfl.app.R;
 import de.mpfl.app.adapters.AlertListAdapter;
 import de.mpfl.app.controllers.BottomSheetActionController;
 import de.mpfl.app.databinding.FragmentMapOverviewBinding;
+import de.mpfl.app.listeners.OnFragmentInteractionListener;
+import de.mpfl.app.listeners.OnTripItemClickListener;
 import de.mpfl.app.utils.SettingsManager;
 import de.mpfl.app.utils.VectorIconFactory;
 
@@ -60,6 +64,12 @@ import de.mpfl.app.utils.VectorIconFactory;
 public class MapOverviewFragment extends Fragment implements MapboxMap.OnCameraIdleListener, MapboxMap.OnMarkerClickListener {
 
     public final static String TAG ="MapOverviewFragment";
+    public final static String KEY_FRAGMENT_ACTION = "KEY_FRAGMENT_ACTION";
+    public final static String KEY_TRIP_ID = "KEY_TRIP_ID";
+    public final static String KEY_TRIP_TIME = "KEY_TRIP_TIME";
+    public final static String KEY_TRIP_DATE = "KEY_TRIP_DATE";
+
+    public final int ACTION_SELECT_TRIP = 0;
 
     private final static int PERMISSION_ACCESS_LOCATION = 0;
 
@@ -67,6 +77,8 @@ public class MapOverviewFragment extends Fragment implements MapboxMap.OnCameraI
     private BottomSheetBehavior bottomSheetBehavior;
     private FusedLocationProviderClient locationProviderClient;
     private LocationCallback locationCallback;
+
+    private OnFragmentInteractionListener fragmentInteractionListener;
 
     private MapboxMap currentMap = null;
     private Icon markerIcon = null;
@@ -156,10 +168,36 @@ public class MapOverviewFragment extends Fragment implements MapboxMap.OnCameraI
             }
         });
 
-        // set action controller and for bottomsheet
+        // set action controller and for bottomsheet and item click fragmentInteractionListener on trip items
         this.components.bottomSheetHolder.setActionController(new BottomSheetActionController(this.getContext(), this.components.bottomSheetHolder));
+        this.components.bottomSheetHolder.setOnTripItemClickListener(new OnTripItemClickListener() {
+            @Override
+            public void onTripItemClick(Trip tripItem) {
+                Bundle arguments = new Bundle();
+                arguments.putInt(KEY_FRAGMENT_ACTION, ACTION_SELECT_TRIP);
+                arguments.putString(KEY_TRIP_ID, tripItem.getTripId());
+
+                if(tripItem.getFrequency() != null) {
+                    arguments.putString(KEY_TRIP_TIME, tripItem.getFrequency().getTripTime());
+                    arguments.putString(KEY_TRIP_DATE, tripItem.getFrequency().getTripDate());
+                }
+
+                fragmentInteractionListener.onFragmentInteraction(MapOverviewFragment.this, arguments);
+            }
+        });
 
         return this.components.getRoot();
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+
+        if(context instanceof  OnFragmentInteractionListener) {
+            this.fragmentInteractionListener = (OnFragmentInteractionListener) context;
+        } else {
+            throw new RuntimeException(context + " must implement OnFragmentInteractionListener!");
+        }
     }
 
     @Override

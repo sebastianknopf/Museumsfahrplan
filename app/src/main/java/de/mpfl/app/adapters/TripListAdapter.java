@@ -4,6 +4,7 @@ import android.content.Context;
 import android.databinding.DataBindingUtil;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,14 +18,17 @@ import de.mfpl.staticnet.lib.data.Trip;
 import de.mpfl.app.R;
 import de.mpfl.app.databinding.LayoutListRouteItemBinding;
 import de.mpfl.app.databinding.LayoutListTripItemBinding;
+import de.mpfl.app.listeners.OnTripItemClickListener;
+import de.mpfl.app.listeners.OnRecyclerViewItemClickListener;
 import de.mpfl.app.utils.DateTimeFormat;
 
-public final class TripListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+public final class TripListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> implements OnRecyclerViewItemClickListener {
 
     private final static int TYPE_TRIP = 0;
     private final static int TYPE_ROUTE = 1;
 
     private Context context;
+    private OnTripItemClickListener tripItemClickListener;
     private List<Object> items;
 
     public TripListAdapter(Context context, List<Trip> tripList) {
@@ -65,6 +69,10 @@ public final class TripListAdapter extends RecyclerView.Adapter<RecyclerView.Vie
         }
     }
 
+    public void setOnTripItemClickListener(OnTripItemClickListener tripItemClickListener) {
+        this.tripItemClickListener = tripItemClickListener;
+    }
+
     @Override
     public  int getItemViewType(int index) {
         if(this.items.get(index) instanceof Trip) {
@@ -78,7 +86,7 @@ public final class TripListAdapter extends RecyclerView.Adapter<RecyclerView.Vie
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int viewType) {
         if(viewType == TYPE_TRIP) {
             LayoutListTripItemBinding components = DataBindingUtil.inflate(LayoutInflater.from(viewGroup.getContext()), R.layout.layout_list_trip_item, viewGroup, false);
-            return new TripItemViewHolder(components);
+            return new TripItemViewHolder(components, this);
         } else {
             LayoutListRouteItemBinding components = DataBindingUtil.inflate(LayoutInflater.from(viewGroup.getContext()), R.layout.layout_list_route_item, viewGroup, false);
             return new RouteItemViewHolder(components);
@@ -205,13 +213,32 @@ public final class TripListAdapter extends RecyclerView.Adapter<RecyclerView.Vie
         return this.items.size();
     }
 
-    public static class TripItemViewHolder extends RecyclerView.ViewHolder {
+    @Override
+    public void onItemClick(RecyclerView.ViewHolder viewHolder, int position) {
+        if(this.tripItemClickListener != null) {
+            Trip tripItem = (Trip) this.items.get(position);
+            this.tripItemClickListener.onTripItemClick(tripItem);
+        }
+    }
+
+    public static class TripItemViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         public LayoutListTripItemBinding components;
+        private OnRecyclerViewItemClickListener recyclerViewItemClickListener;
 
-        public TripItemViewHolder(LayoutListTripItemBinding components) {
+        public TripItemViewHolder(LayoutListTripItemBinding components, OnRecyclerViewItemClickListener recyclerViewItemClickListener) {
             super(components.getRoot());
             this.components = components;
+            this.recyclerViewItemClickListener = recyclerViewItemClickListener;
+
+            this.components.getRoot().setOnClickListener(this);
+        }
+
+        @Override
+        public void onClick(View view) {
+            if(this.recyclerViewItemClickListener != null) {
+                this.recyclerViewItemClickListener.onItemClick(this, this.getLayoutPosition());
+            }
         }
     }
 

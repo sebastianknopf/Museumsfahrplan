@@ -12,6 +12,7 @@ import android.widget.ArrayAdapter;
 
 import de.mpfl.app.R;
 import de.mpfl.app.databinding.FragmentInfoListBinding;
+import de.mpfl.app.listeners.OnFragmentInteractionListener;
 
 public class InfoListFragment extends Fragment {
 

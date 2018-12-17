@@ -8,6 +8,7 @@ import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Gravity;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -18,7 +19,7 @@ import de.mpfl.app.fragments.FavoritesFragment;
 import de.mpfl.app.fragments.InfoDetailsFragment;
 import de.mpfl.app.fragments.InfoListFragment;
 import de.mpfl.app.fragments.MapOverviewFragment;
-import de.mpfl.app.fragments.OnFragmentInteractionListener;
+import de.mpfl.app.listeners.OnFragmentInteractionListener;
 import de.mpfl.app.fragments.PreferencesFragment;
 import de.mpfl.app.fragments.SearchInputFragment;
 import de.mpfl.app.utils.NavigationManager;
@@ -197,6 +198,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             if(infoDetailsFragment != null) {
                 this.navigationManager.navigateTo(infoDetailsFragment);
             }
+        } else if(fragment instanceof MapOverviewFragment) {
+            Toast.makeText(this, arguments.getString(MapOverviewFragment.KEY_TRIP_ID) + " " + arguments.getString(MapOverviewFragment.KEY_TRIP_TIME), Toast.LENGTH_SHORT).show();
         }
     }
 }

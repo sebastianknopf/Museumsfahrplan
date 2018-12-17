@@ -5,6 +5,7 @@
     <data>
 
         <variable name="actionController" type="de.mpfl.app.controllers.BottomSheetActionController" />
+        <variable name="onTripItemClickListener" type="de.mpfl.app.listeners.OnTripItemClickListener" />
 
     </data>
 
