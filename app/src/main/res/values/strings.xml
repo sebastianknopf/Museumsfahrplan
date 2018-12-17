@@ -22,10 +22,6 @@
     <string name="str_location_provider_error">Leider ist GPS deaktiviert!</string>
     <string name="str_zoom_level_hint">Zoomen Sie in die Karte, um mehr zu sehen</string>
     <string name="str_no_departures_found">Leider wurden keine Abfahrten gefunden!</string>
-    <string name="str_frequency_exact">Alle %s Minuten</string>
-    <string name="str_frequency_demand">Etwa alle %s Minuten und bei Bedarf</string>
-    <string name="str_exceptional">Es liegen aktuelle Meldungen vor!</string>
-    <string name="str_see_more">Weitere Informationen</string>
     <string name="str_invalid_url">Ungültige URL!</string>
 
     <!-- InfoListFragment -->
@@ -34,4 +30,13 @@
         <item>Datenschutz</item>
         <item>OpenSource Lizenzen</item>
     </string-array>
+
+    <!-- TripItem -->
+    <string name="str_frequency_exact">Alle %s Minuten</string>
+    <string name="str_frequency_demand">Etwa alle %s Minuten und bei Bedarf</string>
+    <string name="str_exceptional">Es liegen aktuelle Meldungen vor!</string>
+    <string name="str_distance_km">~%d km</string>
+
+    <!-- AlertItem -->
+    <string name="str_see_more">Weitere Informationen</string>
 </resources>

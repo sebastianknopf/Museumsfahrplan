@@ -30,6 +30,11 @@ public final class TripListAdapter extends RecyclerView.Adapter<RecyclerView.Vie
     public TripListAdapter(Context context, List<Trip> tripList) {
         this.context = context;
 
+        // sort input trips by their route, add each route
+        // once as header and every trip sorted by it's departure
+        // time below the route item
+
+        // create list of all routes
         List<String> routeList = new ArrayList<>();
         for(Trip trip : tripList) {
             if(trip.getRoute() == null) {
@@ -42,6 +47,8 @@ public final class TripListAdapter extends RecyclerView.Adapter<RecyclerView.Vie
             }
         }
 
+        // iterate over all routes and find corresponding
+        // trips for this route
         this.items = new ArrayList<>();
         for(String route : routeList) {
             boolean routeIncluded = false;
@@ -112,8 +119,8 @@ public final class TripListAdapter extends RecyclerView.Adapter<RecyclerView.Vie
                     tripItemViewHolder.components.lblTripInfo.setText(tripItem.getTripShortName());
                 }
 
-                // frequency info text
-                if(tripItem.getFrequency() != null) {
+                // frequency info text - only if this is not the last trip in this frequency period
+                if(tripItem.getFrequency() != null && !tripItem.getFrequency().getEndTime().equals(tripItem.getFrequency().getTripTime())) {
                     tripItemViewHolder.components.lblTripInfo.setVisibility(View.VISIBLE);
                     if(tripItem.getFrequency().getExactTimes() == Frequency.ExactTimes.YES) {
                         tripItemViewHolder.components.lblTripInfo.setText(this.context.getString(R.string.str_frequency_exact, String.valueOf(tripItem.getFrequency().getHeadway())));
@@ -124,9 +131,9 @@ public final class TripListAdapter extends RecyclerView.Adapter<RecyclerView.Vie
 
                 // alert info
                 if(tripItem.getRealtime().hasAlerts()) {
-                    tripItemViewHolder.components.layoutTripAdditionalInfo.setVisibility(View.VISIBLE);
+                    tripItemViewHolder.components.layoutTripExceptionalInfo.setVisibility(View.VISIBLE);
                 } else {
-                    tripItemViewHolder.components.layoutTripAdditionalInfo.setVisibility(View.GONE);
+                    tripItemViewHolder.components.layoutTripExceptionalInfo.setVisibility(View.GONE);
                 }
             }
         } else {
@@ -134,6 +141,7 @@ public final class TripListAdapter extends RecyclerView.Adapter<RecyclerView.Vie
             RouteItemViewHolder routeItemViewHolder = (RouteItemViewHolder) viewHolder;
 
             if(routeItem != null) {
+                // display realtime alerts assigned to this route
                 if(routeItem.getRealtime().hasAlerts() || routeItem.getAgency().getRealtime().hasAlerts()) {
                     AlertListAdapter adapter = new AlertListAdapter(this.context, routeItem.getRealtime().getAlerts());
                     routeItemViewHolder.components.lstRouteAlerts.setVisibility(View.VISIBLE);
@@ -145,18 +153,27 @@ public final class TripListAdapter extends RecyclerView.Adapter<RecyclerView.Vie
                 String stringRouteName = routeItem.getRouteLongName();
                 routeItemViewHolder.components.lblRouteName.setText(stringRouteName);
 
+                // display distance in km's if there's a distance available
+                if(routeItem.getPosition() != null && routeItem.getPosition().getDistance() != 0) {
+                    routeItemViewHolder.components.lblRouteDistance.setVisibility(View.VISIBLE);
+                    routeItemViewHolder.components.lblRouteDistance.setText(context.getString(R.string.str_distance_km, routeItem.getPosition().getDistance()/1000));
+                }
+
+                // agency name
                 if(routeItem.getAgency() != null) {
                     String stringAgencyName = routeItem.getAgency().getAgencyName();
                     routeItemViewHolder.components.lblAgencyName.setVisibility(View.VISIBLE);
                     routeItemViewHolder.components.lblAgencyName.setText(stringAgencyName);
                 }
 
+                // route description below
                 if(!routeItem.getRouteDescription().equals("")) {
                     String stringRouteDescription = routeItem.getRouteDescription();
                     routeItemViewHolder.components.lblRouteDescription.setVisibility(View.VISIBLE);
                     routeItemViewHolder.components.lblRouteDescription.setText(stringRouteDescription);
                 }
 
+                // display information url - peferred url is route url if available
                 String stringRouteInfoURL = null;
                 if(routeItem.getAgency() != null) {
                     if(!routeItem.getAgency().getAgencyUrl().equals("")) {
@@ -171,6 +188,7 @@ public final class TripListAdapter extends RecyclerView.Adapter<RecyclerView.Vie
                 routeItemViewHolder.components.lblInfoURL.setVisibility(View.VISIBLE);
                 routeItemViewHolder.components.lblInfoURL.setText(stringRouteInfoURL.replace("http://", "").replace("https://", ""));
 
+                // information phone number from agency object
                 if(routeItem.getAgency() != null) {
                     if(!routeItem.getAgency().getAgencyPhone().equals("")) {
                         String routeInfoPhone = routeItem.getAgency().getAgencyPhone();
