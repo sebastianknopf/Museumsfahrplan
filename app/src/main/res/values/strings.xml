@@ -24,6 +24,9 @@
     <string name="str_no_departures_found">Leider wurden keine Abfahrten gefunden!</string>
     <string name="str_invalid_url">Ungültige URL!</string>
 
+    <!-- TripDetailsFragment -->
+    <string name="str_trip_date">Am %s</string>
+
     <!-- InfoListFragment -->
     <string-array name="str_array_information_categories">
         <item>Allgemeine Informationen</item>
@@ -39,4 +42,5 @@
 
     <!-- AlertItem -->
     <string name="str_see_more">Weitere Informationen</string>
+
 </resources>

@@ -18,7 +18,6 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -57,6 +56,7 @@ import de.mpfl.app.controllers.BottomSheetActionController;
 import de.mpfl.app.databinding.FragmentMapOverviewBinding;
 import de.mpfl.app.listeners.OnFragmentInteractionListener;
 import de.mpfl.app.listeners.OnTripItemClickListener;
+import de.mpfl.app.utils.DateTimeFormat;
 import de.mpfl.app.utils.SettingsManager;
 import de.mpfl.app.utils.VectorIconFactory;
 
@@ -77,7 +77,6 @@ public class MapOverviewFragment extends Fragment implements MapboxMap.OnCameraI
     private BottomSheetBehavior bottomSheetBehavior;
     private FusedLocationProviderClient locationProviderClient;
     private LocationCallback locationCallback;
-
     private OnFragmentInteractionListener fragmentInteractionListener;
 
     private MapboxMap currentMap = null;
@@ -176,10 +175,10 @@ public class MapOverviewFragment extends Fragment implements MapboxMap.OnCameraI
                 Bundle arguments = new Bundle();
                 arguments.putInt(KEY_FRAGMENT_ACTION, ACTION_SELECT_TRIP);
                 arguments.putString(KEY_TRIP_ID, tripItem.getTripId());
+                arguments.putString(KEY_TRIP_DATE, DateTimeFormat.from(new Date()).to(DateTimeFormat.YYYYMMDD));
 
                 if(tripItem.getFrequency() != null) {
                     arguments.putString(KEY_TRIP_TIME, tripItem.getFrequency().getTripTime());
-                    arguments.putString(KEY_TRIP_DATE, tripItem.getFrequency().getTripDate());
                 }
 
                 fragmentInteractionListener.onFragmentInteraction(MapOverviewFragment.this, arguments);
@@ -201,6 +200,13 @@ public class MapOverviewFragment extends Fragment implements MapboxMap.OnCameraI
     }
 
     @Override
+    public void onDetach() {
+        super.onDetach();
+
+        this.fragmentInteractionListener = null;
+    }
+
+    @Override
     public void onStart() {
         super.onStart();
 
@@ -214,6 +220,10 @@ public class MapOverviewFragment extends Fragment implements MapboxMap.OnCameraI
         super.onResume();
 
         this.components.mapViewHolder.mapView.onResume();
+
+        if(this.bottomSheetBehavior != null) {
+            this.bottomSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
+        }
     }
 
     @Override

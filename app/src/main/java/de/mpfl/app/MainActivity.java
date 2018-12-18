@@ -8,7 +8,6 @@ import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Gravity;
 import android.view.MenuItem;
-import android.widget.Toast;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -19,9 +18,10 @@ import de.mpfl.app.fragments.FavoritesFragment;
 import de.mpfl.app.fragments.InfoDetailsFragment;
 import de.mpfl.app.fragments.InfoListFragment;
 import de.mpfl.app.fragments.MapOverviewFragment;
-import de.mpfl.app.listeners.OnFragmentInteractionListener;
 import de.mpfl.app.fragments.PreferencesFragment;
 import de.mpfl.app.fragments.SearchInputFragment;
+import de.mpfl.app.fragments.TripDetailsFragment;
+import de.mpfl.app.listeners.OnFragmentInteractionListener;
 import de.mpfl.app.utils.NavigationManager;
 import de.mpfl.app.utils.SettingsManager;
 
@@ -199,7 +199,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 this.navigationManager.navigateTo(infoDetailsFragment);
             }
         } else if(fragment instanceof MapOverviewFragment) {
-            Toast.makeText(this, arguments.getString(MapOverviewFragment.KEY_TRIP_ID) + " " + arguments.getString(MapOverviewFragment.KEY_TRIP_TIME), Toast.LENGTH_SHORT).show();
+            String tripId = arguments.getString(MapOverviewFragment.KEY_TRIP_ID);
+            String tripDate = arguments.getString(MapOverviewFragment.KEY_TRIP_DATE);
+            String tripTime = arguments.getString(MapOverviewFragment.KEY_TRIP_TIME);
+
+            TripDetailsFragment tripDetailsFragment = TripDetailsFragment.newInstance(tripId, tripDate, tripTime);
+            this.navigationManager.navigateTo(tripDetailsFragment);
         }
     }
 }
