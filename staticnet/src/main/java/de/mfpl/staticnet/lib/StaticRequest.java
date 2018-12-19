@@ -219,7 +219,7 @@ public final class StaticRequest {
         this.executeCall(apiCall);
     }
 
-    public void loadTripDetails(String tripId, boolean selectShape) {
+    public void loadTripDetails(String tripId, Request.Filter filter, boolean selectShape) {
         Request request = new Request();
         request.setTripId(tripId);
 
@@ -231,7 +231,7 @@ public final class StaticRequest {
         options.setIncludeAgency(true);
         options.setIncludeRealtime(true);
 
-        Container requestContainer = this.createRequestContainer(request, options, null);
+        Container requestContainer = this.createRequestContainer(request, options, filter);
 
         StaticAPI staticApi = this.createClient();
         Call<Container> apiCall = staticApi.tripInformationService(requestContainer);
