@@ -45,4 +45,8 @@ public final class DateTimeFormat {
         return new SimpleDateFormat(format).format(this.internalDate);
     }
 
+    public Date toDate() {
+        return this.internalDate;
+    }
+
 }

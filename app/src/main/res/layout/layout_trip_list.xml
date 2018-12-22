@@ -9,8 +9,8 @@
             android:id="@+id/layProgressView"
             android:layout_width="match_parent"
             android:layout_height="82dp"
-            android:paddingLeft="@dimen/default_app_padding"
-            android:paddingRight="@dimen/default_app_padding">
+            android:paddingLeft="@dimen/default_app_space"
+            android:paddingRight="@dimen/default_app_space">
 
             <ProgressBar
                 android:id="@+id/progressBar"
@@ -26,8 +26,8 @@
             android:id="@+id/layErrorView"
             android:layout_width="match_parent"
             android:layout_height="82dp"
-            android:paddingLeft="@dimen/default_app_padding"
-            android:paddingRight="@dimen/default_app_padding"
+            android:paddingLeft="@dimen/default_app_space"
+            android:paddingRight="@dimen/default_app_space"
             android:visibility="gone">
 
             <TextView

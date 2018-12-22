@@ -26,6 +26,7 @@
 
     <!-- TripDetailsFragment -->
     <string name="str_trip_date">Am %s</string>
+    <string name="str_trip_details_title">Fahrtverlauf</string>
 
     <!-- InfoListFragment -->
     <string-array name="str_array_information_categories">

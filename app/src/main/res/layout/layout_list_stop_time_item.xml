@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:minHeight="@dimen/stop_time_item_min_height">
+
+        <!-- layout for displaying time line and departure time -->
+        <android.support.constraint.ConstraintLayout
+            android:layout_width="80dp"
+            android:layout_height="match_parent"
+            android:paddingRight="-50dp">
+
+            <View
+                android:id="@+id/viewLineTop"
+                android:layout_width="@dimen/stop_time_item_timeline_size"
+                android:layout_height="0dp"
+                android:background="@null"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintBottom_toTopOf="@id/viewLineBottom" />
+
+            <View
+                android:id="@+id/viewLineBottom"
+                android:layout_width="@dimen/stop_time_item_timeline_size"
+                android:layout_height="0dp"
+                android:background="@drawable/shape_trip_details_line"
+                app:layout_constraintTop_toBottomOf="@id/viewLineTop"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent" />
+
+            <View
+                android:id="@+id/viewPoint"
+                android:layout_width="@dimen/stop_time_item_point_size"
+                android:layout_height="@dimen/stop_time_item_point_size"
+                android:background="@drawable/shape_trip_details_point"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent" />
+
+            <TextView
+                android:id="@+id/lblStopArrival"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="12:19"
+                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                android:textColor="@color/colorPrimaryDAY"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintBottom_toTopOf="@id/lblStopDeparture"
+                app:layout_constraintVertical_chainStyle="packed"/>
+
+            <TextView
+                android:id="@+id/lblStopDeparture"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="22:19"
+                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                android:textColor="@color/colorPrimaryDAY"
+                app:layout_constraintTop_toBottomOf="@id/lblStopArrival"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintVertical_chainStyle="packed" />
+
+        </android.support.constraint.ConstraintLayout>
+
+        <!-- layout for stop information - must always be greather in height than the time layout!!! -->
+        <android.support.constraint.ConstraintLayout
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="match_parent">
+
+           <TextView
+                android:id="@+id/lblStopName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="12dp"
+                android:text="Haltestelle"
+                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintBottom_toTopOf="@id/lblStopScheduleInfoText"
+                app:layout_constraintVertical_chainStyle="packed"/>
+
+            <ImageView
+                android:id="@+id/imgStopScheduleInfoIcon"
+                android:layout_width="16dp"
+                android:layout_height="16dp"
+                android:layout_marginLeft="12dp"
+                android:src="@drawable/ic_warning"
+                android:visibility="gone"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/lblStopName" />
+
+            <TextView
+                android:id="@+id/lblStopScheduleInfoText"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:textAppearance="@style/TextAppearance.AppCompat.Small"
+                android:text="Infotext"
+                android:visibility="gone"
+                app:layout_constraintTop_toBottomOf="@id/lblStopName"
+                app:layout_constraintLeft_toRightOf="@id/imgStopScheduleInfoIcon"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintVertical_chainStyle="packed"/>
+
+        </android.support.constraint.ConstraintLayout>
+
+    </LinearLayout>
+
+</layout>

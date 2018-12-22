@@ -1,8 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <dimen name="text_margin">16dp</dimen>
-    <dimen name="default_app_padding">16dp</dimen>
+    <dimen name="default_app_space">16dp</dimen>
     <dimen name="default_list_padding">8dp</dimen>
 
     <dimen name="default_separation_space">6dp</dimen>
+
+    <!-- StopTimeItem -->
+    <dimen name="stop_time_item_min_height">60dp</dimen>
+    <dimen name="stop_time_item_timeline_size">3dp</dimen>
+    <dimen name="stop_time_item_point_size">18dp</dimen>
 </resources>

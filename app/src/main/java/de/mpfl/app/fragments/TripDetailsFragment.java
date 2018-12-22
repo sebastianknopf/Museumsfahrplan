@@ -5,6 +5,7 @@ import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -70,6 +71,13 @@ public class TripDetailsFragment extends Fragment {
         // initiate loading of trip times the first time
         this.components.tripDetailsHolder.layoutSwipeRefresh.setRefreshing(true);
         this.components.tripDetailsHolder.getActionController().loadTripDetails(currentTripId, currentTripDate, currentTripTime);
+
+        // set action bar title from itself
+        // todo: set activity title from each fragment itself!
+        AppCompatActivity activity = (AppCompatActivity) this.getActivity();
+        if(activity != null) {
+            activity.getSupportActionBar().setTitle(R.string.str_trip_details_title);
+        }
 
         return this.components.getRoot();
     }

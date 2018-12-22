@@ -14,37 +14,85 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <android.support.constraint.ConstraintLayout
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="@dimen/default_app_padding"
-            android:background="@color/colorBackgroundLightGray">
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:padding="@dimen/default_app_space">
 
-            <TextView
-                android:id="@+id/lblTripName"
+            <RelativeLayout
+                android:id="@+id/layoutTripDetailsView"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textAppearance="@style/TextAppearance.AppCompat.Small"
-                android:textColor="@color/colorAccentDAY"
-                android:textStyle="bold"
-                android:text="@string/str_placeholder"
-                app:layout_constraintTop_toTopOf="parent" />
+                android:layout_height="match_parent">
 
-            <TextView
-                android:id="@+id/lblTripDate"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textAppearance="@style/TextAppearance.AppCompat.Small"
-                android:text="@string/str_trip_date"
-                app:layout_constraintTop_toBottomOf="@id/lblTripName"
-                app:layout_constraintLeft_toLeftOf="parent"/>
+                <android.support.constraint.ConstraintLayout
+                    android:id="@+id/layoutTripBasicData"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
 
-        </android.support.constraint.ConstraintLayout>
+                    <TextView
+                        android:id="@+id/lblTripName"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                        android:textColor="@color/colorAccentDAY"
+                        android:textStyle="bold"
+                        android:text="@string/str_placeholder"
+                        app:layout_constraintTop_toTopOf="parent" />
 
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/rcvTripDetails"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+                    <TextView
+                        android:id="@+id/lblTripDate"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Small"
+                        android:text="@string/str_trip_date"
+                        app:layout_constraintTop_toBottomOf="@id/lblTripName"
+                        app:layout_constraintLeft_toLeftOf="parent"/>
+
+                </android.support.constraint.ConstraintLayout>
+
+                <android.support.v4.widget.NestedScrollView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/layoutTripBasicData"
+                    android:fillViewport="true">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                        <android.support.v7.widget.RecyclerView
+                            android:id="@+id/rcvTripDetails"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:scrollbars="vertical" />
+
+                        <ListView
+                            android:id="@+id/lstTripAlerts"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content" />
+
+                    </LinearLayout>
+
+                </android.support.v4.widget.NestedScrollView>
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/layoutTripDetailsError"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:visibility="gone">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Fehler" />
+
+            </RelativeLayout>
+
+        </LinearLayout>
 
     </android.support.v4.widget.SwipeRefreshLayout>
 
