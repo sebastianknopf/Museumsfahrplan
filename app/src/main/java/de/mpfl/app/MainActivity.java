@@ -9,10 +9,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.Gravity;
 import android.view.MenuItem;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-
 import de.mpfl.app.databinding.ActivityMainBinding;
 import de.mpfl.app.fragments.FavoritesFragment;
 import de.mpfl.app.fragments.InfoDetailsFragment;
@@ -68,39 +64,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     @Override
-    protected void onResume() {
-        super.onResume();
-
-        // set title the first time when (re-)starting the app
-        // moved from onCreate to onResume to ensure the display is always correct
-        try {
-            Date currentDate = new Date();
-            String currentDateString = new SimpleDateFormat("dd.MM.yyyy").format(currentDate);
-
-            Date morning = new SimpleDateFormat("HH:mm:ss dd.MM.yyyy").parse("00:00:01 " + currentDateString);
-            Date afternoon = new SimpleDateFormat("HH:mm:ss dd.MM.yyyy").parse("11:00:00 " + currentDateString);
-            Date evening = new SimpleDateFormat("HH:mm:ss dd.MM.yyyy").parse("17:00:00 " + currentDateString);
-
-            String titleString = "";
-            if(currentDate.after(morning)) {
-                titleString = this.getString(R.string.str_good_morning);
-
-                if(currentDate.after(afternoon)) {
-                    titleString = this.getString(R.string.str_good_afternoon);
-
-                    if(currentDate.after(evening)) {
-                        titleString = this.getString(R.string.str_goog_evening);
-                    }
-                }
-            }
-
-            this.setTitle(titleString);
-
-        } catch (ParseException e) {
-        }
-    }
-
-    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch(item.getItemId()) {
             case android.R.id.home:
@@ -150,9 +113,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         // set checked item and hide drawer
         item.setChecked(true);
-        setTitle(item.getTitle());
-
-        // hide navigation drawer
         this.components.navigationDrawer.closeDrawers();
 
         return true;

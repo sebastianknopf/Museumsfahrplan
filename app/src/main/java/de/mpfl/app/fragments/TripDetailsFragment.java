@@ -73,7 +73,6 @@ public class TripDetailsFragment extends Fragment {
         this.components.tripDetailsHolder.getActionController().loadTripDetails(currentTripId, currentTripDate, currentTripTime);
 
         // set action bar title from itself
-        // todo: set activity title from each fragment itself!
         AppCompatActivity activity = (AppCompatActivity) this.getActivity();
         if(activity != null) {
             activity.getSupportActionBar().setTitle(R.string.str_trip_details_title);

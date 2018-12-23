@@ -4,6 +4,7 @@ import android.content.Context;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -55,6 +56,12 @@ public class InfoListFragment extends Fragment {
                 listener.onFragmentInteraction(InfoListFragment.this, arguments);
             }
         });
+
+        // set acitivty title
+        AppCompatActivity activity = (AppCompatActivity) this.getActivity();
+        if(activity != null) {
+            activity.getSupportActionBar().setTitle(R.string.str_info_list_title);
+        }
 
         return this.components.getRoot();
     }

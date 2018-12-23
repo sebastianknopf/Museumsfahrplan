@@ -3,9 +3,6 @@
     <string name="str_placeholder">Placeholder Text</string>
     <string name="str_enable">Freigeben</string>
     <string name="str_activate">Aktivieren</string>
-    <string name="str_good_morning">Guten Morgen</string>
-    <string name="str_good_afternoon">Guten Tag</string>
-    <string name="str_goog_evening">Guten Abend</string>
 
     <!-- MainMenu -->
     <string name="app_name">Museums Fahrplan</string>
@@ -18,22 +15,33 @@
     <string name="str_menu_agency_title">Fahrbetrieb</string>
 
     <!-- MapOverviewFragment -->
+    <string name="str_map_overview_title">Karte</string>
     <string name="str_location_access_error">Leider können wir nicht auf den Standort zugreifen!</string>
     <string name="str_location_provider_error">Leider ist GPS deaktiviert!</string>
     <string name="str_zoom_level_hint">Zoomen Sie in die Karte, um mehr zu sehen</string>
     <string name="str_no_departures_found">Leider wurden keine Abfahrten gefunden!</string>
     <string name="str_invalid_url">Ungültige URL!</string>
 
+    <!-- SearchInputFragment -->
+    <string name="str_search_input_title">Suche</string>
+
+    <!-- FavoritesFragment -->
+    <string name="str_favorites_title">Favoriten</string>
+
     <!-- TripDetailsFragment -->
     <string name="str_trip_date">Am %s</string>
     <string name="str_trip_details_title">Fahrtverlauf</string>
 
     <!-- InfoListFragment -->
+    <string name="str_info_list_title">Informationen</string>
     <string-array name="str_array_information_categories">
         <item>Allgemeine Informationen</item>
         <item>Datenschutz</item>
         <item>OpenSource Lizenzen</item>
     </string-array>
+
+    <!-- PreferencesFragment -->
+    <string name="str_preferences_title">Einstellungen</string>
 
     <!-- TripItem -->
     <string name="str_frequency_exact">Alle %s Minuten</string>
