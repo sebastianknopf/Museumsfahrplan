@@ -70,7 +70,8 @@ public class MapOverviewFragment extends Fragment implements MapboxMap.OnCameraI
     public final static String KEY_TRIP_TIME = "KEY_TRIP_TIME";
     public final static String KEY_TRIP_DATE = "KEY_TRIP_DATE";
 
-    public final int ACTION_SELECT_TRIP = 0;
+    public final static int ACTION_SELECT_TRIP = 0;
+    public final static int ACTION_OPEN_SEARCH = 1;
 
     private final static int PERMISSION_ACCESS_LOCATION = 0;
 
@@ -367,6 +368,12 @@ public class MapOverviewFragment extends Fragment implements MapboxMap.OnCameraI
             this.locationProviderClient.requestLocationUpdates(locationRequest, this.locationCallback, null);
         } catch(SecurityException e) {
         }
+    }
+
+    public void fabSearchClick(View view) {
+        Bundle arguments = new Bundle();
+        arguments.putInt(KEY_FRAGMENT_ACTION, ACTION_OPEN_SEARCH);
+        this.fragmentInteractionListener.onFragmentInteraction(this, arguments);
     }
 
     private boolean checkPermission(String permissionName) {

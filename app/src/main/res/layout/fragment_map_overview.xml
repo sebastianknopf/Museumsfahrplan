@@ -27,17 +27,31 @@
                 android:id="@+id/bottomSheetHolder"
                 layout="@layout/layout_map_bottom_sheet" />
 
-                <android.support.design.widget.FloatingActionButton
-                    android:id="@+id/fabLocation"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginRight="16dp"
-                    android:layout_marginBottom="56dp"
-                    android:visibility="invisible"
-                    android:onClick="@{fragment::fabLocationClick}"
-                    android:src="@drawable/ic_current_location"
-                    app:layout_anchor="@id/bottomSheetHolder"
-                    app:layout_anchorGravity="top|end" />
+            <android.support.design.widget.FloatingActionButton
+                android:id="@+id/fabSearch"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:onClick="@{fragment::fabSearchClick}"
+                android:src="@drawable/ic_search"
+                android:tint="@android:color/white"
+                app:useCompatPadding="true"
+                app:layout_anchor="@id/bottomSheetHolder"
+                app:layout_anchorGravity="top|end"/>
+
+            <android.support.design.widget.FloatingActionButton
+                android:id="@+id/fabLocation"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center|top"
+                android:onClick="@{fragment::fabLocationClick}"
+                android:src="@drawable/ic_current_location"
+                android:tint="@color/colorAccentDAY"
+                android:visibility="invisible"
+                app:useCompatPadding="true"
+                app:layout_anchor="@id/fabSearch"
+                app:layout_anchorGravity="top|center"
+                app:fabSize="mini"
+                app:backgroundTint="@android:color/white"/>
 
         </android.support.design.widget.CoordinatorLayout>
 

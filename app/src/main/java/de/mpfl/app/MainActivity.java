@@ -89,9 +89,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 targetFragment = MapOverviewFragment.newInstance();
                 break;
 
-            case R.id.navigationMenuSearch:
+            /*case R.id.navigationMenuSearch:
                 targetFragment = SearchInputFragment.newInstance();
-                break;
+                break;*/
 
             case R.id.navigationMenuFavorites:
                 targetFragment = FavoritesFragment.newInstance();
@@ -159,12 +159,17 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 this.navigationManager.navigateTo(infoDetailsFragment);
             }
         } else if(fragment instanceof MapOverviewFragment) {
-            String tripId = arguments.getString(MapOverviewFragment.KEY_TRIP_ID);
-            String tripDate = arguments.getString(MapOverviewFragment.KEY_TRIP_DATE);
-            String tripTime = arguments.getString(MapOverviewFragment.KEY_TRIP_TIME);
+            if(arguments.getInt(MapOverviewFragment.KEY_FRAGMENT_ACTION) == MapOverviewFragment.ACTION_OPEN_SEARCH) {
+                SearchInputFragment searchInputFragment = SearchInputFragment.newInstance();
+                this.navigationManager.navigateTo(searchInputFragment);
+            } else if(arguments.getInt(MapOverviewFragment.KEY_FRAGMENT_ACTION) == MapOverviewFragment.ACTION_SELECT_TRIP) {
+                String tripId = arguments.getString(MapOverviewFragment.KEY_TRIP_ID);
+                String tripDate = arguments.getString(MapOverviewFragment.KEY_TRIP_DATE);
+                String tripTime = arguments.getString(MapOverviewFragment.KEY_TRIP_TIME);
 
-            TripDetailsFragment tripDetailsFragment = TripDetailsFragment.newInstance(tripId, tripDate, tripTime);
-            this.navigationManager.navigateTo(tripDetailsFragment);
+                TripDetailsFragment tripDetailsFragment = TripDetailsFragment.newInstance(tripId, tripDate, tripTime);
+                this.navigationManager.navigateTo(tripDetailsFragment);
+            }
         }
     }
 }

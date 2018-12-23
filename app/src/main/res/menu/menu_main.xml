@@ -14,10 +14,10 @@
                         android:icon="@drawable/ic_menu_map"
                         android:title="@string/str_menu_map" />
 
-                    <item
+                    <!--<item
                         android:id="@+id/navigationMenuSearch"
                         android:icon="@drawable/ic_menu_search"
-                        android:title="@string/str_menu_search" />
+                        android:title="@string/str_menu_search" />-->
 
                     <item
                         android:id="@+id/navigationMenuFavorites"
