@@ -1,6 +1,6 @@
 <resources>
 
-    <!-- Base application theme. -->
+    <!-- App Themes -->
     <style name="AppTheme" parent="AppTheme.DAY">
     </style>
 
@@ -8,11 +8,58 @@
         <item name="colorPrimary">@color/colorPrimaryDAY</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDarkDAY</item>
         <item name="colorAccent">@color/colorAccentDAY</item>
+
         <item name="android:windowBackground">@color/windowBackgroundColorDAY</item>
     </style>
 
     <style name="AppTheme.LAUNCHER" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="android:windowBackground">@drawable/launcher_background</item>
+    </style>
+
+    <!-- View Styles -->
+    <style name="DefaultTextViewStyle" parent="android:Widget.TextView">
+        <item name="android:fontFamily">sans-serif-light</item>
+        <item name="android:textStyle">normal</item>
+    </style>
+
+    <!-- Text Appearances -->
+    <style name="TextAppearance.Large" parent="TextAppearance.AppCompat.Large">
+
+    </style>
+
+    <style name="TextAppearance.Medium" parent="TextAppearance.AppCompat.Medium">
+        <item name="android:fontFamily">sans-serif-light</item>
+        <item name="android:textStyle">normal</item>
+    </style>
+
+    <style name="TextAppearance.Medium.Accent" parent="@style/TextAppearance.Medium">
+        <item name="android:textColor">@color/colorTextAccent</item>
+    </style>
+
+    <style name="TextAppearance.Medium.Primary" parent="@style/TextAppearance.Medium">
+        <item name="android:textColor">@color/colorTextPrimary</item>
+    </style>
+
+    <style name="TextAppearance.Small" parent="Base.TextAppearance.AppCompat.Small">
+        <item name="android:fontFamily">sans-serif-light</item>
+        <item name="android:textStyle">normal</item>
+    </style>
+
+    <style name="TextAppearance.Small.Accent" parent="@style/TextAppearance.Small">
+        <item name="android:textColor">@color/colorTextAccent</item>
+    </style>
+
+    <style name="TextAppearance.Small.Secondary" parent="@style/TextAppearance.Small">
+        <item name="android:textColor">@color/colorTextSecondary</item>
+    </style>
+
+    <style name="TextAppearance.Small.ErrorTitle" parent="@style/TextAppearance.Small">
+        <item name="android:textColor">@color/colorTextRed</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="TextAppearance.Small.ErrorText" parent="@style/TextAppearance.Small">
+        <item name="android:textColor">@color/colorTextRed</item>
     </style>
 
 </resources>

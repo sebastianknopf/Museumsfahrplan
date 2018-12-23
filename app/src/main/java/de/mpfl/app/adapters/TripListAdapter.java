@@ -4,7 +4,6 @@ import android.content.Context;
 import android.databinding.DataBindingUtil;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,8 +17,8 @@ import de.mfpl.staticnet.lib.data.Trip;
 import de.mpfl.app.R;
 import de.mpfl.app.databinding.LayoutListRouteItemBinding;
 import de.mpfl.app.databinding.LayoutListTripItemBinding;
-import de.mpfl.app.listeners.OnTripItemClickListener;
 import de.mpfl.app.listeners.OnRecyclerViewItemClickListener;
+import de.mpfl.app.listeners.OnTripItemClickListener;
 import de.mpfl.app.utils.DateTimeFormat;
 
 public final class TripListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> implements OnRecyclerViewItemClickListener {
@@ -121,27 +120,35 @@ public final class TripListAdapter extends RecyclerView.Adapter<RecyclerView.Vie
                 String departureString = DateTimeFormat.from(tripItem.getStopTimes().get(0).getDepartureTime(), DateTimeFormat.HHMMSS).to(DateTimeFormat.HHMM);
                 tripItemViewHolder.components.lblDepartureText.setText(departureString);
 
+                // display exceptional icon
+                if(tripItem.getRealtime().hasAlerts()) {
+                    tripItemViewHolder.components.imgExceptional.setVisibility(View.VISIBLE);
+                } else {
+                    tripItemViewHolder.components.imgExceptional.setVisibility(View.GONE);
+                }
+
                 // trip short name / trip info
-                if(!tripItem.getTripShortName().equals("")) {
-                    tripItemViewHolder.components.lblTripInfo.setVisibility(View.VISIBLE);
-                    tripItemViewHolder.components.lblTripInfo.setText(tripItem.getTripShortName());
+                String shortNameString = tripItem.getTripShortName();
+                if(!shortNameString.equals("")) {
+                    tripItemViewHolder.components.lblTripAdditionalInfo.setVisibility(View.VISIBLE);
+                    tripItemViewHolder.components.lblTripAdditionalInfo.setText(shortNameString);
+                } else if(tripItem.getRealtime().hasAlerts()) {
+                    tripItemViewHolder.components.lblTripAdditionalInfo.setVisibility(View.VISIBLE);
+                    tripItemViewHolder.components.lblTripAdditionalInfo.setText(R.string.str_exceptional);
+                } else {
+                    tripItemViewHolder.components.lblTripAdditionalInfo.setVisibility(View.GONE);
                 }
 
                 // frequency info text - only if this is not the last trip in this frequency period
                 if(tripItem.getFrequency() != null && !tripItem.getFrequency().getEndTime().equals(tripItem.getFrequency().getTripTime())) {
-                    tripItemViewHolder.components.lblTripInfo.setVisibility(View.VISIBLE);
+                    tripItemViewHolder.components.lblTripFrequencyInfo.setVisibility(View.VISIBLE);
                     if(tripItem.getFrequency().getExactTimes() == Frequency.ExactTimes.YES) {
-                        tripItemViewHolder.components.lblTripInfo.setText(this.context.getString(R.string.str_frequency_exact, String.valueOf(tripItem.getFrequency().getHeadway())));
+                        tripItemViewHolder.components.lblTripFrequencyInfo.setText(this.context.getString(R.string.str_frequency_exact, String.valueOf(tripItem.getFrequency().getHeadway())));
                     } else {
-                        tripItemViewHolder.components.lblTripInfo.setText(this.context.getString(R.string.str_frequency_demand, String.valueOf(tripItem.getFrequency().getHeadway())));
+                        tripItemViewHolder.components.lblTripFrequencyInfo.setText(this.context.getString(R.string.str_frequency_demand, String.valueOf(tripItem.getFrequency().getHeadway())));
                     }
-                }
-
-                // alert info
-                if(tripItem.getRealtime().hasAlerts()) {
-                    tripItemViewHolder.components.layoutTripExceptionalInfo.setVisibility(View.VISIBLE);
                 } else {
-                    tripItemViewHolder.components.layoutTripExceptionalInfo.setVisibility(View.GONE);
+                    tripItemViewHolder.components.lblTripFrequencyInfo.setVisibility(View.GONE);
                 }
             }
         } else {

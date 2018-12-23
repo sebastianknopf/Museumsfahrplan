@@ -34,18 +34,15 @@
                         android:id="@+id/lblTripName"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-                        android:textColor="@color/colorAccentDAY"
+                        android:textAppearance="@style/TextAppearance.Medium.Accent"
                         android:textStyle="bold"
-                        android:text="@string/str_placeholder"
                         app:layout_constraintTop_toTopOf="parent" />
 
                     <TextView
                         android:id="@+id/lblTripDate"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textAppearance="@style/TextAppearance.AppCompat.Small"
-                        android:text="@string/str_trip_date"
+                        android:textAppearance="@style/TextAppearance.Small.Secondary"
                         app:layout_constraintTop_toBottomOf="@id/lblTripName"
                         app:layout_constraintLeft_toLeftOf="parent"/>
 

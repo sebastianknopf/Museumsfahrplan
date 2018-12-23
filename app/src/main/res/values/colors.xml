@@ -7,10 +7,15 @@
     <color name="colorPrimaryDarkDAY">#003002</color>
     <color name="textColorPrimaryDAY">#232323</color>
     <color name="colorAccentDAY">#3da428</color>
-    <color name="windowBackgroundColorDAY">#FBFBFB</color>
+    <color name="windowBackgroundColorDAY">#fff</color>
 
     <!-- Others -->
+    <color name="colorBackgroundLightGray">#f9f9f9</color>
+
+    <!-- Text Colors -->
+    <color name="colorTextPrimary">@color/colorPrimaryDAY</color>
     <color name="colorTextAccent">@color/colorAccentDAY</color>
-    <color name="colorTextLight">#9f9f9f</color>
-    <color name="colorBackgroundLightGray">#fafafa</color>
+    <color name="colorTextSecondary">#888</color>
+    <color name="colorTextRed">@android:color/holo_red_dark</color>
+
 </resources>
