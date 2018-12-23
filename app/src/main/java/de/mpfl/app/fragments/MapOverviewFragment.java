@@ -130,7 +130,7 @@ public class MapOverviewFragment extends Fragment implements MapboxMap.OnCameraI
                 SettingsManager settingsManager = new SettingsManager(getContext());
                 Location lastMapLocation = settingsManager.getLastMapPosition();
                 if(lastMapLocation != null) {
-                    moveMapToPosition(lastMapLocation, settingsManager.getLastMapZoomlevel());
+                    moveMapToPosition(lastMapLocation, settingsManager.getLastMapZoomlevel(), false);
                 }
             }
         });
@@ -424,15 +424,23 @@ public class MapOverviewFragment extends Fragment implements MapboxMap.OnCameraI
         }
     }
 
-    private void moveMapToPosition(Location location, double zoomLevel) {
+    private void moveMapToPosition(Location location, double zoomlevel) {
+        this.moveMapToPosition(location, zoomlevel, true);
+    }
+
+    private void moveMapToPosition(Location location, double zoomLevel, boolean animate) {
         if(currentMap != null && location != null) {
             if(zoomLevel == 0) {
                 zoomLevel = 13.0;
             }
 
             CameraPosition cameraPosition = new CameraPosition.Builder().target(new LatLng(location.getLatitude(), location.getLongitude())).zoom(zoomLevel).build();
+            if(animate) {
+                currentMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition), 2000);
+            } else {
+                currentMap.setCameraPosition(cameraPosition);
+            }
 
-            currentMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition), 2000);
         }
     }
 }
