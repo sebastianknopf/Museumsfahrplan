@@ -100,6 +100,17 @@ public final class StopTimesAdapter extends RecyclerView.Adapter<StopTimesAdapte
             // stop name
             String stopName = stopTimeItem.getStop().getStopName();
             viewHolder.components.lblStopName.setText(stopName);
+
+            // stop schedule relationship type
+            // todo: add realtime check here when relatime level II is starting, then execute this only, when schedule relationship is not 'cancelled'
+            if(stopTimeItem.getPickupType() == StopTime.ChangeType.DEMAND || stopTimeItem.getDropOffType() == StopTime.ChangeType.DEMAND) {
+                String scheduleInfoString = context.getString(R.string.str_change_demand);
+
+                viewHolder.components.layoutStopTimeScheduleInfo.setVisibility(View.VISIBLE);
+                viewHolder.components.lblStopScheduleInfoText.setText(scheduleInfoString);
+            } else {
+                viewHolder.components.layoutStopTimeScheduleInfo.setVisibility(View.GONE);
+            }
         }
     }
 

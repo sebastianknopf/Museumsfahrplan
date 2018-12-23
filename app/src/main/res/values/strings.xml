@@ -31,6 +31,9 @@
     <!-- TripDetailsFragment -->
     <string name="str_trip_date">Am %s</string>
     <string name="str_trip_details_title">Fahrtverlauf</string>
+    <string name="str_change_no_entrance">Kein Einstieg</string>
+    <string name="str_change_no_exit">Kein Ausstieg</string>
+    <string name="str_change_demand">Bedarfshalt</string>
 
     <!-- InfoListFragment -->
     <string name="str_info_list_title">Informationen</string>
