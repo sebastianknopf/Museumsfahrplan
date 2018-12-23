@@ -31,27 +31,28 @@
                 android:id="@+id/fabSearch"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginRight="@dimen/default_app_space"
+                android:layout_marginBottom="56dp"
                 android:onClick="@{fragment::fabSearchClick}"
                 android:src="@drawable/ic_search"
                 android:tint="@android:color/white"
                 app:useCompatPadding="true"
                 app:layout_anchor="@id/bottomSheetHolder"
-                app:layout_anchorGravity="top|end"/>
+                app:layout_anchorGravity="top|end" />
 
             <android.support.design.widget.FloatingActionButton
                 android:id="@+id/fabLocation"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center|top"
+                android:layout_gravity="top|end"
+                android:layout_marginEnd="@dimen/default_app_space"
                 android:onClick="@{fragment::fabLocationClick}"
                 android:src="@drawable/ic_current_location"
                 android:tint="@color/colorAccentDAY"
-                android:visibility="invisible"
                 app:useCompatPadding="true"
+                app:backgroundTint="@android:color/white"
                 app:layout_anchor="@id/fabSearch"
-                app:layout_anchorGravity="top|center"
-                app:fabSize="mini"
-                app:backgroundTint="@android:color/white"/>
+                app:layout_anchorGravity="top"/>
 
         </android.support.design.widget.CoordinatorLayout>
 

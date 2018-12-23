@@ -50,13 +50,11 @@ import de.mfpl.staticnet.lib.base.Delivery;
 import de.mfpl.staticnet.lib.base.Request;
 import de.mfpl.staticnet.lib.data.Position;
 import de.mfpl.staticnet.lib.data.Stop;
-import de.mfpl.staticnet.lib.data.Trip;
 import de.mpfl.app.R;
 import de.mpfl.app.adapters.AlertListAdapter;
 import de.mpfl.app.controllers.BottomSheetActionController;
 import de.mpfl.app.databinding.FragmentMapOverviewBinding;
 import de.mpfl.app.listeners.OnFragmentInteractionListener;
-import de.mpfl.app.listeners.OnTripItemClickListener;
 import de.mpfl.app.utils.DateTimeFormat;
 import de.mpfl.app.utils.SettingsManager;
 import de.mpfl.app.utils.VectorIconFactory;
@@ -157,34 +155,28 @@ public class MapOverviewFragment extends Fragment implements MapboxMap.OnCameraI
         });
 
         // expand / hide bottom sheet on button click
-        this.components.bottomSheetHolder.btnToggle.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                int currentState = bottomSheetBehavior.getState();
-                if(currentState == BottomSheetBehavior.STATE_EXPANDED) {
-                    bottomSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
-                } else {
-                    bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
-                }
+        this.components.bottomSheetHolder.btnToggle.setOnClickListener(view -> {
+            int currentState = bottomSheetBehavior.getState();
+            if(currentState == BottomSheetBehavior.STATE_EXPANDED) {
+                bottomSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
+            } else {
+                bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
             }
         });
 
         // set action controller and for bottomsheet and item click fragmentInteractionListener on trip items
         this.components.bottomSheetHolder.setActionController(new BottomSheetActionController(this.getContext(), this.components.bottomSheetHolder));
-        this.components.bottomSheetHolder.setOnTripItemClickListener(new OnTripItemClickListener() {
-            @Override
-            public void onTripItemClick(Trip tripItem) {
-                Bundle arguments = new Bundle();
-                arguments.putInt(KEY_FRAGMENT_ACTION, ACTION_SELECT_TRIP);
-                arguments.putString(KEY_TRIP_ID, tripItem.getTripId());
-                arguments.putString(KEY_TRIP_DATE, DateTimeFormat.from(new Date()).to(DateTimeFormat.YYYYMMDD));
+        this.components.bottomSheetHolder.setOnTripItemClickListener(tripItem -> {
+            Bundle arguments = new Bundle();
+            arguments.putInt(KEY_FRAGMENT_ACTION, ACTION_SELECT_TRIP);
+            arguments.putString(KEY_TRIP_ID, tripItem.getTripId());
+            arguments.putString(KEY_TRIP_DATE, DateTimeFormat.from(new Date()).to(DateTimeFormat.YYYYMMDD));
 
-                if(tripItem.getFrequency() != null) {
-                    arguments.putString(KEY_TRIP_TIME, tripItem.getFrequency().getTripTime());
-                }
-
-                fragmentInteractionListener.onFragmentInteraction(MapOverviewFragment.this, arguments);
+            if(tripItem.getFrequency() != null) {
+                arguments.putString(KEY_TRIP_TIME, tripItem.getFrequency().getTripTime());
             }
+
+            fragmentInteractionListener.onFragmentInteraction(MapOverviewFragment.this, arguments);
         });
 
         // set activity title from itels
@@ -332,12 +324,7 @@ public class MapOverviewFragment extends Fragment implements MapboxMap.OnCameraI
                     break;
             }
 
-            this.displaySnackbar(this.components.fragmentLayout, stringResId, Snackbar.LENGTH_INDEFINITE, R.string.str_enable, new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    requestPermission(requestCode, permissions[0]);
-                }
-            });
+            this.displaySnackbar(this.components.fragmentLayout, stringResId, Snackbar.LENGTH_INDEFINITE, R.string.str_enable, v -> requestPermission(requestCode, permissions[0]));
         } else {
             this.checkEnvironmentConditions();
         }
@@ -347,12 +334,9 @@ public class MapOverviewFragment extends Fragment implements MapboxMap.OnCameraI
     public void fabLocationClick(View view) {
         LocationManager locationManager = (LocationManager) this.getContext().getSystemService(Context.LOCATION_SERVICE);
         if(!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) && !locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)) {
-            this.displaySnackbar(this.components.fragmentLayout, R.string.str_location_provider_error, Snackbar.LENGTH_INDEFINITE, R.string.str_activate, new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent settingsIntent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
-                    startActivity(settingsIntent);
-                }
+            this.displaySnackbar(this.components.fragmentLayout, R.string.str_location_provider_error, Snackbar.LENGTH_INDEFINITE, R.string.str_activate, v -> {
+                Intent settingsIntent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+                startActivity(settingsIntent);
             });
 
             return;
@@ -368,6 +352,8 @@ public class MapOverviewFragment extends Fragment implements MapboxMap.OnCameraI
             this.locationProviderClient.requestLocationUpdates(locationRequest, this.locationCallback, null);
         } catch(SecurityException e) {
         }
+
+        this.bottomSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
     }
 
     public void fabSearchClick(View view) {
