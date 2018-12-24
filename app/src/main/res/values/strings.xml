@@ -3,6 +3,8 @@
     <string name="str_placeholder">Placeholder Text</string>
     <string name="str_enable">Freigeben</string>
     <string name="str_activate">Aktivieren</string>
+    <string name="str_missing_connection">Keine Internetverbindung!</string>
+    <string name="str_request_error">Fehler bei der Anfrage!</string>
 
     <!-- MainMenu -->
     <string name="app_name">Museums Fahrplan</string>

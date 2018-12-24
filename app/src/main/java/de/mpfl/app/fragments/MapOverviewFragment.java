@@ -23,6 +23,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
+import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
@@ -84,6 +85,7 @@ public class MapOverviewFragment extends Fragment implements MapboxMap.OnCameraI
     private Snackbar snackbar = null;
 
     private List<Stop> currentStopList;
+    private boolean zoomLevelHintShown = false;
 
     public MapOverviewFragment() {
     }
@@ -287,10 +289,16 @@ public class MapOverviewFragment extends Fragment implements MapboxMap.OnCameraI
 
                 @Override
                 public void onError(Throwable throwable) {
+                    Toast.makeText(getContext(), R.string.str_missing_connection, Toast.LENGTH_SHORT).show();
                 }
             }).loadStops(new Position().setLatitude(cameraPosition.target.getLatitude()).setLongitude(cameraPosition.target.getLongitude()), 15000, filter);
         } else {
             this.currentMap.clear();
+
+            if(!this.zoomLevelHintShown) {
+                Toast.makeText(this.getContext(), R.string.str_zoom_level_hint, Toast.LENGTH_LONG).show();
+                this.zoomLevelHintShown = true;
+            }
         }
     }
 

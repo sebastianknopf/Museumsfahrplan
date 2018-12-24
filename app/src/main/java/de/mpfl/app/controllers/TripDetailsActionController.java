@@ -39,16 +39,30 @@ public final class TripDetailsActionController {
         staticRequest.setListener(new StaticRequest.Listener() {
             @Override
             public void onSuccess(Delivery delivery) {
+                // stop displaying refresh progress bar
+                components.layoutSwipeRefresh.setRefreshing(false);
+
+                // check for api errors
+                if(delivery.getError() != null) {
+                    components.layoutTripDetailsView.setVisibility(View.GONE);
+                    components.layoutTripDetailsError.setVisibility(View.VISIBLE);
+
+                    components.lblTripDetailsError.setText(delivery.getError().getErrorMessage());
+                }
+
                 List<Trip> tripList = delivery.getTrips();
                 if(tripList.size() != 1) {
-                    // todo: display unambigous trip error here...
+                    components.layoutTripDetailsView.setVisibility(View.GONE);
+                    components.layoutTripDetailsError.setVisibility(View.VISIBLE);
+
+                    components.lblTripDetailsError.setText(R.string.str_request_error);
+
                     return;
                 }
 
                 Trip tripItem = tripList.get(0);
 
-                // stop displaying refresh progress bar and display trip details view
-                components.layoutSwipeRefresh.setRefreshing(false);
+                // display trip details view
                 components.layoutTripDetailsView.setVisibility(View.VISIBLE);
                 components.layoutTripDetailsError.setVisibility(View.GONE);
 
@@ -84,11 +98,12 @@ public final class TripDetailsActionController {
 
             @Override
             public void onError(Throwable throwable) {
-                // todo: error handling!
                 // stop displaying refresh progress bar and display trip error view
                 components.layoutSwipeRefresh.setRefreshing(false);
                 components.layoutTripDetailsView.setVisibility(View.GONE);
                 components.layoutTripDetailsError.setVisibility(View.VISIBLE);
+
+                components.lblTripDetailsError.setText(R.string.str_missing_connection);
             }
         }).loadTripDetails(tripId, filter, true);
     }

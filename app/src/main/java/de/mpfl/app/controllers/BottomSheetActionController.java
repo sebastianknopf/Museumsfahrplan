@@ -2,9 +2,6 @@ package de.mpfl.app.controllers;
 
 import android.content.Context;
 import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.util.Log;
-import android.view.MotionEvent;
 import android.view.View;
 
 import java.text.SimpleDateFormat;
@@ -47,6 +44,15 @@ public final class BottomSheetActionController {
         staticRequest.setListener(new StaticRequest.Listener() {
             @Override
             public void onSuccess(Delivery delivery) {
+                // check api errors here
+                if(delivery.getError() != null) {
+                    components.tripListHolder.progressBar.setVisibility(View.GONE);
+                    components.tripListHolder.layErrorView.setVisibility(View.VISIBLE);
+
+                    components.tripListHolder.lblErrorText.setText(delivery.getError().getErrorMessage());
+                    return;
+                }
+
                 currentTripList = delivery.getTrips();
                 if(currentTripList.size() == 0) {
                     components.tripListHolder.layProgressView.setVisibility(View.GONE);
@@ -83,6 +89,8 @@ public final class BottomSheetActionController {
             public void onError(Throwable throwable) {
                 components.tripListHolder.progressBar.setVisibility(View.GONE);
                 components.tripListHolder.layErrorView.setVisibility(View.VISIBLE);
+
+                components.tripListHolder.lblErrorText.setText(R.string.str_request_error);
             }
         }).loadDepartures(stopId, filter);
     }
