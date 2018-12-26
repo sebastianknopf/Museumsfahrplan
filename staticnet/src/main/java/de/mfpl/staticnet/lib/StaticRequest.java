@@ -156,6 +156,7 @@ public final class StaticRequest {
 
         Request.Options options = new Request.Options();
         options.setIncludeRoutes(true);
+        options.setIncludeAgency(true);
         options.setIncludeRealtime(true);
 
         Container requestContainer = this.createRequestContainer(request, options, filter);
