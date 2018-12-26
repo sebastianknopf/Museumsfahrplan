@@ -1,11 +1,14 @@
 package de.mpfl.app.fragments;
 
 import android.Manifest;
+import android.animation.ValueAnimator;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.databinding.DataBindingUtil;
+import android.graphics.Bitmap;
+import android.graphics.PointF;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
@@ -32,17 +35,20 @@ import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
+import com.mapbox.geojson.Feature;
+import com.mapbox.geojson.FeatureCollection;
+import com.mapbox.geojson.Point;
 import com.mapbox.mapboxsdk.Mapbox;
-import com.mapbox.mapboxsdk.annotations.Icon;
-import com.mapbox.mapboxsdk.annotations.Marker;
-import com.mapbox.mapboxsdk.annotations.MarkerOptions;
 import com.mapbox.mapboxsdk.camera.CameraPosition;
 import com.mapbox.mapboxsdk.camera.CameraUpdateFactory;
 import com.mapbox.mapboxsdk.geometry.LatLng;
 import com.mapbox.mapboxsdk.maps.MapboxMap;
-import com.mapbox.mapboxsdk.maps.OnMapReadyCallback;
+import com.mapbox.mapboxsdk.style.layers.PropertyFactory;
+import com.mapbox.mapboxsdk.style.layers.SymbolLayer;
+import com.mapbox.mapboxsdk.style.sources.GeoJsonSource;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -60,8 +66,7 @@ import de.mpfl.app.utils.DateTimeFormat;
 import de.mpfl.app.utils.SettingsManager;
 import de.mpfl.app.utils.VectorIconFactory;
 
-
-public class MapOverviewFragment extends Fragment implements MapboxMap.OnCameraIdleListener, MapboxMap.OnMarkerClickListener {
+public class MapOverviewFragment extends Fragment implements MapboxMap.OnCameraIdleListener, MapboxMap.OnMapClickListener {
 
     public final static String TAG ="MapOverviewFragment";
     public final static String KEY_FRAGMENT_ACTION = "KEY_FRAGMENT_ACTION";
@@ -81,11 +86,12 @@ public class MapOverviewFragment extends Fragment implements MapboxMap.OnCameraI
     private OnFragmentInteractionListener fragmentInteractionListener;
 
     private MapboxMap currentMap = null;
-    private Icon markerIcon = null;
+    private Bitmap markerBitmap = null;
     private Snackbar snackbar = null;
 
     private List<Stop> currentStopList;
     private boolean zoomLevelHintShown = false;
+    private boolean markerSelected = false;
 
     public MapOverviewFragment() {
     }
@@ -100,7 +106,7 @@ public class MapOverviewFragment extends Fragment implements MapboxMap.OnCameraI
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        this.markerIcon = VectorIconFactory.fromVectorDrawable(this.getContext(), R.drawable.ic_marker);
+        this.markerBitmap = VectorIconFactory.fromVectorDrawable(this.getContext(), R.drawable.ic_marker);
         this.locationProviderClient = LocationServices.getFusedLocationProviderClient(this.getContext());
         this.locationCallback = new LocationCallback() {
             @Override
@@ -121,19 +127,32 @@ public class MapOverviewFragment extends Fragment implements MapboxMap.OnCameraI
         this.components = DataBindingUtil.inflate(inflater, R.layout.fragment_map_overview, container, false);
         this.components.setFragment(this);
         this.components.mapViewHolder.mapView.onCreate(savedInstanceState);
-        this.components.mapViewHolder.mapView.getMapAsync(new OnMapReadyCallback() {
-            @Override
-            public void onMapReady(MapboxMap resultMap) {
-                currentMap = resultMap;
-                currentMap.addOnCameraIdleListener(MapOverviewFragment.this);
-                currentMap.setOnMarkerClickListener(MapOverviewFragment.this);
+        this.components.mapViewHolder.mapView.getMapAsync(resultMap -> {
+            this.currentMap = resultMap;
+            this.currentMap.addOnCameraIdleListener(MapOverviewFragment.this);
+            this.currentMap.addOnMapClickListener(this);
+            this.currentMap.addImage("icon.marker", this.markerBitmap);
 
-                SettingsManager settingsManager = new SettingsManager(getContext());
-                Location lastMapLocation = settingsManager.getLastMapPosition();
-                if(lastMapLocation != null) {
-                    moveMapToPosition(lastMapLocation, settingsManager.getLastMapZoomlevel(), false);
-                }
+            SettingsManager settingsManager = new SettingsManager(getContext());
+            Location lastMapLocation = settingsManager.getLastMapPosition();
+            if(lastMapLocation != null) {
+                this.moveMapToPosition(lastMapLocation, settingsManager.getLastMapZoomlevel(), false);
             }
+
+            // add layer for marker symbols
+            FeatureCollection markerCollection = FeatureCollection.fromFeatures(new Feature[]{});
+            GeoJsonSource markerSource = new GeoJsonSource("source.marker", markerCollection);
+            this.currentMap.addSource(markerSource);
+            SymbolLayer markerLayer = new SymbolLayer("layer.marker", "source.marker").withProperties(PropertyFactory.iconImage("icon.marker"));
+            markerLayer.setProperties(PropertyFactory.iconAllowOverlap(true)); // this call is very important - otherwise some stop icons may be swallowed by the layer!
+            this.currentMap.addLayer(markerLayer);
+
+            // add layer for selected marker level
+            FeatureCollection selectedMarkerCollection = FeatureCollection.fromFeatures(new Feature[]{});
+            GeoJsonSource selectedMarkerSource = new GeoJsonSource("source.selected.marker", selectedMarkerCollection);
+            this.currentMap.addSource(selectedMarkerSource);
+            SymbolLayer selectedMarkerLayer = new SymbolLayer("layer.selected.marker", "source.selected.marker").withProperties(PropertyFactory.iconImage("icon.marker"));
+            this.currentMap.addLayer(selectedMarkerLayer);
         });
 
         // setup bottom sheet behaviour
@@ -145,14 +164,15 @@ public class MapOverviewFragment extends Fragment implements MapboxMap.OnCameraI
                 ImageButton toggleButton = components.bottomSheetHolder.btnToggle;
                 if(newState == BottomSheetBehavior.STATE_EXPANDED) {
                     toggleButton.setImageDrawable(getResources().getDrawable(R.drawable.ic_arrow_down));
+                    components.fabLocation.hide();
                 } else {
                     toggleButton.setImageDrawable(getResources().getDrawable(R.drawable.ic_arrow_up));
+                    components.fabLocation.show();
                 }
             }
 
             @Override
             public void onSlide(@NonNull View view, float v) {
-
             }
         });
 
@@ -275,16 +295,19 @@ public class MapOverviewFragment extends Fragment implements MapboxMap.OnCameraI
             staticRequest.setListener(new StaticRequest.Listener() {
                 @Override
                 public void onSuccess(Delivery delivery) {
-                    currentMap.clear();
                     currentStopList = delivery.getStops();
 
+                    // create marker feature list
+                    List<Feature> markerList = new ArrayList<Feature>();
                     for(int i = 0; i < currentStopList.size(); i++) {
-                        currentMap.addMarker(new MarkerOptions()
-                                .position(new LatLng(currentStopList.get(i).getPosition().getLatitude(), currentStopList.get(i).getPosition().getLongitude()))
-                                .setTitle(currentStopList.get(i).getStopName())
-                                .setSnippet(String.valueOf(i))
-                                .icon(markerIcon));
+                        Feature marker = Feature.fromGeometry(Point.fromLngLat(currentStopList.get(i).getPosition().getLongitude(), currentStopList.get(i).getPosition().getLatitude()));
+                        marker.addNumberProperty("stop.index", i);
+                        markerList.add(marker);
                     }
+
+                    // display markers in source.markers data source
+                    GeoJsonSource markerSource = currentMap.getSourceAs("source.marker");
+                    markerSource.setGeoJson(FeatureCollection.fromFeatures(markerList));
                 }
 
                 @Override
@@ -293,8 +316,15 @@ public class MapOverviewFragment extends Fragment implements MapboxMap.OnCameraI
                 }
             }).loadStops(new Position().setLatitude(cameraPosition.target.getLatitude()).setLongitude(cameraPosition.target.getLongitude()), 15000, filter);
         } else {
-            this.currentMap.clear();
+            //this.currentMap.clear();
+            // remove all markers
+            GeoJsonSource markerSource = currentMap.getSourceAs("source.marker");
+            markerSource.setGeoJson(FeatureCollection.fromFeatures(new Feature[]{}));
 
+            GeoJsonSource selectedMarkerSource = currentMap.getSourceAs("source.selected.marker");
+            selectedMarkerSource.setGeoJson(FeatureCollection.fromFeatures(new Feature[]{}));
+
+            // display zoom level hint only once per fragment lifetime
             if(!this.zoomLevelHintShown) {
                 Toast.makeText(this.getContext(), R.string.str_zoom_level_hint, Toast.LENGTH_LONG).show();
                 this.zoomLevelHintShown = true;
@@ -303,23 +333,56 @@ public class MapOverviewFragment extends Fragment implements MapboxMap.OnCameraI
     }
 
     @Override
-    public boolean onMarkerClick(@NonNull Marker marker) {
-        this.bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+    public void onMapClick(@NonNull LatLng point) {
+        final SymbolLayer marker = (SymbolLayer) this.currentMap.getLayer("layer.selected.marker");
 
-        Stop selectedStop = this.currentStopList.get(Integer.parseInt(marker.getSnippet()));
+        final PointF pixel = this.currentMap.getProjection().toScreenLocation(point);
+        List<Feature> features = this.currentMap.queryRenderedFeatures(pixel, "layer.marker");
+        List<Feature> selectedFeature = this.currentMap.queryRenderedFeatures(pixel, "layer.selected.marker");
 
-        this.components.bottomSheetHolder.lblTitle.setText(marker.getTitle());
-        if(selectedStop.getRealtime() != null && selectedStop.getRealtime().hasAlerts()) {
-            AlertListAdapter adapter = new AlertListAdapter(this.getContext(), selectedStop.getRealtime().getAlerts());
-            this.components.bottomSheetHolder.lstStopAlerts.setVisibility(View.VISIBLE);
-            this.components.bottomSheetHolder.lstStopAlerts.setAdapter(adapter);
+        // load departures of selected stop
+        if(features.size() > 0) {
+            Feature stopFeature = features.get(0);
+            Stop selectedStop = this.currentStopList.get(stopFeature.getNumberProperty("stop.index").intValue());
+
+            this.bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+            this.components.bottomSheetHolder.lblTitle.setText(selectedStop.getStopName());
+            if(selectedStop.getRealtime() != null && selectedStop.getRealtime().hasAlerts()) {
+                AlertListAdapter adapter = new AlertListAdapter(this.getContext(), selectedStop.getRealtime().getAlerts());
+                this.components.bottomSheetHolder.lstStopAlerts.setVisibility(View.VISIBLE);
+                this.components.bottomSheetHolder.lstStopAlerts.setAdapter(adapter);
+            } else {
+                this.components.bottomSheetHolder.lstStopAlerts.setVisibility(View.GONE);
+            }
+
+            this.components.bottomSheetHolder.getActionController().loadDepartures(selectedStop.getStopId());
         } else {
-            this.components.bottomSheetHolder.lstStopAlerts.setVisibility(View.GONE);
+            if(this.markerSelected) {
+                this.deselectMarker(marker);
+            }
+
+            this.bottomSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
+            return;
         }
 
-        this.components.bottomSheetHolder.getActionController().loadDepartures(selectedStop.getStopId());
+        // handle marker animation here
+        if (selectedFeature.size() > 0 && this.markerSelected) {
+            return;
+        }
 
-        return true;
+        FeatureCollection featureCollection = FeatureCollection.fromFeatures(new Feature[]{Feature.fromGeometry(features.get(0).geometry())});
+        GeoJsonSource source = this.currentMap.getSourceAs("source.selected.marker");
+        if (source != null) {
+            source.setGeoJson(featureCollection);
+        }
+
+        if (this.markerSelected) {
+            this.deselectMarker(marker);
+        }
+
+        if (features.size() > 0) {
+            this.selectMarker(marker);
+        }
     }
 
     @Override
@@ -425,6 +488,30 @@ public class MapOverviewFragment extends Fragment implements MapboxMap.OnCameraI
         }
     }
 
+    private void selectMarker(SymbolLayer marker) {
+        ValueAnimator valueAnimator = new ValueAnimator();
+        valueAnimator.setObjectValues(1.0f, 1.35f);
+        valueAnimator.setDuration(250);
+        valueAnimator.addUpdateListener(animation -> {
+            marker.setProperties(PropertyFactory.iconSize((float) animation.getAnimatedValue()));
+        });
+
+        valueAnimator.start();
+        this.markerSelected = true;
+    }
+
+    private void deselectMarker(SymbolLayer marker) {
+        ValueAnimator valueAnimator = new ValueAnimator();
+        valueAnimator.setObjectValues(1.35f, 1.0f);
+        valueAnimator.setDuration(250);
+        valueAnimator.addUpdateListener(animation -> {
+            marker.setProperties(PropertyFactory.iconSize((float) animation.getAnimatedValue()));
+        });
+
+        valueAnimator.start();
+        this.markerSelected = false;
+    }
+
     private void moveMapToPosition(Location location, double zoomlevel) {
         this.moveMapToPosition(location, zoomlevel, true);
     }
@@ -441,7 +528,6 @@ public class MapOverviewFragment extends Fragment implements MapboxMap.OnCameraI
             } else {
                 currentMap.setCameraPosition(cameraPosition);
             }
-
         }
     }
 }

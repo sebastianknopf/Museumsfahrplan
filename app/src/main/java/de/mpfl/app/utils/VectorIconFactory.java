@@ -12,9 +12,6 @@ import android.support.annotation.DrawableRes;
 import android.support.graphics.drawable.VectorDrawableCompat;
 import android.support.v4.content.ContextCompat;
 
-import com.mapbox.mapboxsdk.annotations.Icon;
-import com.mapbox.mapboxsdk.annotations.IconFactory;
-
 public class VectorIconFactory {
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
@@ -49,8 +46,12 @@ public class VectorIconFactory {
         }
     }
 
-    public static Icon fromVectorDrawable(Context context, @DrawableRes int vectorDrawableResId) {
+    /*public static Icon fromVectorDrawable(Context context, @DrawableRes int vectorDrawableResId) {
         Bitmap iconBitmap = VectorIconFactory.getBitmap(context, vectorDrawableResId);
         return IconFactory.getInstance(context).fromBitmap(iconBitmap);
+    }*/
+
+    public static Bitmap fromVectorDrawable(Context context, @DrawableRes int vectorDrawableResId) {
+        return VectorIconFactory.getBitmap(context, vectorDrawableResId);
     }
 }
