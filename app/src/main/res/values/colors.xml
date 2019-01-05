@@ -11,6 +11,7 @@
 
     <!-- Others -->
     <color name="colorBackgroundLightGray">#f9f9f9</color>
+    <color name="colorBackgroundDarkGray">#cecece</color>
 
     <!-- Text Colors -->
     <color name="colorTextPrimary">@color/colorPrimaryDAY</color>

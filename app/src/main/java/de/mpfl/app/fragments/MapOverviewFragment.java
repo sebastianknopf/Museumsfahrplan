@@ -73,6 +73,8 @@ public class MapOverviewFragment extends Fragment implements MapboxMap.OnCameraI
     public final static String KEY_TRIP_ID = "KEY_TRIP_ID";
     public final static String KEY_TRIP_TIME = "KEY_TRIP_TIME";
     public final static String KEY_TRIP_DATE = "KEY_TRIP_DATE";
+    public final static String KEY_SEARCH_LAT = "KEY_SEARCH_LAT";
+    public final static String KEY_SEARCH_LON = "KEY_SEARCH_LON";
 
     public final static int ACTION_SELECT_TRIP = 0;
     public final static int ACTION_OPEN_SEARCH = 1;
@@ -430,6 +432,8 @@ public class MapOverviewFragment extends Fragment implements MapboxMap.OnCameraI
     public void fabSearchClick(View view) {
         Bundle arguments = new Bundle();
         arguments.putInt(KEY_FRAGMENT_ACTION, ACTION_OPEN_SEARCH);
+        arguments.putDouble(KEY_SEARCH_LAT, this.currentMap.getCameraPosition().target.getLatitude());
+        arguments.putDouble(KEY_SEARCH_LON, this.currentMap.getCameraPosition().target.getLongitude());
         this.fragmentInteractionListener.onFragmentInteraction(this, arguments);
     }
 

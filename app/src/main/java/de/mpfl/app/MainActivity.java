@@ -160,7 +160,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             }
         } else if(fragment instanceof MapOverviewFragment) {
             if(arguments.getInt(MapOverviewFragment.KEY_FRAGMENT_ACTION) == MapOverviewFragment.ACTION_OPEN_SEARCH) {
-                SearchInputFragment searchInputFragment = SearchInputFragment.newInstance();
+                double searchLat = arguments.getDouble(MapOverviewFragment.KEY_SEARCH_LAT);
+                double searchLon = arguments.getDouble(MapOverviewFragment.KEY_SEARCH_LON);
+
+                SearchInputFragment searchInputFragment = SearchInputFragment.newInstance(searchLat, searchLon);
                 this.navigationManager.navigateTo(searchInputFragment);
             } else if(arguments.getInt(MapOverviewFragment.KEY_FRAGMENT_ACTION) == MapOverviewFragment.ACTION_SELECT_TRIP) {
                 String tripId = arguments.getString(MapOverviewFragment.KEY_TRIP_ID);

@@ -4,11 +4,11 @@
     <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="?attr/selectableItemBackground"
         android:paddingLeft="@dimen/default_app_space"
         android:paddingRight="@dimen/default_app_space"
-        android:paddingTop="8dp"
-        android:paddingBottom="8dp"
-        android:clickable="true">
+        android:paddingTop="@dimen/default_list_space"
+        android:paddingBottom="@dimen/default_list_space">
 
         <ImageView
             android:id="@+id/imgTripType"
@@ -26,7 +26,6 @@
             android:layout_marginStart="12dp"
             android:layout_marginEnd="6dp"
             android:textAppearance="@style/TextAppearance.Medium"
-            android:text="Fahrt 1"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintLeft_toRightOf="@id/imgTripType"
             app:layout_constraintRight_toLeftOf="@id/lblDepartureText"

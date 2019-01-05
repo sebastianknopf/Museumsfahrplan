@@ -3,6 +3,7 @@ package de.mpfl.app.adapters;
 import android.content.Context;
 import android.databinding.DataBindingUtil;
 import android.support.annotation.NonNull;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -156,6 +157,9 @@ public final class TripListAdapter extends RecyclerView.Adapter<RecyclerView.Vie
             RouteItemViewHolder routeItemViewHolder = (RouteItemViewHolder) viewHolder;
 
             if(routeItem != null) {
+                // override route item background
+                routeItemViewHolder.components.getRoot().setBackgroundColor(ContextCompat.getColor(context, R.color.colorBackgroundLightGray));
+
                 // display realtime alerts assigned to this route
                 if(routeItem.getRealtime().hasAlerts() || routeItem.getAgency().getRealtime().hasAlerts()) {
                     AlertListAdapter adapter = new AlertListAdapter(this.context, routeItem.getRealtime().getAlerts());
@@ -205,12 +209,15 @@ public final class TripListAdapter extends RecyclerView.Adapter<RecyclerView.Vie
 
                 // information phone number from agency object
                 if(routeItem.getAgency() != null) {
-                    if(!routeItem.getAgency().getAgencyPhone().equals("")) {
+                    if (!routeItem.getAgency().getAgencyPhone().equals("")) {
                         String routeInfoPhone = routeItem.getAgency().getAgencyPhone();
                         routeItemViewHolder.components.lblInfoPhone.setVisibility(View.VISIBLE);
                         routeItemViewHolder.components.lblInfoPhone.setText(routeInfoPhone);
                     }
                 }
+
+                // override route items background
+                routeItemViewHolder.components.getRoot().setBackgroundColor(0xFFFFFFFF);
             }
         }
     }

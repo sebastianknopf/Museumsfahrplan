@@ -5,7 +5,9 @@
 
     <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:background="@null"
+        android:clickable="false">
 
         <ImageView
             android:id="@+id/imgAlertType"
@@ -20,7 +22,7 @@
             android:id="@+id/lblAlertTitle"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="4dp"
+            android:layout_marginStart="4dp"
             android:textAppearance="@style/TextAppearance.Small.ErrorTitle"
             android:textStyle="bold"
             app:layout_constraintTop_toTopOf="parent"

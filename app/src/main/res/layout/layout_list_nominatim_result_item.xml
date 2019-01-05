@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <android.support.constraint.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?attr/selectableItemBackground"
+        android:paddingTop="@dimen/default_list_space"
+        android:paddingLeft="@dimen/default_app_space"
+        android:paddingRight="@dimen/default_app_space"
+        android:paddingBottom="@dimen/default_list_space">
+
+        <ImageView
+            android:id="@+id/imgNominatimResultType"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:src="@drawable/ic_city"
+            android:tint="#ddd"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent" />
+
+        <TextView
+            android:id="@+id/lblNominatimResultTitle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:textAppearance="@style/TextAppearance.Medium.Primary"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintLeft_toRightOf="@id/imgNominatimResultType"
+            app:layout_constraintBottom_toTopOf="@id/lblNominatimResultSubtitle"
+            app:layout_constraintVertical_chainStyle="packed"/>
+
+        <TextView
+            android:id="@+id/lblNominatimResultSubtitle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:textAppearance="@style/TextAppearance.Small.Secondary"
+            app:layout_constraintTop_toBottomOf="@id/lblNominatimResultTitle"
+            app:layout_constraintLeft_toRightOf="@id/imgNominatimResultType"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintVertical_chainStyle="packed" />
+
+    </android.support.constraint.ConstraintLayout>
+
+</layout>

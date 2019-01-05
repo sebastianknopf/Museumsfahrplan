@@ -1,10 +1,15 @@
 <resources>
     <!-- Default Strings -->
     <string name="str_placeholder">Placeholder Text</string>
+    <string name="str_ok">OK</string>
+    <string name="str_cancel">Abbrechen</string>
     <string name="str_enable">Freigeben</string>
     <string name="str_activate">Aktivieren</string>
+    <string name="str_retry">Nochmal</string>
     <string name="str_missing_connection">Keine Internetverbindung!</string>
     <string name="str_request_error">Fehler bei der Anfrage!</string>
+    <string name="str_default_network_error_title">Hier ist etwas schief gelaufen!</string>
+    <string name="str_default_network_error_text">Bei dieser Anfrage ist ein Fehler aufgetreten. Am Besten versuchen Sie es später noch einmal.</string>
 
     <!-- MainMenu -->
     <string name="app_name">Museums Fahrplan</string>
@@ -26,6 +31,18 @@
 
     <!-- SearchInputFragment -->
     <string name="str_search_input_title">Suche</string>
+    <string name="str_search_options">Suchoptionen</string>
+    <string name="str_user_location">Standort</string>
+    <string name="str_user_search_params_info">Suchergebnisse am %s - Suchradius %d km</string>
+    <string name="str_current_user_location">Aktueller Standort</string>
+    <string name="str_search_date">Datum</string>
+    <string name="str_search_radius">Suchradius</string>
+    <string name="str_search_no_results_title">Leider konnten wir keine Ergebnisse finden!</string>
+    <string name="str_search_no_results_text">Am Besten ändern Sie den Suchradius oder suchen an einem anderen Datum.</string>
+    <string name="str_search_no_location_results_title">Wir konnten keine Orte finden!</string>
+    <string name="str_search_no_location_results_text">Sind Sie sicher, dass Sie sich nicht vertippt haben und dass es den Ort so wirklich gibt?</string>
+    <string name="str_search_no_route_results_title">Wir konnten keine Fahrten finden!</string>
+    <string name="str_search_no_route_results_text">Am besten suchen Sie an einem anderen Datum oder wählen einen größeren Suchradius.</string>
 
     <!-- FavoritesFragment -->
     <string name="str_favorites_title">Favoriten</string>
@@ -52,7 +69,9 @@
     <string name="str_frequency_exact">Alle %s Minuten</string>
     <string name="str_frequency_demand">Etwa alle %s Minuten und bei Bedarf</string>
     <string name="str_exceptional">Es liegen aktuelle Meldungen vor!</string>
-    <string name="str_distance_km">~%d km</string>
+
+    <!-- RouteItem -->
+    <string name="str_distance_km">%1$.0f km</string>
 
     <!-- AlertItem -->
     <string name="str_see_more">Weitere Informationen</string>

@@ -10,6 +10,7 @@
         <item name="colorAccent">@color/colorAccentDAY</item>
 
         <item name="android:windowBackground">@color/windowBackgroundColorDAY</item>
+        <item name="android:alertDialogTheme">@style/AppTheme.AlertDialog</item>
     </style>
 
     <style name="AppTheme.LAUNCHER" parent="Theme.AppCompat.Light.NoActionBar">
@@ -22,7 +23,17 @@
         <item name="android:textStyle">normal</item>
     </style>
 
+    <!-- Dialog Styles -->
+    <style name="AppTheme.AlertDialog" parent="android:Theme.Material.Light.Dialog.Alert">
+        <item name="android:colorAccent">?attr/colorAccent</item>
+        <item name="android:windowBackground">@color/windowBackgroundColorDAY</item>
+    </style>
+
     <!-- Text Appearances -->
+    <style name="TextAppearance.Light" parent="TextAppearance.AppCompat">
+        <item name="android:fontFamily">sans-serif-light</item>
+    </style>
+
     <style name="TextAppearance.Large" parent="TextAppearance.AppCompat.Large">
 
     </style>
