@@ -15,6 +15,7 @@ import de.mpfl.app.fragments.InfoDetailsFragment;
 import de.mpfl.app.fragments.InfoListFragment;
 import de.mpfl.app.fragments.MapOverviewFragment;
 import de.mpfl.app.fragments.PreferencesFragment;
+import de.mpfl.app.fragments.SearchDetailsFragment;
 import de.mpfl.app.fragments.SearchInputFragment;
 import de.mpfl.app.fragments.TripDetailsFragment;
 import de.mpfl.app.listeners.OnFragmentInteractionListener;
@@ -169,6 +170,24 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 String tripId = arguments.getString(MapOverviewFragment.KEY_TRIP_ID);
                 String tripDate = arguments.getString(MapOverviewFragment.KEY_TRIP_DATE);
                 String tripTime = arguments.getString(MapOverviewFragment.KEY_TRIP_TIME);
+
+                TripDetailsFragment tripDetailsFragment = TripDetailsFragment.newInstance(tripId, tripDate, tripTime);
+                this.navigationManager.navigateTo(tripDetailsFragment);
+            }
+        } else if(fragment instanceof SearchInputFragment) {
+            if(arguments.getInt(SearchInputFragment.KEY_FRAGMENT_ACTION) == SearchInputFragment.ACTION_SELECT_ROUTE) {
+                String routeId = arguments.getString(SearchInputFragment.KEY_SEARCH_ROUTE_ID);
+                String routeName = arguments.getString(SearchInputFragment.KEY_SEARCH_ROUTE_NAME);
+                String searchDate = arguments.getString(SearchInputFragment.KEY_SEARCH_DATE);
+
+                SearchDetailsFragment searchDetailsFragment = SearchDetailsFragment.newInstance(routeId, routeName, searchDate);
+                this.navigationManager.navigateTo(searchDetailsFragment);
+            }
+        } else if(fragment instanceof SearchDetailsFragment) {
+            if(arguments.getInt(SearchDetailsFragment.KEY_FRAGMENT_ACTION) == SearchDetailsFragment.ACTION_SELECT_TRIP) {
+                String tripId = arguments.getString(SearchDetailsFragment.KEY_TRIP_ID);
+                String tripDate = arguments.getString(SearchDetailsFragment.KEY_TRIP_DATE);
+                String tripTime = arguments.getString(SearchDetailsFragment.KEY_TRIP_TIME);
 
                 TripDetailsFragment tripDetailsFragment = TripDetailsFragment.newInstance(tripId, tripDate, tripTime);
                 this.navigationManager.navigateTo(tripDetailsFragment);

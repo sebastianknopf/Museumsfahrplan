@@ -1,0 +1,180 @@
+package de.mpfl.app.fragments;
+
+
+import android.content.Context;
+import android.databinding.DataBindingUtil;
+import android.os.Bundle;
+import android.support.annotation.Nullable;
+import android.support.annotation.StringRes;
+import android.support.v4.app.Fragment;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+
+import java.util.Date;
+import java.util.List;
+
+import de.mfpl.staticnet.lib.StaticRequest;
+import de.mfpl.staticnet.lib.base.Delivery;
+import de.mfpl.staticnet.lib.base.Request;
+import de.mfpl.staticnet.lib.data.Trip;
+import de.mpfl.app.R;
+import de.mpfl.app.adapters.TripListAdapter;
+import de.mpfl.app.databinding.FragmentSearchDetailsBinding;
+import de.mpfl.app.dialogs.ErrorDialog;
+import de.mpfl.app.listeners.OnFragmentInteractionListener;
+import de.mpfl.app.listeners.OnTripItemClickListener;
+import de.mpfl.app.utils.DateTimeFormat;
+
+public class SearchDetailsFragment extends Fragment implements OnTripItemClickListener {
+
+    public final static String TAG = "SearchDetailsFragment";
+
+    public final static String KEY_FRAGMENT_ACTION = "KEY_FRAGMENT_ACTION";
+    public final static String KEY_SEARCH_ROUTE_ID = "KEY_SEARCH_ROUTE_ID";
+    public final static String KEY_SEARCH_ROUTE_NAME = "KEY_SEARCH_ROUTE_NAME";
+    public final static String KEY_SEARCH_DATE = "KEY_SEARCH_DATE";
+    public final static String KEY_TRIP_ID = "KEY_TRIP_ID";
+    public final static String KEY_TRIP_TIME = "KEY_TRIP_TIME";
+    public final static String KEY_TRIP_DATE = "KEY_TRIP_DATE";
+
+    public final static int ACTION_SELECT_TRIP = 0;
+
+    private FragmentSearchDetailsBinding components;
+    private OnFragmentInteractionListener fragmentInteractionListener;
+
+    private String currentSearchRouteId;
+    private String currentSearchRouteName;
+    private Date currentSearchDate = new Date();
+
+    public SearchDetailsFragment() {
+        // Required empty public constructor
+    }
+
+    public static SearchDetailsFragment newInstance(String routeId, String routeName, String date) {
+        SearchDetailsFragment fragment = new SearchDetailsFragment();
+
+        Bundle arguments = new Bundle();
+        arguments.putString(KEY_SEARCH_ROUTE_ID, routeId);
+        arguments.putString(KEY_SEARCH_ROUTE_NAME, routeName);
+        arguments.putString(KEY_SEARCH_DATE, date);
+        fragment.setArguments(arguments);
+
+        return fragment;
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        if(this.getArguments() != null) {
+            this.currentSearchRouteId = this.getArguments().getString(KEY_SEARCH_ROUTE_ID);
+            this.currentSearchRouteName = this.getArguments().getString(KEY_SEARCH_ROUTE_NAME);
+            this.currentSearchDate = DateTimeFormat.from(this.getArguments().getString(KEY_SEARCH_DATE), DateTimeFormat.DDMMYYYY).toDate();
+        }
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        this.components = DataBindingUtil.inflate(inflater, R.layout.fragment_search_details, container, false);
+        this.components.setFragment(this);
+
+        // set activity title
+        AppCompatActivity activity = (AppCompatActivity) this.getActivity();
+        if(activity != null) {
+            activity.getSupportActionBar().setTitle(this.currentSearchRouteName);
+        }
+
+        // load route related trips at startup if there's a route id
+        if(this.currentSearchRouteId != null) {
+            this.loadRouteTrips();
+        }
+
+        return this.components.getRoot();
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        if (context instanceof OnFragmentInteractionListener) {
+            this.fragmentInteractionListener = (OnFragmentInteractionListener) context;
+        } else {
+            throw new RuntimeException(context.toString() + " must implement OnFragmentInteractionListener");
+        }
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        this.fragmentInteractionListener = null;
+    }
+
+
+    @Override
+    public void onTripItemClick(Trip tripItem) {
+        if(this.fragmentInteractionListener != null) {
+            Bundle arguments = new Bundle();
+            arguments.putInt(KEY_FRAGMENT_ACTION, ACTION_SELECT_TRIP);
+            arguments.putString(KEY_TRIP_ID, tripItem.getTripId());
+            arguments.putString(KEY_TRIP_DATE, DateTimeFormat.from(this.currentSearchDate).to(DateTimeFormat.YYYYMMDD));
+
+            if(tripItem.getFrequency() != null) {
+                arguments.putString(KEY_TRIP_TIME, tripItem.getFrequency().getTripTime());
+            }
+
+            this.fragmentInteractionListener.onFragmentInteraction(this, arguments);
+        }
+    }
+
+    private void showNetworkErrorDialog(ErrorDialog.OnRetryClickListener retryListener) {
+        this.showNetworkErrorDialog(R.string.str_default_network_error_title, R.string.str_default_network_error_text, retryListener);
+    }
+
+    private void showNetworkErrorDialog(@StringRes int titleStringRes, @StringRes int textStringRes, ErrorDialog.OnRetryClickListener retryListener) {
+        ErrorDialog errorDialog = new ErrorDialog(this.getContext());
+        errorDialog.setDialogImage(R.drawable.img_error_basic);
+        errorDialog.setDialogTitle(titleStringRes);
+        errorDialog.setDialogText(textStringRes);
+        errorDialog.setOnRetryClickListener(retryListener);
+        errorDialog.show();
+    }
+
+    private void loadRouteTrips() {
+        StaticRequest staticRequest = new StaticRequest();
+        staticRequest.setAppId(this.getString(R.string.MFPL_APP_ID));
+        staticRequest.setApiKey(this.getString(R.string.MFPL_API_KEY));
+
+        Request.Filter filter = new Request.Filter();
+        filter.setDate(Request.Filter.Date.fromJavaDate(this.currentSearchDate));
+        filter.setTime(DateTimeFormat.from(new Date()).to(DateTimeFormat.HHMMSS));
+
+        staticRequest.setListener(new StaticRequest.Listener() {
+            @Override
+            public void onSuccess(Delivery delivery) {
+                // check for api errors
+                if(delivery.getError() != null) {
+                    showNetworkErrorDialog(null);
+                    return;
+                }
+
+                // check whether we have some results
+                List<Trip> tripList = delivery.getTrips();
+
+                TripListAdapter tripListAdapter = new TripListAdapter(getContext(), tripList);
+                tripListAdapter.setOnTripItemClickListener(SearchDetailsFragment.this);
+
+                LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
+                layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+                components.rcvSearchDetailsResults.setLayoutManager(layoutManager);
+                components.rcvSearchDetailsResults.setAdapter(tripListAdapter);
+            }
+
+            @Override
+            public void onError(Throwable throwable) {
+                showNetworkErrorDialog(() -> loadRouteTrips());
+            }
+        }).loadTrips(this.currentSearchRouteId, filter);
+    }
+}

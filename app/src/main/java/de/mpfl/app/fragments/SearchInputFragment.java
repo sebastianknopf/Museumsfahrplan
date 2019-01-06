@@ -14,7 +14,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.SeekBar;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -45,8 +44,14 @@ public class SearchInputFragment extends Fragment implements OnRouteItemClickLis
 
     public final static String TAG ="SearchInputFragment";
 
+    public final static String KEY_FRAGMENT_ACTION = "KEY_FRAGMENT_ACTION";
     public final static String KEY_SEARCH_LAT = "KEY_SEARCH_LAT";
     public final static String KEY_SEARCH_LON = "KEY_SEARCH_LON";
+    public final static String KEY_SEARCH_ROUTE_ID = "KEY_SEARCH_ROUTE_ID";
+    public final static String KEY_SEARCH_ROUTE_NAME = "KEY_SEARCH_ROUTE_NAME";
+    public final static String KEY_SEARCH_DATE = "KEY_SEARCH_DATE";
+
+    public final static int ACTION_SELECT_ROUTE = 0;
 
     private FragmentSearchInputBinding components;
     private OnFragmentInteractionListener fragmentInteractionListener;
@@ -76,7 +81,6 @@ public class SearchInputFragment extends Fragment implements OnRouteItemClickLis
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        this.setHasOptionsMenu(true);
 
         if(this.getArguments() != null) {
             this.currentSearchLatitude = this.getArguments().getDouble(KEY_SEARCH_LAT);
@@ -206,7 +210,15 @@ public class SearchInputFragment extends Fragment implements OnRouteItemClickLis
 
     @Override
     public void onRouteItemClick(Route routeItem) {
-        Toast.makeText(this.getContext(), routeItem.getRouteId(), Toast.LENGTH_LONG).show();
+        if(this.fragmentInteractionListener != null) {
+            Bundle arguments = new Bundle();
+            arguments.putInt(KEY_FRAGMENT_ACTION, ACTION_SELECT_ROUTE);
+            arguments.putString(KEY_SEARCH_ROUTE_ID, routeItem.getRouteId());
+            arguments.putString(KEY_SEARCH_ROUTE_NAME, routeItem.getRouteLongName());
+            arguments.putString(KEY_SEARCH_DATE, DateTimeFormat.from(this.currentSearchDate).to(DateTimeFormat.DDMMYYYY));
+
+            this.fragmentInteractionListener.onFragmentInteraction(this, arguments);
+        }
     }
 
     @Override
