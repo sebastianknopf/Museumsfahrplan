@@ -261,9 +261,7 @@ public class MapOverviewFragment extends Fragment implements MapboxMap.OnCameraI
     @Override
     public void onStop() {
         super.onStop();
-
-        // don't call this here... it sucks
-        //this.components.mapViewHolder.mapView.onStop();
+        this.components.mapViewHolder.mapView.onStop();
     }
 
     @Override
