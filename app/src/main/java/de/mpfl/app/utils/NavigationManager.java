@@ -1,5 +1,6 @@
 package de.mpfl.app.utils;
 
+import android.support.annotation.AnimRes;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -13,6 +14,9 @@ public final class NavigationManager {
     private int targetContainerId;
     private int toggleResId;
     private int backResId;
+
+    private int enterAnimation = 0;
+    private int exitAnimation = 0;
 
     public NavigationManager(AppCompatActivity parentActivity, int targetContainerId, int toggleResId, int backResId) {
         this.parentActivity = parentActivity;
@@ -30,6 +34,11 @@ public final class NavigationManager {
         this.backResId = 0;
     }
 
+    public void setNextAnimation(@AnimRes int enterAnimation, @AnimRes int exitAnimation) {
+        this.enterAnimation = enterAnimation;
+        this.exitAnimation = exitAnimation;
+    }
+
     private void syncActionBar(int backStackCount) {
         ActionBar actionBar = this.parentActivity.getSupportActionBar();
         if(actionBar != null) {
@@ -45,8 +54,17 @@ public final class NavigationManager {
 
     public void navigateTo(Fragment targetFragment, boolean keepStack) {
         FragmentManager fragmentManager = this.parentActivity.getSupportFragmentManager();
-        FragmentTransaction transaction = fragmentManager.beginTransaction().replace(this.targetContainerId, targetFragment);
+        FragmentTransaction transaction = fragmentManager.beginTransaction();
         int backStackCount = fragmentManager.getBackStackEntryCount();
+
+        if(this.enterAnimation != 0 && this.exitAnimation != 0) {
+            transaction.setCustomAnimations(this.enterAnimation, this.exitAnimation, this.enterAnimation, this.exitAnimation);
+
+            this.enterAnimation = 0;
+            this.exitAnimation = 0;
+        }
+
+        transaction.replace(this.targetContainerId, targetFragment);
 
         if(keepStack) {
             transaction.addToBackStack(targetFragment.getTag());

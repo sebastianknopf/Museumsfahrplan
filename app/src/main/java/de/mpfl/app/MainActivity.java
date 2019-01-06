@@ -165,6 +165,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 double searchLon = arguments.getDouble(MapOverviewFragment.KEY_SEARCH_LON);
 
                 SearchInputFragment searchInputFragment = SearchInputFragment.newInstance(searchLat, searchLon);
+                this.navigationManager.setNextAnimation(R.anim.fragment_enter_up, R.anim.fragment_exit_up);
                 this.navigationManager.navigateTo(searchInputFragment);
             } else if(arguments.getInt(MapOverviewFragment.KEY_FRAGMENT_ACTION) == MapOverviewFragment.ACTION_SELECT_TRIP) {
                 String tripId = arguments.getString(MapOverviewFragment.KEY_TRIP_ID);
@@ -181,6 +182,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 String searchDate = arguments.getString(SearchInputFragment.KEY_SEARCH_DATE);
 
                 SearchDetailsFragment searchDetailsFragment = SearchDetailsFragment.newInstance(routeId, routeName, searchDate);
+                this.navigationManager.setNextAnimation(R.anim.fragment_enter_right, R.anim.fragment_exit_right);
                 this.navigationManager.navigateTo(searchDetailsFragment);
             }
         } else if(fragment instanceof SearchDetailsFragment) {
@@ -190,6 +192,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 String tripTime = arguments.getString(SearchDetailsFragment.KEY_TRIP_TIME);
 
                 TripDetailsFragment tripDetailsFragment = TripDetailsFragment.newInstance(tripId, tripDate, tripTime);
+                this.navigationManager.setNextAnimation(R.anim.fragment_enter_right, R.anim.fragment_exit_right);
                 this.navigationManager.navigateTo(tripDetailsFragment);
             }
         }
