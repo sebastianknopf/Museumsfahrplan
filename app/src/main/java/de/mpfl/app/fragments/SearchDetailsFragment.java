@@ -49,6 +49,9 @@ public class SearchDetailsFragment extends Fragment implements OnTripItemClickLi
     private String currentSearchRouteName;
     private Date currentSearchDate = new Date();
 
+    // needed for retain behaviour when returning from back stack to this fragment
+    private List<Trip> resultList = null;
+
     public SearchDetailsFragment() {
         // Required empty public constructor
     }
@@ -88,7 +91,9 @@ public class SearchDetailsFragment extends Fragment implements OnTripItemClickLi
         }
 
         // load route related trips at startup if there's a route id
-        if(this.currentSearchRouteId != null) {
+        if(this.resultList != null && this.resultList.size() > 0) {
+            this.setListAdapter(this.resultList);
+        } else if(this.currentSearchRouteId != null) {
             this.loadRouteTrips();
         }
 
@@ -128,6 +133,17 @@ public class SearchDetailsFragment extends Fragment implements OnTripItemClickLi
         }
     }
 
+    public void setListAdapter(List<Trip> resultList) {
+        TripListAdapter listAdapter = new TripListAdapter(getContext(), resultList);
+        listAdapter.setOnTripItemClickListener(SearchDetailsFragment.this);
+
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
+        layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+        this.components.rcvSearchDetailsResults.setLayoutManager(layoutManager);
+
+        this.components.rcvSearchDetailsResults.setAdapter(listAdapter);
+    }
+
     private void showNetworkErrorDialog(ErrorDialog.OnRetryClickListener retryListener) {
         this.showNetworkErrorDialog(R.string.str_default_network_error_title, R.string.str_default_network_error_text, retryListener);
     }
@@ -142,6 +158,8 @@ public class SearchDetailsFragment extends Fragment implements OnTripItemClickLi
     }
 
     private void loadRouteTrips() {
+        // todo: display skeleton adapter here
+
         StaticRequest staticRequest = new StaticRequest();
         staticRequest.setAppId(this.getString(R.string.MFPL_APP_ID));
         staticRequest.setApiKey(this.getString(R.string.MFPL_API_KEY));
@@ -159,16 +177,10 @@ public class SearchDetailsFragment extends Fragment implements OnTripItemClickLi
                     return;
                 }
 
-                // check whether we have some results
-                List<Trip> tripList = delivery.getTrips();
-
-                TripListAdapter tripListAdapter = new TripListAdapter(getContext(), tripList);
-                tripListAdapter.setOnTripItemClickListener(SearchDetailsFragment.this);
-
-                LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
-                layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-                components.rcvSearchDetailsResults.setLayoutManager(layoutManager);
-                components.rcvSearchDetailsResults.setAdapter(tripListAdapter);
+                // no need for check result count here
+                // api returns this route id only if there's at least one scheduled trip
+                resultList = delivery.getTrips();
+                setListAdapter(resultList);
             }
 
             @Override

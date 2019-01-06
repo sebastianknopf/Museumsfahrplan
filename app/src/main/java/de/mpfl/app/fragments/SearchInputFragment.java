@@ -61,6 +61,9 @@ public class SearchInputFragment extends Fragment implements OnRouteItemClickLis
     private int currentSearchRadius = 25000;            // 25km
     private Date currentSearchDate = new Date();        // let's look for results of today
 
+    // needed for retain behaviour when returning from back stack to this fragment
+    private List<Route> resultList = null;
+
     private boolean textInputBlocked = false;
 
     public SearchInputFragment() {
@@ -185,7 +188,12 @@ public class SearchInputFragment extends Fragment implements OnRouteItemClickLis
             });
 
             // load routes depending on current location and search radius
-            this.loadRouteResults();
+            if(this.resultList != null && this.resultList.size() > 0) {
+                this.setRouteListAdapter(this.resultList);
+                this.showRouteResultList();
+            } else {
+                this.loadRouteResults();
+            }
         }
 
         return this.components.getRoot();
@@ -241,6 +249,17 @@ public class SearchInputFragment extends Fragment implements OnRouteItemClickLis
             this.loadRouteResults();
         });
         dateDialog.show();
+    }
+
+    private void setRouteListAdapter(List<Route> resultList) {
+        RouteListAdapter routeListAdapter = new RouteListAdapter(getContext(), resultList);
+        routeListAdapter.setOnRouteItemClickListener(SearchInputFragment.this);
+
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
+        layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+        this.components.rcvSearchInputRouteResults.setLayoutManager(layoutManager);
+
+        this.components.rcvSearchInputRouteResults.setAdapter(routeListAdapter);
     }
 
     private void showRouteResultList() {
@@ -348,8 +367,8 @@ public class SearchInputFragment extends Fragment implements OnRouteItemClickLis
                 }
 
                 // check whether we have some results
-                List<Route> routeList = delivery.getRoutes();
-                if(routeList.size() == 0) {
+                resultList = delivery.getRoutes();
+                if(resultList.size() == 0) {
                     components.rcvSearchInputRouteResults.setVisibility(View.GONE);
                     components.layoutSearchInputRouteEmpty.setVisibility(View.VISIBLE);
                     return;
@@ -358,13 +377,7 @@ public class SearchInputFragment extends Fragment implements OnRouteItemClickLis
                     components.layoutSearchInputRouteEmpty.setVisibility(View.GONE);
                 }
 
-                RouteListAdapter routeListAdapter = new RouteListAdapter(getContext(), routeList);
-                routeListAdapter.setOnRouteItemClickListener(SearchInputFragment.this);
-
-                LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
-                layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-                components.rcvSearchInputRouteResults.setLayoutManager(layoutManager);
-                components.rcvSearchInputRouteResults.setAdapter(routeListAdapter);
+                setRouteListAdapter(resultList);
             }
 
             @Override
