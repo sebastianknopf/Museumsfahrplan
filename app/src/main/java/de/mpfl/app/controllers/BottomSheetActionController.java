@@ -1,6 +1,7 @@
 package de.mpfl.app.controllers;
 
 import android.content.Context;
+import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.view.View;
 
@@ -27,6 +28,9 @@ public final class BottomSheetActionController {
     public BottomSheetActionController(Context context, LayoutMapBottomSheetBinding components) {
         this.context = context;
         this.components = components;
+
+        DividerItemDecoration itemDecor = new DividerItemDecoration(context, DividerItemDecoration.VERTICAL);
+        this.components.rcvTripList.addItemDecoration(itemDecor);
     }
 
     public void loadDepartures(String stopId) {
@@ -38,26 +42,26 @@ public final class BottomSheetActionController {
         filter.setDate(Request.Filter.Date.fromJavaDate(new Date()));
         filter.setTime(new SimpleDateFormat("HH:mm:ss").format(new Date()));
 
-        this.components.tripListHolder.rcvTripList.setVisibility(View.GONE);
-        this.components.tripListHolder.layErrorView.setVisibility(View.GONE);
-        this.components.tripListHolder.layProgressView.setVisibility(View.VISIBLE);
+        this.components.rcvTripList.setVisibility(View.GONE);
+        this.components.layErrorView.setVisibility(View.GONE);
+        this.components.layProgressView.setVisibility(View.VISIBLE);
         staticRequest.setListener(new StaticRequest.Listener() {
             @Override
             public void onSuccess(Delivery delivery) {
                 // check api errors here
                 if(delivery.getError() != null) {
-                    components.tripListHolder.progressBar.setVisibility(View.GONE);
-                    components.tripListHolder.layErrorView.setVisibility(View.VISIBLE);
+                    components.progressBar.setVisibility(View.GONE);
+                    components.layErrorView.setVisibility(View.VISIBLE);
 
-                    components.tripListHolder.lblErrorText.setText(delivery.getError().getErrorMessage());
+                    components.lblErrorText.setText(delivery.getError().getErrorMessage());
                     return;
                 }
 
                 currentTripList = delivery.getTrips();
                 if(currentTripList.size() == 0) {
-                    components.tripListHolder.layProgressView.setVisibility(View.GONE);
-                    components.tripListHolder.layErrorView.setVisibility(View.VISIBLE);
-                    components.tripListHolder.lblErrorText.setText(context.getString(R.string.str_no_departures_found));
+                    components.layProgressView.setVisibility(View.GONE);
+                    components.layErrorView.setVisibility(View.VISIBLE);
+                    components.lblErrorText.setText(context.getString(R.string.str_no_departures_found));
                     return;
                 }
 
@@ -73,24 +77,24 @@ public final class BottomSheetActionController {
                     }
                 });
 
-                components.tripListHolder.layProgressView.setVisibility(View.GONE);
-                components.tripListHolder.rcvTripList.setVisibility(View.VISIBLE);
+                components.layProgressView.setVisibility(View.GONE);
+                components.rcvTripList.setVisibility(View.VISIBLE);
 
                 LinearLayoutManager layoutManager = new LinearLayoutManager(context);
                 layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-                components.tripListHolder.rcvTripList.setLayoutManager(layoutManager);
-                components.tripListHolder.rcvTripList.setAdapter(tripListAdapter);
+                components.rcvTripList.setLayoutManager(layoutManager);
+                components.rcvTripList.setAdapter(tripListAdapter);
 
-                components.tripListHolder.layProgressView.setVisibility(View.GONE);
-                components.tripListHolder.rcvTripList.setVisibility(View.VISIBLE);
+                components.layProgressView.setVisibility(View.GONE);
+                components.rcvTripList.setVisibility(View.VISIBLE);
             }
 
             @Override
             public void onError(Throwable throwable) {
-                components.tripListHolder.progressBar.setVisibility(View.GONE);
-                components.tripListHolder.layErrorView.setVisibility(View.VISIBLE);
+                components.progressBar.setVisibility(View.GONE);
+                components.layErrorView.setVisibility(View.VISIBLE);
 
-                components.tripListHolder.lblErrorText.setText(R.string.str_request_error);
+                components.lblErrorText.setText(R.string.str_request_error);
             }
         }).loadDepartures(stopId, filter);
     }

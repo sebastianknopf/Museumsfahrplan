@@ -7,6 +7,7 @@ import android.os.Handler;
 import android.support.annotation.StringRes;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -259,6 +260,10 @@ public class SearchInputFragment extends Fragment implements OnRouteItemClickLis
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         this.components.rcvSearchInputRouteResults.setLayoutManager(layoutManager);
 
+        // divider setup
+        DividerItemDecoration itemDecor = new DividerItemDecoration(this.getContext(), DividerItemDecoration.VERTICAL);
+        this.components.rcvSearchInputRouteResults.addItemDecoration(itemDecor);
+
         this.components.rcvSearchInputRouteResults.setAdapter(routeListAdapter);
     }
 
@@ -333,6 +338,11 @@ public class SearchInputFragment extends Fragment implements OnRouteItemClickLis
                     LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
                     layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
                     components.rcvSearchInputLocationResults.setLayoutManager(layoutManager);
+
+                    // divider setup
+                    DividerItemDecoration itemDecor = new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL);
+                    components.rcvSearchInputLocationResults.addItemDecoration(itemDecor);
+
                     components.rcvSearchInputLocationResults.setAdapter(nominatimResultListAdapter);
                 }
             }

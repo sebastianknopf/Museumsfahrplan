@@ -74,7 +74,7 @@ public final class NominatimResult {
 
     public String getState() {
         if(this.getAddress() != null) {
-            if(!this.getAddress().getState().equals("")) {
+            if(this.getAddress().getState() != null && !this.getAddress().getState().equals("")) {
                 return this.getAddress().getState();
             } else {
                 return this.getAddress().getCountry();

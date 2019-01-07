@@ -217,7 +217,7 @@ public final class TripListAdapter extends RecyclerView.Adapter<RecyclerView.Vie
                 }
 
                 // override route items background
-                routeItemViewHolder.components.getRoot().setBackgroundColor(0xFFFFFFFF);
+                routeItemViewHolder.components.getRoot().setBackgroundColor(ContextCompat.getColor(context, R.color.colorBackgroundLightGray));
             }
         }
     }

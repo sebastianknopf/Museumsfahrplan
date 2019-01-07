@@ -8,6 +8,7 @@ import android.support.annotation.Nullable;
 import android.support.annotation.StringRes;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -83,6 +84,10 @@ public class SearchDetailsFragment extends Fragment implements OnTripItemClickLi
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         this.components = DataBindingUtil.inflate(inflater, R.layout.fragment_search_details, container, false);
         this.components.setFragment(this);
+
+        // divider setup
+        DividerItemDecoration itemDecor = new DividerItemDecoration(this.getContext(), DividerItemDecoration.VERTICAL);
+        this.components.rcvSearchDetailsResults.addItemDecoration(itemDecor);
 
         // set activity title
         AppCompatActivity activity = (AppCompatActivity) this.getActivity();
@@ -177,7 +182,7 @@ public class SearchDetailsFragment extends Fragment implements OnTripItemClickLi
                     return;
                 }
 
-                // no need for check result count here
+                // no need for check result count here (only for error purposes)
                 // api returns this route id only if there's at least one scheduled trip
                 resultList = delivery.getTrips();
                 setListAdapter(resultList);

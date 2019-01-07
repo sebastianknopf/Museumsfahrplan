@@ -54,7 +54,7 @@
     <string name="str_change_no_entrance">Kein Einstieg</string>
     <string name="str_change_no_exit">Kein Ausstieg</string>
     <string name="str_change_demand">Bedarfshalt</string>
-    <string name="str_favorite_added">Als Favorit gespeichert!</string>
+    <string name="str_favorite_added">Fahrt als Favorit gespeichert!</string>
 
     <!-- InfoListFragment -->
     <string name="str_info_list_title">Informationen</string>

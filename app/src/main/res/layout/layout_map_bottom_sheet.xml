@@ -54,9 +54,51 @@
 
             </LinearLayout>
 
-            <include
-                android:id="@+id/tripListHolder"
-                layout="@layout/layout_trip_list" />
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <RelativeLayout
+                    android:id="@+id/layProgressView"
+                    android:layout_width="match_parent"
+                    android:layout_height="82dp"
+                    android:paddingLeft="@dimen/default_app_space"
+                    android:paddingRight="@dimen/default_app_space">
+
+                    <ProgressBar
+                        android:id="@+id/progressBar"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:layout_margin="16dp"
+                        android:layout_centerHorizontal="true"
+                        style="?android:attr/progressBarStyleSmall"/>
+
+                </RelativeLayout>
+
+                <LinearLayout
+                    android:id="@+id/layErrorView"
+                    android:layout_width="match_parent"
+                    android:layout_height="82dp"
+                    android:paddingLeft="@dimen/default_app_space"
+                    android:paddingRight="@dimen/default_app_space"
+                    android:visibility="gone">
+
+                    <TextView
+                        android:id="@+id/lblErrorText"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textAppearance="@style/TextAppearance.Small.ErrorText" />
+
+                </LinearLayout>
+
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/rcvTripList"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:scrollbars="vertical"
+                    android:visibility="gone" />
+
+            </RelativeLayout>
 
         </LinearLayout>
 

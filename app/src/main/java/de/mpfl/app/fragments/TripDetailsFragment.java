@@ -104,7 +104,6 @@ public class TripDetailsFragment extends Fragment {
                 this.setAlertAdapter(this.resultTrip.getRealtime().getAlerts());
             }
         } else {
-            this.components.layoutSwipeRefresh.setRefreshing(true);
             this.loadTripDetails(this.currentTripId, this.currentTripDate, this.currentTripTime);
         }
 
@@ -287,7 +286,8 @@ public class TripDetailsFragment extends Fragment {
         Request.Filter filter = new Request.Filter();
         filter.setDate(new Request.Filter.Date().setSingle(tripDate));
         filter.setTime(tripTime);
-
+        
+        this.components.layoutSwipeRefresh.setRefreshing(true);
         staticRequest.setListener(new StaticRequest.Listener() {
             @Override
             public void onSuccess(Delivery delivery) {
