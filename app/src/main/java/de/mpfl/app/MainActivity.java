@@ -195,6 +195,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 this.navigationManager.setNextAnimation(R.anim.fragment_enter_right, R.anim.fragment_exit_right);
                 this.navigationManager.navigateTo(tripDetailsFragment);
             }
+        } else if(fragment instanceof TripDetailsFragment) {
+            if(arguments.getInt(TripDetailsFragment.KEY_FRAGMENT_ACTION) == TripDetailsFragment.ACTION_VIEW_FAVORITES) {
+                FavoritesFragment favoritesFragment = FavoritesFragment.newInstance();
+                this.navigationManager.setNextAnimation(R.anim.fragment_enter_right, R.anim.fragment_exit_right);
+                this.navigationManager.navigateTo(favoritesFragment);
+            }
         }
     }
 }

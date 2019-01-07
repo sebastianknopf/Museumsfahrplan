@@ -11,4 +11,9 @@
     <dimen name="stop_time_item_min_height">60dp</dimen>
     <dimen name="stop_time_item_timeline_size">3dp</dimen>
     <dimen name="stop_time_item_point_size">18dp</dimen>
+
+    <!-- FAB Menu -->
+    <dimen name="fab_menu_level_1">88dp</dimen>
+    <dimen name="fab_menu_level_2">152dp</dimen>
+    <dimen name="fab_menu_level_3">216dp</dimen>
 </resources>

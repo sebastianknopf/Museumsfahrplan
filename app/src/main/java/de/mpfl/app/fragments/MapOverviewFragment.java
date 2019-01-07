@@ -234,6 +234,8 @@ public class MapOverviewFragment extends Fragment implements MapboxMap.OnCameraI
     public void onStart() {
         super.onStart();
 
+        this.components.mapViewHolder.mapView.onStart();
+
         // check permissions and try to achieve them
         // do this only here (and not in onResume!) cause it will display a dialog
         this.checkEnvironmentConditions();

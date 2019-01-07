@@ -1,4 +1,5 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
@@ -12,8 +13,160 @@
         android:layout_height="match_parent"
         tools:context="de.mpfl.app.fragments.TripDetailsFragment">
 
-        <include android:id="@+id/tripDetailsHolder"
-            layout="@layout/layout_trip_details" />
+        <RelativeLayout
+            android:id="@+id/layoutTripDetailsList"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <android.support.v4.widget.SwipeRefreshLayout
+                android:id="@+id/layoutSwipeRefresh"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:padding="@dimen/default_app_space">
+
+                    <RelativeLayout
+                        android:id="@+id/layoutTripDetailsView"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+
+                        <android.support.constraint.ConstraintLayout
+                            android:id="@+id/layoutTripBasicData"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
+
+                            <TextView
+                                android:id="@+id/lblTripName"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:textAppearance="@style/TextAppearance.Medium.Accent"
+                                android:textStyle="bold"
+                                app:layout_constraintTop_toTopOf="parent" />
+
+                            <TextView
+                                android:id="@+id/lblTripDate"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textAppearance="@style/TextAppearance.Small.Secondary"
+                                app:layout_constraintTop_toBottomOf="@id/lblTripName"
+                                app:layout_constraintLeft_toLeftOf="parent"/>
+
+                        </android.support.constraint.ConstraintLayout>
+
+                        <android.support.v4.widget.NestedScrollView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@id/layoutTripBasicData"
+                            android:fillViewport="true">
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="vertical">
+
+                                <android.support.v7.widget.RecyclerView
+                                    android:id="@+id/rcvTripDetails"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:scrollbars="vertical" />
+
+                                <ListView
+                                    android:id="@+id/lstTripAlerts"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content" />
+
+                            </LinearLayout>
+
+                        </android.support.v4.widget.NestedScrollView>
+
+                    </RelativeLayout>
+
+                    <RelativeLayout
+                        android:id="@+id/layoutTripDetailsError"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:visibility="gone">
+
+                        <TextView
+                            android:id="@+id/lblTripDetailsError"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_centerHorizontal="true"
+                            android:textAppearance="@style/TextAppearance.Small.ErrorText" />
+
+                    </RelativeLayout>
+
+                </LinearLayout>
+
+            </android.support.v4.widget.SwipeRefreshLayout>
+
+        </RelativeLayout>
+
+        <View
+            android:id="@+id/viewFabBackground"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="#50000000"
+            android:visibility="gone"
+            android:alpha="0"
+            android:onClick="@{fragment::viewFabBackgroundClick}" />
+
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/fabFareInfo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="23dp"
+            android:layout_marginBottom="56dp"
+            android:layout_gravity="bottom|end"
+            android:src="@drawable/ic_menu_ticket"
+            android:tint="@android:color/white"
+            android:onClick="@{fragment::fabFareInfoClick}"
+            android:rotation="90"
+            android:visibility="gone"
+            app:fabSize="mini"/>
+
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/fabMapView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="23dp"
+            android:layout_marginBottom="56dp"
+            android:layout_gravity="bottom|end"
+            android:src="@drawable/ic_menu_map"
+            android:tint="@android:color/white"
+            android:onClick="@{fragment::fabMapViewClick}"
+            android:rotation="90"
+            android:visibility="gone"
+            app:fabSize="mini"/>
+
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/fabAddFavorite"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="23dp"
+            android:layout_marginBottom="56dp"
+            android:layout_gravity="bottom|end"
+            android:src="@drawable/ic_menu_favorites"
+            android:tint="@android:color/white"
+            android:onClick="@{fragment::fabAddFavoriteClick}"
+            android:rotation="90"
+            android:visibility="gone"
+            app:fabSize="mini" />
+
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/fabMenu"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/default_app_space"
+            android:layout_marginBottom="56dp"
+            android:layout_gravity="bottom|end"
+            android:src="@drawable/ic_menu_plus"
+            android:tint="@android:color/white"
+            android:onClick="@{fragment::fabMenuClick}" />
 
     </FrameLayout>
 
