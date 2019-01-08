@@ -3,6 +3,9 @@ package de.mpfl.app.fragments;
 import android.animation.Animator;
 import android.content.Context;
 import android.databinding.DataBindingUtil;
+import android.graphics.Bitmap;
+import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.StringRes;
 import android.support.design.widget.Snackbar;
@@ -15,12 +18,23 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.mapbox.mapboxsdk.annotations.Icon;
+import com.mapbox.mapboxsdk.annotations.IconFactory;
+import com.mapbox.mapboxsdk.annotations.MarkerOptions;
+import com.mapbox.mapboxsdk.annotations.PolylineOptions;
+import com.mapbox.mapboxsdk.camera.CameraUpdateFactory;
+import com.mapbox.mapboxsdk.geometry.LatLng;
+import com.mapbox.mapboxsdk.geometry.LatLngBounds;
+
+import java.util.ArrayList;
 import java.util.List;
 
 import de.mfpl.staticnet.lib.StaticRequest;
 import de.mfpl.staticnet.lib.base.Delivery;
 import de.mfpl.staticnet.lib.base.Request;
 import de.mfpl.staticnet.lib.data.Alert;
+import de.mfpl.staticnet.lib.data.Position;
+import de.mfpl.staticnet.lib.data.Shape;
 import de.mfpl.staticnet.lib.data.StopTime;
 import de.mfpl.staticnet.lib.data.Trip;
 import de.mpfl.app.R;
@@ -30,6 +44,7 @@ import de.mpfl.app.databinding.FragmentTripDetailsBinding;
 import de.mpfl.app.dialogs.ErrorDialog;
 import de.mpfl.app.listeners.OnFragmentInteractionListener;
 import de.mpfl.app.utils.DateTimeFormat;
+import de.mpfl.app.utils.VectorIconFactory;
 
 public class TripDetailsFragment extends Fragment {
 
@@ -54,6 +69,7 @@ public class TripDetailsFragment extends Fragment {
     private boolean isFabMenuOpen = false;
 
     private Trip resultTrip = null;
+    private Icon currentIcon = null;
 
     public TripDetailsFragment() {
         // Required empty public constructor
@@ -79,6 +95,10 @@ public class TripDetailsFragment extends Fragment {
             this.currentTripDate = getArguments().getString(KEY_TRIP_DATE);
             this.currentTripTime = getArguments().getString(KEY_TRIP_TIME);
         }
+
+        // load map marker icon
+        Bitmap markerBitmap = VectorIconFactory.fromVectorDrawable(this.getContext(), R.drawable.ic_marker_stop);
+        this.currentIcon = IconFactory.getInstance(this.getContext()).fromBitmap(markerBitmap);
     }
 
     @Override
@@ -86,8 +106,10 @@ public class TripDetailsFragment extends Fragment {
         this.components = DataBindingUtil.inflate(inflater, R.layout.fragment_trip_details, container, false);
         this.components.setFragment(this);
 
+        // init map view
+        this.components.mapView.onCreate(savedInstanceState);
+
         // set action controller for trip details view
-        //this.components.tripDetailsHolder.setActionController(new TripDetailsActionController(this.getContext(), this.components.tripDetailsHolder));
         this.components.layoutSwipeRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -132,6 +154,36 @@ public class TripDetailsFragment extends Fragment {
         this.fragmentInteractionListener = null;
     }
 
+    @Override
+    public void onStart() {
+        super.onStart();
+        this.components.mapView.onStart();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        this.components.mapView.onResume();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        //this.components.mapView.onPause();
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        this.components.mapView.onStop();
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        this.components.mapView.onDestroy();
+    }
+
     public void viewFabBackgroundClick(View view) {
         this.hideFabMenu();
     }
@@ -159,12 +211,19 @@ public class TripDetailsFragment extends Fragment {
     public void fabMapViewClick(View view) {
         this.hideFabMenu();
 
-        // todo: add complete action here
-        if(this.fragmentInteractionListener != null) {
-            Bundle arguments = new Bundle();
-            arguments.putInt(KEY_FRAGMENT_ACTION, ACTION_VIEW_MAP);
+        // todo: check action is complete?
+        if(!this.components.getDoublePane()) {
+            if(!this.components.getMapVisible()) {
+                this.showTripDetailsMap();
 
-            this.fragmentInteractionListener.onFragmentInteraction(this, arguments);
+                Drawable icList = this.getResources().getDrawable(R.drawable.ic_menu_list, null);
+                this.components.fabMapView.setImageDrawable(icList);
+            } else {
+                this.showTripDetailsList();
+
+                Drawable icMap = this.getResources().getDrawable(R.drawable.ic_menu_map, null);
+                this.components.fabMapView.setImageDrawable(icMap);
+            }
         }
     }
 
@@ -192,6 +251,60 @@ public class TripDetailsFragment extends Fragment {
         // trip date of selected trip
         String tripDateString = getContext().getString(R.string.str_trip_date, DateTimeFormat.from(tripDate, DateTimeFormat.YYYYMMDD).to(DateTimeFormat.DDMMYYYY));
         this.components.lblTripDate.setText(tripDateString);
+    }
+
+    private void setTripMapView(List<StopTime> stopTimeList, Shape tripShape, final String tripShapeColor) {
+        this.components.mapView.getMapAsync(map -> {
+            // clear map at first
+            map.clear();
+
+            // lat lng bound builder to zoom the map to desied views
+            LatLngBounds.Builder latLngBuilder = new LatLngBounds.Builder();
+
+            // display all stops on the map
+            for(StopTime stopTime : stopTimeList) {
+                if(stopTime.getStop() != null) {
+                    LatLng position = new LatLng(stopTime.getStop().getPosition().getLatitude(), stopTime.getStop().getPosition().getLongitude());
+
+                    latLngBuilder.include(position);
+
+                    map.addMarker(new MarkerOptions()
+                            .position(position)
+                            .setTitle(stopTime.getStop().getStopName())
+                            .setSnippet(DateTimeFormat.from(stopTime.getDepartureTime(), DateTimeFormat.HHMMSS).to(DateTimeFormat.HHMM))
+                            .setIcon(this.currentIcon)
+                    );
+                }
+            }
+
+            // display shape polyline on map
+            if(tripShape != null && tripShape.getPoints().size() > 0) {
+                List<LatLng> pointList = new ArrayList<LatLng>();
+                for(Position pos : tripShape.getPoints()) {
+                    LatLng position = new LatLng(pos.getLatitude(), pos.getLongitude());
+                    latLngBuilder.include(position);
+                    pointList.add(position);
+                }
+
+                int polylineColor = Color.RED;
+                try {
+                    if(!tripShapeColor.startsWith("#")) {
+                        polylineColor = Color.parseColor("#" + tripShapeColor);
+                    } else {
+                        polylineColor = Color.parseColor(tripShapeColor);
+                    }
+                } catch(Exception ignored) {
+                }
+
+                map.addPolyline(new PolylineOptions()
+                        .addAll(pointList)
+                        .color(polylineColor)
+                        .width(this.getResources().getDimension(R.dimen.map_polyline_width))
+                );
+            }
+
+            map.moveCamera(CameraUpdateFactory.newLatLngBounds(latLngBuilder.build(), 200));
+        });
     }
 
     private void setStopTimesAdapter(List<StopTime> stopTimesList) {
@@ -223,6 +336,24 @@ public class TripDetailsFragment extends Fragment {
         errorDialog.setDialogText(textStringRes);
         errorDialog.setOnRetryClickListener(retryListener);
         errorDialog.show();
+    }
+
+    public void showTripDetailsList() {
+        if(!this.components.getDoublePane()) {
+            this.components.setMapVisible(false);
+            this.components.layoutTripDetailsList.setVisibility(View.VISIBLE);
+            this.components.layoutTripDetailsMap.setVisibility(View.GONE);
+        }
+    }
+
+    private void showTripDetailsMap() {
+        if(!this.components.getDoublePane()) {
+            this.components.setMapVisible(true);
+            this.components.layoutTripDetailsList.setVisibility(View.GONE);
+            this.components.layoutTripDetailsMap.setVisibility(View.VISIBLE);
+
+            this.setTripMapView(this.resultTrip.getStopTimes(), this.resultTrip.getShape(), this.resultTrip.getRoute().getRouteColor());
+        }
     }
 
     private void showFabMenu() {
@@ -278,7 +409,7 @@ public class TripDetailsFragment extends Fragment {
         });
     }
 
-    public void loadTripDetails(String tripId, String tripDate, String tripTime) {
+    private void loadTripDetails(String tripId, String tripDate, String tripTime) {
         StaticRequest staticRequest = new StaticRequest();
         staticRequest.setAppId(this.getContext().getString(R.string.MFPL_APP_ID));
         staticRequest.setApiKey(this.getContext().getString(R.string.MFPL_API_KEY));
@@ -321,6 +452,11 @@ public class TripDetailsFragment extends Fragment {
                 // display trip assigned alerts
                 if (resultTrip.getRealtime().hasAlerts()) {
                     setAlertAdapter(resultTrip.getRealtime().getAlerts());
+                }
+
+                // display trip map view if we're in double pane mode
+                if(components.getDoublePane()) {
+                    setTripMapView(resultTrip.getStopTimes(), resultTrip.getShape(), resultTrip.getRoute().getRouteColor());
                 }
             }
 

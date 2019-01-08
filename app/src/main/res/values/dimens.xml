@@ -16,4 +16,7 @@
     <dimen name="fab_menu_level_1">88dp</dimen>
     <dimen name="fab_menu_level_2">152dp</dimen>
     <dimen name="fab_menu_level_3">216dp</dimen>
+
+    <!-- MapView -->
+    <dimen name="map_polyline_width">2dp</dimen>
 </resources>

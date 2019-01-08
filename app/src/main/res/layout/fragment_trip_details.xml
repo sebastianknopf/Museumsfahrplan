@@ -1,10 +1,15 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:mapbox="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
 
         <variable name="fragment" type="de.mpfl.app.fragments.TripDetailsFragment" />
+
+        <variable name="doublePane" type="boolean" android:value="false" />
+
+        <variable name="mapVisible" type="boolean" android:value="false" />
 
     </data>
 
@@ -103,6 +108,26 @@
                 </LinearLayout>
 
             </android.support.v4.widget.SwipeRefreshLayout>
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/layoutTripDetailsMap"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="gone">
+
+            <com.mapbox.mapboxsdk.maps.MapView
+                android:id="@+id/mapView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                mapbox:mapbox_cameraTargetLat="51.1657"
+                mapbox:mapbox_cameraTargetLng="10.4515"
+                mapbox:mapbox_cameraZoom="5.15"
+                mapbox:mapbox_cameraZoomMax="18"
+                mapbox:mapbox_cameraZoomMin="5"
+                mapbox:mapbox_styleUrl="mapbox://styles/sebastianknopf/cjp042n58ati52so77w931alz"
+                mapbox:mapbox_uiRotateGestures="false" />
 
         </RelativeLayout>
 
