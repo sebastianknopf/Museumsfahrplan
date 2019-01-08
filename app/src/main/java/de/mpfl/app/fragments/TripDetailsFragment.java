@@ -40,6 +40,8 @@ import de.mfpl.staticnet.lib.data.Trip;
 import de.mpfl.app.R;
 import de.mpfl.app.adapters.AlertListAdapter;
 import de.mpfl.app.adapters.StopTimesAdapter;
+import de.mpfl.app.database.AppDatabase;
+import de.mpfl.app.database.Favorite;
 import de.mpfl.app.databinding.FragmentTripDetailsBinding;
 import de.mpfl.app.dialogs.ErrorDialog;
 import de.mpfl.app.listeners.OnFragmentInteractionListener;
@@ -225,7 +227,19 @@ public class TripDetailsFragment extends Fragment {
     public void fabAddFavoriteClick(View view) {
         this.hideFabMenu();
 
-        // todo: add complete action here
+        // add favorite to internal database
+        AppDatabase appDatabase = AppDatabase.getInstance(this.getContext());
+
+        Favorite favorite = new Favorite();
+        favorite.setTripId(this.resultTrip.getTripId());
+        favorite.setTripType(this.resultTrip.getRoute().getRouteType().toString());
+        favorite.setTripName(this.resultTrip.getTripHeadsign());
+        favorite.setTripDate(this.currentTripDate);
+        favorite.setTripTime(this.resultTrip.getStopTimes().get(0).getDepartureTime());
+
+        appDatabase.addFavorite(favorite);
+
+        // inform user
         Snackbar.make(this.components.getRoot(), R.string.str_favorite_added, Snackbar.LENGTH_LONG).setAction(R.string.str_view, v -> {
             if(this.fragmentInteractionListener != null) {
                 Bundle arguments = new Bundle();
