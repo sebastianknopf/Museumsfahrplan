@@ -69,7 +69,6 @@ public class TripDetailsFragment extends Fragment {
     private boolean isFabMenuOpen = false;
 
     private Trip resultTrip = null;
-    private Icon currentIcon = null;
 
     public TripDetailsFragment() {
         // Required empty public constructor
@@ -95,10 +94,6 @@ public class TripDetailsFragment extends Fragment {
             this.currentTripDate = getArguments().getString(KEY_TRIP_DATE);
             this.currentTripTime = getArguments().getString(KEY_TRIP_TIME);
         }
-
-        // load map marker icon
-        Bitmap markerBitmap = VectorIconFactory.fromVectorDrawable(this.getContext(), R.drawable.ic_marker_stop);
-        this.currentIcon = IconFactory.getInstance(this.getContext()).fromBitmap(markerBitmap);
     }
 
     @Override
@@ -261,6 +256,21 @@ public class TripDetailsFragment extends Fragment {
             // lat lng bound builder to zoom the map to desied views
             LatLngBounds.Builder latLngBuilder = new LatLngBounds.Builder();
 
+            // calculare route color of current trip
+            int routeColor = Color.RED;
+            try {
+                if(!tripShapeColor.startsWith("#")) {
+                    routeColor = Color.parseColor("#" + tripShapeColor);
+                } else {
+                    routeColor = Color.parseColor(tripShapeColor);
+                }
+            } catch(Exception ignored) {
+            }
+
+            // get stop
+            Bitmap stopBitmap = VectorIconFactory.fromVectorDrawable(this.getContext(), R.drawable.ic_stop);
+            Icon stopIcon = IconFactory.getInstance(this.getContext()).fromBitmap(stopBitmap);
+
             // display all stops on the map
             for(StopTime stopTime : stopTimeList) {
                 if(stopTime.getStop() != null) {
@@ -272,7 +282,7 @@ public class TripDetailsFragment extends Fragment {
                             .position(position)
                             .setTitle(stopTime.getStop().getStopName())
                             .setSnippet(DateTimeFormat.from(stopTime.getDepartureTime(), DateTimeFormat.HHMMSS).to(DateTimeFormat.HHMM))
-                            .setIcon(this.currentIcon)
+                            .setIcon(stopIcon)
                     );
                 }
             }
@@ -286,24 +296,14 @@ public class TripDetailsFragment extends Fragment {
                     pointList.add(position);
                 }
 
-                int polylineColor = Color.RED;
-                try {
-                    if(!tripShapeColor.startsWith("#")) {
-                        polylineColor = Color.parseColor("#" + tripShapeColor);
-                    } else {
-                        polylineColor = Color.parseColor(tripShapeColor);
-                    }
-                } catch(Exception ignored) {
-                }
-
                 map.addPolyline(new PolylineOptions()
                         .addAll(pointList)
-                        .color(polylineColor)
+                        .color(routeColor)
                         .width(this.getResources().getDimension(R.dimen.map_polyline_width))
                 );
             }
 
-            map.moveCamera(CameraUpdateFactory.newLatLngBounds(latLngBuilder.build(), 200));
+            map.moveCamera(CameraUpdateFactory.newLatLngBounds(latLngBuilder.build(), (int) this.getResources().getDimension(R.dimen.map_boundary_padding)));
         });
     }
 
@@ -369,10 +369,8 @@ public class TripDetailsFragment extends Fragment {
                 this.components.fabFareInfo.animate().translationY(-this.getResources().getDimension(R.dimen.fab_menu_level_3)).rotation(0f);
             }*/
 
-            if(this.resultTrip.getShape() != null) {
-                this.components.fabMapView.show();
-                this.components.fabMapView.animate().translationY(-this.getResources().getDimension(R.dimen.fab_menu_level_2)).rotation(0f);
-            }
+            this.components.fabMapView.show();
+            this.components.fabMapView.animate().translationY(-this.getResources().getDimension(R.dimen.fab_menu_level_2)).rotation(0f);
 
             this.components.fabAddFavorite.show();
             this.components.fabAddFavorite.animate().translationY(-this.getResources().getDimension(R.dimen.fab_menu_level_1)).rotation(0f);

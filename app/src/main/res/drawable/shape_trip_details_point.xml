@@ -7,7 +7,7 @@
         android:color="@color/colorAccentDAY" />
 
     <stroke
-        android:width="5px"
+        android:width="3dp"
         android:color="#ffffff" />
 
     <size

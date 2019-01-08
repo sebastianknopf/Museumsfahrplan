@@ -19,4 +19,5 @@
 
     <!-- MapView -->
     <dimen name="map_polyline_width">2dp</dimen>
+    <dimen name="map_boundary_padding">60dp</dimen>
 </resources>

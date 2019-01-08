@@ -33,7 +33,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="@dimen/default_app_space"
-                        android:layout_marginRight="@dimen/default_app_space"
+                        android:layout_marginEnd="@dimen/default_app_space"
                         android:layout_marginBottom="32dp"
                         android:background="@color/windowBackgroundColorDAY"
                         android:textAppearance="@style/TextAppearance.Medium"
@@ -153,6 +153,7 @@
                                 android:layout_weight="1"
                                 android:layout_marginStart="@dimen/default_app_space_small"
                                 android:min="25"
+                                android:progress="25"
                                 android:max="250" />
 
                         </LinearLayout>

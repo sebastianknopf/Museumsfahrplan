@@ -44,7 +44,7 @@
             android:id="@+id/btnErrorRetry"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/default_app_space"
+            android:layout_marginTop="24dp"
             android:background="@null"
             android:gravity="center"
             android:text="@string/str_ok"

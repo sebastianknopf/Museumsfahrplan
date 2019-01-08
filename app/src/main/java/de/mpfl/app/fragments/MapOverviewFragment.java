@@ -128,8 +128,8 @@ public class MapOverviewFragment extends Fragment implements MapboxMap.OnCameraI
 
         this.components = DataBindingUtil.inflate(inflater, R.layout.fragment_map_overview, container, false);
         this.components.setFragment(this);
-        this.components.mapViewHolder.mapView.onCreate(savedInstanceState);
-        this.components.mapViewHolder.mapView.getMapAsync(resultMap -> {
+        this.components.mapView.onCreate(savedInstanceState);
+        this.components.mapView.getMapAsync(resultMap -> {
             this.currentMap = resultMap;
             this.currentMap.addOnCameraIdleListener(MapOverviewFragment.this);
             this.currentMap.addOnMapClickListener(this);
@@ -234,7 +234,7 @@ public class MapOverviewFragment extends Fragment implements MapboxMap.OnCameraI
     public void onStart() {
         super.onStart();
 
-        this.components.mapViewHolder.mapView.onStart();
+        this.components.mapView.onStart();
 
         // check permissions and try to achieve them
         // do this only here (and not in onResume!) cause it will display a dialog
@@ -245,7 +245,7 @@ public class MapOverviewFragment extends Fragment implements MapboxMap.OnCameraI
     public void onResume() {
         super.onResume();
 
-        this.components.mapViewHolder.mapView.onResume();
+        this.components.mapView.onResume();
 
         if(this.bottomSheetBehavior != null) {
             this.bottomSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
@@ -257,19 +257,19 @@ public class MapOverviewFragment extends Fragment implements MapboxMap.OnCameraI
         super.onPause();
 
         this.dismissSnackbar();
-        this.components.mapViewHolder.mapView.onPause();
+        this.components.mapView.onPause();
     }
 
     @Override
     public void onStop() {
         super.onStop();
-        this.components.mapViewHolder.mapView.onStop();
+        this.components.mapView.onStop();
     }
 
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        this.components.mapViewHolder.mapView.onDestroy();
+        this.components.mapView.onDestroy();
     }
 
     @Override
@@ -309,7 +309,9 @@ public class MapOverviewFragment extends Fragment implements MapboxMap.OnCameraI
 
                     // display markers in source.markers data source
                     GeoJsonSource markerSource = currentMap.getSourceAs("source.marker");
-                    markerSource.setGeoJson(FeatureCollection.fromFeatures(markerList));
+                    if(markerSource != null) {
+                        markerSource.setGeoJson(FeatureCollection.fromFeatures(markerList));
+                    }
                 }
 
                 @Override
