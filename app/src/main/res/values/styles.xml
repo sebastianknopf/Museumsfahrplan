@@ -8,6 +8,7 @@
         <item name="colorPrimary">@color/colorPrimaryDAY</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDarkDAY</item>
         <item name="colorAccent">@color/colorAccentDAY</item>
+        <item name="preferenceTheme">@style/PreferenceThemeOverlay.v14.Material</item>
 
         <item name="android:windowBackground">@color/windowBackgroundColorDAY</item>
         <item name="android:alertDialogTheme">@style/AppTheme.AlertDialog</item>

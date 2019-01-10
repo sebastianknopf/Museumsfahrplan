@@ -14,9 +14,9 @@ import de.mpfl.app.fragments.FavoritesFragment;
 import de.mpfl.app.fragments.InfoDetailsFragment;
 import de.mpfl.app.fragments.InfoListFragment;
 import de.mpfl.app.fragments.MapOverviewFragment;
-import de.mpfl.app.fragments.PreferencesFragment;
 import de.mpfl.app.fragments.SearchDetailsFragment;
 import de.mpfl.app.fragments.SearchInputFragment;
+import de.mpfl.app.fragments.SettingsFragment;
 import de.mpfl.app.fragments.TripDetailsFragment;
 import de.mpfl.app.listeners.OnFragmentInteractionListener;
 import de.mpfl.app.utils.NavigationManager;
@@ -99,7 +99,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 break;
 
             case R.id.navigationMenuSettings:
-                targetFragment = PreferencesFragment.newInstance();
+                targetFragment = SettingsFragment.newInstance();
                 break;
 
             case R.id.navigationMenuInformation:
@@ -184,6 +184,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 SearchDetailsFragment searchDetailsFragment = SearchDetailsFragment.newInstance(routeId, routeName, searchDate);
                 this.navigationManager.setNextAnimation(R.anim.fragment_enter_right, R.anim.fragment_exit_right);
                 this.navigationManager.navigateTo(searchDetailsFragment);
+            } else if(arguments.getInt(SearchInputFragment.KEY_FRAGMENT_ACTION) == SearchInputFragment.ACTION_SHOW_SETTINGS) {
+                SettingsFragment settingsFragment = SettingsFragment.newInstance();
+                this.navigationManager.setNextAnimation(R.anim.fragment_enter_right, R.anim.fragment_exit_right);
+                this.navigationManager.navigateTo(settingsFragment);
             }
         } else if(fragment instanceof SearchDetailsFragment) {
             if(arguments.getInt(SearchDetailsFragment.KEY_FRAGMENT_ACTION) == SearchDetailsFragment.ACTION_SELECT_TRIP) {

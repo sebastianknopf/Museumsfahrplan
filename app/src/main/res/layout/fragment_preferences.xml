@@ -4,7 +4,7 @@
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context="de.mpfl.app.fragments.PreferencesFragment">
+        tools:context="de.mpfl.app.fragments.SettingsFragment">
 
     </FrameLayout>
 

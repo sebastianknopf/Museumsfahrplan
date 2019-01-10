@@ -55,6 +55,10 @@
     <string name="str_change_no_exit">Kein Ausstieg</string>
     <string name="str_change_demand">Bedarfshalt</string>
     <string name="str_favorite_added">Fahrt als Favorit gespeichert!</string>
+    <string name="str_trip_details_wheelchair_yes">barrierefrei</string>
+    <string name="str_trip_details_wheelchair_no">nicht barrierefrei</string>
+    <string name="str_trip_details_bikes_yes">Fahrradmitnahme begrenzt möglich</string>
+    <string name="str_trip_details_bikes_no">Fahrradmitnahme nicht möglich</string>
 
     <!-- FavoritesFragment -->
     <string name="str_favorites_no_results_title">Hier ist noch nichts!</string>
@@ -68,8 +72,12 @@
         <item>OpenSource Lizenzen</item>
     </string-array>
 
-    <!-- PreferencesFragment -->
+    <!-- SettingsFragmentment -->
     <string name="str_preferences_title">Einstellungen</string>
+    <string name="str_preferences_cat_search">Suchoptionen</string>
+    <string name="str_preferences_cat_view">Anzeigeoptionen</string>
+    <string name="str_preferences_wheelchair_accessible">Barrierefreiheit</string>
+    <string name="str_preferences_bikes_allowed">Fahrradmitnahme</string>
 
     <!-- TripItem -->
     <string name="str_frequency_exact">Alle %s Minuten</string>

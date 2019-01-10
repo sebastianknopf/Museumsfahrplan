@@ -1,38 +1,47 @@
 package de.mpfl.app.fragments;
 
-import android.content.Context;
-import android.databinding.DataBindingUtil;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
+import android.support.v7.preference.PreferenceFragmentCompat;
 
 import de.mpfl.app.R;
 import de.mpfl.app.databinding.FragmentPreferencesBinding;
 
-public class PreferencesFragment extends Fragment {
+public class SettingsFragment extends PreferenceFragmentCompat {
 
-    public static final String TAG ="PreferencesFragment";
+    public static final String TAG ="SettingsFragment";
+
+    public final static String KEY_WHEELCHAIR_ACCESSIBLE = "KEY_WHEELCHAIR_ACCESSIBLE";
+    public final static String KEY_BIKES_ALLOWED = "KEY_BIKES_ALLOWED";
 
     private FragmentPreferencesBinding components;
 
-    public PreferencesFragment() {
+    public SettingsFragment() {
         // Required empty public constructor
     }
 
-    public static PreferencesFragment newInstance() {
-        PreferencesFragment fragment = new PreferencesFragment();
+    public static SettingsFragment newInstance() {
+        SettingsFragment fragment = new SettingsFragment();
         return fragment;
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        // set activity title
+        AppCompatActivity activity = (AppCompatActivity) this.getActivity();
+        if(activity != null) {
+            activity.getSupportActionBar().setTitle(R.string.str_preferences_title);
+        }
     }
 
     @Override
+    public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
+        this.addPreferencesFromResource(R.xml.screen_fragment_preferences);
+    }
+
+    /*@Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         this.components = DataBindingUtil.inflate(inflater, R.layout.fragment_preferences, container, false);
 
@@ -53,5 +62,5 @@ public class PreferencesFragment extends Fragment {
     @Override
     public void onDetach() {
         super.onDetach();
-    }
+    }*/
 }

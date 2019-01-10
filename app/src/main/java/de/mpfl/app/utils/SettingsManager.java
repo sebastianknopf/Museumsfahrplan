@@ -4,6 +4,9 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.location.Location;
 import android.location.LocationManager;
+import android.support.v7.preference.PreferenceManager;
+
+import de.mpfl.app.fragments.SettingsFragment;
 
 public final class SettingsManager {
 
@@ -51,4 +54,15 @@ public final class SettingsManager {
         sp.putFloat(MAP_LAST_ZOOMLEVEL, (float) lastZoomlevel);
         sp.commit();
     }
+
+    public boolean getPreferenceWheelchairAccessible() {
+        SharedPreferences defaultPreference = PreferenceManager.getDefaultSharedPreferences(this.context);
+        return defaultPreference.getBoolean(SettingsFragment.KEY_WHEELCHAIR_ACCESSIBLE, false);
+    }
+
+    public boolean getPreferenceBikesAllowed() {
+        SharedPreferences defaultPreference = PreferenceManager.getDefaultSharedPreferences(this.context);
+        return defaultPreference.getBoolean(SettingsFragment.KEY_BIKES_ALLOWED, false);
+    }
+
 }

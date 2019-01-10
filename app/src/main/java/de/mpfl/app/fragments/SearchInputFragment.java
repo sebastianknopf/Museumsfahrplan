@@ -12,6 +12,9 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.SeekBar;
@@ -53,6 +56,7 @@ public class SearchInputFragment extends Fragment implements OnRouteItemClickLis
     public final static String KEY_SEARCH_DATE = "KEY_SEARCH_DATE";
 
     public final static int ACTION_SELECT_ROUTE = 0;
+    public final static int ACTION_SHOW_SETTINGS = 1;
 
     private FragmentSearchInputBinding components;
     private OnFragmentInteractionListener fragmentInteractionListener;
@@ -85,6 +89,8 @@ public class SearchInputFragment extends Fragment implements OnRouteItemClickLis
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        this.setHasOptionsMenu(true);
 
         if(this.getArguments() != null) {
             this.currentSearchLatitude = this.getArguments().getDouble(KEY_SEARCH_LAT);
@@ -198,6 +204,25 @@ public class SearchInputFragment extends Fragment implements OnRouteItemClickLis
         }
 
         return this.components.getRoot();
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+
+        inflater.inflate(R.menu.menu_settings_shortcut, menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if(item.getItemId() == R.id.optionsMenuSettings && this.fragmentInteractionListener != null) {
+            Bundle arguments = new Bundle();
+            arguments.putInt(KEY_FRAGMENT_ACTION, ACTION_SHOW_SETTINGS);
+
+            this.fragmentInteractionListener.onFragmentInteraction(this, arguments);
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 
     @Override

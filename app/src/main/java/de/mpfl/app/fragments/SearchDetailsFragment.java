@@ -14,6 +14,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -28,6 +29,7 @@ import de.mpfl.app.dialogs.ErrorDialog;
 import de.mpfl.app.listeners.OnFragmentInteractionListener;
 import de.mpfl.app.listeners.OnTripItemClickListener;
 import de.mpfl.app.utils.DateTimeFormat;
+import de.mpfl.app.utils.SettingsManager;
 
 public class SearchDetailsFragment extends Fragment implements OnTripItemClickListener {
 
@@ -188,7 +190,29 @@ public class SearchDetailsFragment extends Fragment implements OnTripItemClickLi
 
                 // no need for check result count here (only for error purposes)
                 // api returns this route id only if there's at least one scheduled trip
-                resultList = delivery.getTrips();
+                resultList = new ArrayList<>();
+
+                // apply filter methods from api result
+                SettingsManager settingsManager = new SettingsManager(getContext());
+                boolean wheelchairRequired = settingsManager.getPreferenceWheelchairAccessible();
+                boolean bikeRequired = settingsManager.getPreferenceBikesAllowed();
+
+                for(Trip trip : delivery.getTrips()) {
+                    // skip this result, if the wheelchair accessibility is not defined entirely
+                    if(wheelchairRequired && trip.getWheelchairAccessible() != Trip.WheelchairAccessible.YES) {
+                        continue;
+                    }
+
+                    // skip this result, if the bike carriage is not defined entirely
+                    if(bikeRequired && trip.getBikesAllowed() != Trip.BikesAllowed.YES) {
+                        continue;
+                    }
+
+                    // add the trip to the list, after we passed every filter
+                    resultList.add(trip);
+                }
+
+                // set list adapter
                 setListAdapter(resultList);
             }
 
