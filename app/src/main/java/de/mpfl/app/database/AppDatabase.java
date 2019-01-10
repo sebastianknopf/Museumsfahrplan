@@ -150,7 +150,6 @@ public final class AppDatabase extends SQLiteOpenHelper {
 
     private void cleanFavorites() {
         SQLiteDatabase db = this.getWritableDatabase();
-        db.beginTransaction();
 
         String cleanFavoritesCommand = String.format("DELETE FROM %s WHERE %s < %s", TABLE_FAVORITES, KEY_FAVORITES_TRIP_DATE, DateTimeFormat.from(new Date()).to(DateTimeFormat.YYYYMMDD));
         db.execSQL(cleanFavoritesCommand);

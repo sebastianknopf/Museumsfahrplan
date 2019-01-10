@@ -56,6 +56,10 @@
     <string name="str_change_demand">Bedarfshalt</string>
     <string name="str_favorite_added">Fahrt als Favorit gespeichert!</string>
 
+    <!-- FavoritesFragment -->
+    <string name="str_favorites_no_results_title">Hier ist noch nichts!</string>
+    <string name="str_favorites_no_results_text">Sobald Sie Fahrten als Favoriten abspeichern, werden diese hier angezeigt.</string>
+
     <!-- InfoListFragment -->
     <string name="str_info_list_title">Informationen</string>
     <string-array name="str_array_information_categories">
