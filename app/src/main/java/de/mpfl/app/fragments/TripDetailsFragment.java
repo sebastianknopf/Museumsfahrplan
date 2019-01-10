@@ -27,6 +27,7 @@ import com.mapbox.mapboxsdk.geometry.LatLng;
 import com.mapbox.mapboxsdk.geometry.LatLngBounds;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import de.mfpl.staticnet.lib.StaticRequest;
@@ -117,7 +118,7 @@ public class TripDetailsFragment extends Fragment {
         // initiate loading of trip times the first time
         if(this.resultTrip != null) {
             this.setTripDetails(this.resultTrip.getTripShortName(), this.resultTrip.getTripHeadsign(), this.currentTripDate);
-            this.setStopTimesAdapter(this.resultTrip.getStopTimes());
+            this.setStopTimesAdapter(this.resultTrip.getStopTimes(), this.resultTrip.getRoute().getRouteColor());
 
             if(this.resultTrip.getRealtime() != null && this.resultTrip.getRealtime().hasAlerts()) {
                 this.setAlertAdapter(this.resultTrip.getRealtime().getAlerts());
@@ -321,13 +322,27 @@ public class TripDetailsFragment extends Fragment {
         });
     }
 
-    private void setStopTimesAdapter(List<StopTime> stopTimesList) {
+    private void setStopTimesAdapter(List<StopTime> stopTimesList, String colorString) {
         StopTimesAdapter stopTimesAdapter = new StopTimesAdapter(getContext(), stopTimesList);
-        stopTimesAdapter.setLineActiveColor(ContextCompat.getColor(getContext(), R.color.colorAccentDAY));
-        stopTimesAdapter.setPointActiveColor(ContextCompat.getColor(getContext(), R.color.colorAccentDAY));
-        stopTimesAdapter.setPointInactiveColor(ContextCompat.getColor(getContext(), R.color.colorAccentDAY));
 
-        LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
+        // parse route color
+        int tripColor = ContextCompat.getColor(this.getContext(), R.color.colorAccentDAY);
+        try {
+            //tripColor = Color.parseColor((!colorString.startsWith("#") ? "#" : "") + colorString);
+        } catch(Exception ignored) {
+        }
+
+        // display trip progress with colored line only when the trip is departing today
+        if(this.currentTripDate.equals(DateTimeFormat.from(new Date()).to(DateTimeFormat.YYYYMMDD))) {
+            stopTimesAdapter.setLineActiveColor(tripColor);
+        } else {
+            stopTimesAdapter.setLineActiveColor(ContextCompat.getColor(this.getContext(), R.color.colorBackgroundDarkGray));
+        }
+
+        stopTimesAdapter.setPointActiveColor(tripColor);
+        stopTimesAdapter.setPointInactiveColor(tripColor);
+
+        LinearLayoutManager layoutManager = new LinearLayoutManager(this.getContext());
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         this.components.rcvTripDetails.setLayoutManager(layoutManager);
         this.components.rcvTripDetails.setHasFixedSize(true);
@@ -459,7 +474,7 @@ public class TripDetailsFragment extends Fragment {
                 setTripDetails(resultTrip.getTripShortName(), resultTrip.getTripHeadsign(), tripDate);
 
                 // create trip timeline here...
-                setStopTimesAdapter(resultTrip.getStopTimes());
+                setStopTimesAdapter(resultTrip.getStopTimes(), resultTrip.getRoute().getRouteColor());
 
                 // display trip assigned alerts
                 if (resultTrip.getRealtime().hasAlerts()) {

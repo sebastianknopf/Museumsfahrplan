@@ -171,7 +171,11 @@ public class SearchDetailsFragment extends Fragment implements OnTripItemClickLi
 
         Request.Filter filter = new Request.Filter();
         filter.setDate(Request.Filter.Date.fromJavaDate(this.currentSearchDate));
-        filter.setTime(DateTimeFormat.from(new Date()).to(DateTimeFormat.HHMMSS));
+
+        // set lookup time to *current* only if we look for trips departing today
+        if(this.currentSearchDate.equals(DateTimeFormat.from(new Date()).to(DateTimeFormat.YYYYMMDD))) {
+            filter.setTime(DateTimeFormat.from(new Date()).to(DateTimeFormat.HHMMSS));
+        }
 
         staticRequest.setListener(new StaticRequest.Listener() {
             @Override
@@ -192,6 +196,6 @@ public class SearchDetailsFragment extends Fragment implements OnTripItemClickLi
             public void onError(Throwable throwable) {
                 showNetworkErrorDialog(() -> loadRouteTrips());
             }
-        }).loadTrips(this.currentSearchRouteId, filter);
+        }).loadTrips(this.currentSearchRouteId, filter, 999); // limit 999 to display all trips
     }
 }

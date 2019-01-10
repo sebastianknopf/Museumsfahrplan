@@ -202,7 +202,7 @@ public final class StaticRequest {
         this.executeCall(apiCall);
     }
 
-    public void loadTrips(String routeId, Request.Filter filter) {
+    public void loadTrips(String routeId, Request.Filter filter, int limit) {
         Request request = new Request();
         request.setRouteId(routeId);
 
@@ -212,6 +212,7 @@ public final class StaticRequest {
         options.setIncludeRoutes(true);
         options.setIncludeAgency(true);
         options.setIncludeRealtime(true);
+        options.setLimit(limit);
 
         Container requestContainer = this.createRequestContainer(request, options, filter);
 
