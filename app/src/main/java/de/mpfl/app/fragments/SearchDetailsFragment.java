@@ -195,6 +195,14 @@ public class SearchDetailsFragment extends Fragment implements OnTripItemClickLi
                 // no need for check result count here (only for error purposes)
                 // api returns this route id only if there's at least one scheduled trip
                 resultList = delivery.getTrips();
+                if(resultList.size() == 0) {
+                    components.rcvSearchDetailsResults.setVisibility(View.GONE);
+                    components.layoutSearchDetailsEmpty.setVisibility(View.VISIBLE);
+                    return;
+                } else {
+                    components.rcvSearchDetailsResults.setVisibility(View.VISIBLE);
+                    components.layoutSearchDetailsEmpty.setVisibility(View.GONE);
+                }
 
                 // set list adapter
                 setListAdapter(resultList);

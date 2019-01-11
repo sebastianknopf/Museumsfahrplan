@@ -22,6 +22,47 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent" />
 
+            <RelativeLayout
+                android:id="@+id/layoutSearchDetailsEmpty"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/cdvSearchParams"
+                android:layout_alignParentBottom="true"
+                android:visibility="gone">
+
+                <TextView
+                    android:id="@+id/lblSearchDetailsEmptyTitle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/default_app_space"
+                    android:layout_marginLeft="@dimen/default_app_space"
+                    android:layout_marginRight="@dimen/default_app_space"
+                    android:gravity="center"
+                    android:textAppearance="@style/TextAppearance.Large"
+                    android:text="@string/str_search_details_no_results_title" />
+
+                <TextView
+                    android:id="@+id/lblSearchDetailsEmptyText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/default_app_space_small"
+                    android:layout_marginLeft="@dimen/default_app_space"
+                    android:layout_marginRight="@dimen/default_app_space"
+                    android:layout_below="@id/lblSearchDetailsEmptyTitle"
+                    android:gravity="center"
+                    android:textAppearance="@style/TextAppearance.Medium.Accent"
+                    android:text="@string/str_search_details_no_results_text" />
+
+                <ImageView
+                    android:layout_width="240dp"
+                    android:layout_height="240dp"
+                    android:layout_marginTop="@dimen/default_app_space"
+                    android:layout_centerInParent="true"
+                    android:layout_below="@id/lblSearchDetailsEmptyText"
+                    android:src="@drawable/img_blueprint_background" />
+
+            </RelativeLayout>
+
         </android.support.constraint.ConstraintLayout>
 
     </FrameLayout>

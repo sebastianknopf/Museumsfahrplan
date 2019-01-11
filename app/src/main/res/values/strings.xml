@@ -38,12 +38,14 @@
     <string name="str_current_user_location">Aktueller Standort</string>
     <string name="str_search_date">Datum</string>
     <string name="str_search_radius">Suchradius</string>
-    <string name="str_search_no_results_title">Leider konnten wir keine Ergebnisse finden!</string>
-    <string name="str_search_no_results_text">Am Besten ändern Sie den Suchradius oder suchen an einem anderen Datum.</string>
     <string name="str_search_no_location_results_title">Wir konnten keine Orte finden!</string>
     <string name="str_search_no_location_results_text">Sind Sie sicher, dass Sie sich nicht vertippt haben und dass es den Ort so wirklich gibt?</string>
     <string name="str_search_no_route_results_title">Wir konnten keine Fahrten finden!</string>
     <string name="str_search_no_route_results_text">Am besten suchen Sie an einem anderen Datum oder wählen einen größeren Suchradius.</string>
+
+    <!-- SearchDetailsFragment -->
+    <string name="str_search_details_no_results_title">Leider konnten wir keine Ergebnisse finden!</string>
+    <string name="str_search_details_no_results_text">Anscheinend gibt es zu diesem Zeitpunkt keine Fahrten mehr.</string>
 
     <!-- FavoritesFragment -->
     <string name="str_favorites_title">Favoriten</string>
