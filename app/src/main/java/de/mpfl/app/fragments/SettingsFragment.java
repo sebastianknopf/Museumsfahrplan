@@ -13,6 +13,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
 
     public final static String KEY_WHEELCHAIR_ACCESSIBLE = "KEY_WHEELCHAIR_ACCESSIBLE";
     public final static String KEY_BIKES_ALLOWED = "KEY_BIKES_ALLOWED";
+    public final static String KEY_NUM_RESULTS = "KEY_NUM_RESULTS";
 
     private FragmentPreferencesBinding components;
 

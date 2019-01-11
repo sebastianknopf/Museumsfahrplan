@@ -66,7 +66,7 @@ public class TripDetailsFragment extends Fragment {
     private OnFragmentInteractionListener fragmentInteractionListener;
 
     private String currentTripId;
-    private String currentTripDate;
+    private Date currentTripDate;
     private String currentTripTime;
 
     private boolean isFabMenuOpen = false;
@@ -92,10 +92,10 @@ public class TripDetailsFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            this.currentTripId = getArguments().getString(KEY_TRIP_ID);
-            this.currentTripDate = getArguments().getString(KEY_TRIP_DATE);
-            this.currentTripTime = getArguments().getString(KEY_TRIP_TIME);
+        if (this.getArguments() != null) {
+            this.currentTripId = this.getArguments().getString(KEY_TRIP_ID);
+            this.currentTripDate = DateTimeFormat.from(this.getArguments().getString(KEY_TRIP_DATE), DateTimeFormat.YYYYMMDD).toDate();
+            this.currentTripTime = this.getArguments().getString(KEY_TRIP_TIME);
         }
     }
 
@@ -117,7 +117,7 @@ public class TripDetailsFragment extends Fragment {
 
         // initiate loading of trip times the first time
         if(this.resultTrip != null) {
-            this.setTripDetails(this.resultTrip.getTripShortName(), this.resultTrip.getTripHeadsign(), this.currentTripDate);
+            this.setTripDetails(this.resultTrip.getTripShortName(), this.resultTrip.getTripHeadsign(), this.currentTripDate, this.resultTrip.getWheelchairAccessible(), this.resultTrip.getBikesAllowed());
             this.setStopTimesAdapter(this.resultTrip.getStopTimes(), this.resultTrip.getRoute().getRouteColor());
 
             if(this.resultTrip.getRealtime() != null && this.resultTrip.getRealtime().hasAlerts()) {
@@ -235,7 +235,7 @@ public class TripDetailsFragment extends Fragment {
         favorite.setTripId(this.resultTrip.getTripId());
         favorite.setTripType(this.resultTrip.getRoute().getRouteType().toString());
         favorite.setTripName((!this.resultTrip.getTripShortName().equals("") ? this.resultTrip.getTripShortName() + " " : "") + this.resultTrip.getTripHeadsign());
-        favorite.setTripDate(this.currentTripDate);
+        favorite.setTripDate(DateTimeFormat.from(this.currentTripDate).to(DateTimeFormat.YYYYMMDD));
         favorite.setTripTime(this.resultTrip.getStopTimes().get(0).getDepartureTime());
 
         appDatabase.addFavorite(favorite);
@@ -251,7 +251,7 @@ public class TripDetailsFragment extends Fragment {
         }).show();
     }
 
-    private void setTripDetails(String tripShortName, String tripHeadsign, String tripDate) {
+    private void setTripDetails(String tripShortName, String tripHeadsign, Date tripDate, Trip.WheelchairAccessible wheelchairAccessible, Trip.BikesAllowed bikesAllowed) {
         String tripNameString = tripHeadsign;
         if (tripShortName != null && !tripShortName.equals("")) {
             tripNameString = tripShortName + " " + tripNameString;
@@ -259,8 +259,30 @@ public class TripDetailsFragment extends Fragment {
         this.components.lblTripName.setText(tripNameString);
 
         // trip date of selected trip
-        String tripDateString = getContext().getString(R.string.str_trip_date, DateTimeFormat.from(tripDate, DateTimeFormat.YYYYMMDD).to(DateTimeFormat.DDMMYYYY));
+        String tripDateString = getContext().getString(R.string.str_trip_date, DateTimeFormat.from(tripDate).to(DateTimeFormat.DDMMYYYY));
         this.components.lblTripDate.setText(tripDateString);
+
+        // wheelchair and bike information
+        this.components.layoutTripAccessibility.setVisibility(View.VISIBLE);
+        String wheelchairString = this.getString(R.string.str_trip_details_na);
+        String bikeString = this.getString(R.string.str_trip_details_na);
+
+        if(wheelchairAccessible == Trip.WheelchairAccessible.NO) {
+            wheelchairString = this.getString(R.string.str_trip_details_wheelchair_no);
+            this.components.lblWheelchairAccess.setTextColor(Color.RED);
+        } else if(wheelchairAccessible == Trip.WheelchairAccessible.YES) {
+            wheelchairString = this.getString(R.string.str_trip_details_wheelchair_yes);
+        }
+
+        if(bikesAllowed == Trip.BikesAllowed.NO) {
+            bikeString = this.getString(R.string.str_trip_details_bikes_no);
+            this.components.lblBikesAllowed.setTextColor(Color.RED);
+        } else if(bikesAllowed == Trip.BikesAllowed.YES) {
+            bikeString = this.getString(R.string.str_trip_details_bikes_yes);
+        }
+
+        this.components.lblWheelchairAccess.setText(wheelchairString);
+        this.components.lblBikesAllowed.setText(bikeString);
     }
 
     private void setTripMapView(List<StopTime> stopTimeList, Shape tripShape, final String tripShapeColor) {
@@ -436,13 +458,13 @@ public class TripDetailsFragment extends Fragment {
         });
     }
 
-    private void loadTripDetails(String tripId, String tripDate, String tripTime) {
+    private void loadTripDetails(String tripId, Date tripDate, String tripTime) {
         StaticRequest staticRequest = new StaticRequest();
         staticRequest.setAppId(this.getContext().getString(R.string.MFPL_APP_ID));
         staticRequest.setApiKey(this.getContext().getString(R.string.MFPL_API_KEY));
 
         Request.Filter filter = new Request.Filter();
-        filter.setDate(new Request.Filter.Date().setSingle(tripDate));
+        filter.setDate(new Request.Filter.Date().fromJavaDate(tripDate));
         filter.setTime(tripTime);
         
         this.components.layoutSwipeRefresh.setRefreshing(true);
@@ -471,7 +493,7 @@ public class TripDetailsFragment extends Fragment {
                 components.layoutTripDetailsError.setVisibility(View.GONE);
 
                 // display basic trip information
-                setTripDetails(resultTrip.getTripShortName(), resultTrip.getTripHeadsign(), tripDate);
+                setTripDetails(resultTrip.getTripShortName(), resultTrip.getTripHeadsign(), tripDate, resultTrip.getWheelchairAccessible(), resultTrip.getBikesAllowed());
 
                 // create trip timeline here...
                 setStopTimesAdapter(resultTrip.getStopTimes(), resultTrip.getRoute().getRouteColor());

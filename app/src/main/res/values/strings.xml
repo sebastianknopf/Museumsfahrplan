@@ -55,10 +55,11 @@
     <string name="str_change_no_exit">Kein Ausstieg</string>
     <string name="str_change_demand">Bedarfshalt</string>
     <string name="str_favorite_added">Fahrt als Favorit gespeichert!</string>
-    <string name="str_trip_details_wheelchair_yes">barrierefrei</string>
-    <string name="str_trip_details_wheelchair_no">nicht barrierefrei</string>
-    <string name="str_trip_details_bikes_yes">Fahrradmitnahme begrenzt möglich</string>
-    <string name="str_trip_details_bikes_no">Fahrradmitnahme nicht möglich</string>
+    <string name="str_trip_details_wheelchair_yes">Barrierefreiheit</string>
+    <string name="str_trip_details_wheelchair_no">Keine Barrierefreiheit</string>
+    <string name="str_trip_details_bikes_yes">Begrenzte Fahrradmitnahme</string>
+    <string name="str_trip_details_bikes_no">Keine Fahrradmitnahme</string>
+    <string name="str_trip_details_na">Keine Informationen</string>
 
     <!-- FavoritesFragment -->
     <string name="str_favorites_no_results_title">Hier ist noch nichts!</string>
@@ -78,6 +79,21 @@
     <string name="str_preferences_cat_view">Anzeigeoptionen</string>
     <string name="str_preferences_wheelchair_accessible">Barrierefreiheit</string>
     <string name="str_preferences_bikes_allowed">Fahrradmitnahme</string>
+    <string name="str_preferences_num_results">Anzahl Suchergebnisse</string>
+
+    <string-array name="str_preferences_num_results_text">
+        <item>5 Ergebnisse</item>
+        <item>10 Ergebnisse</item>
+        <item>20 Ergebnisse</item>
+        <item>Alle Ergebnisse</item>
+    </string-array>
+
+    <string-array name="int_preferences_num_results_value">
+        <item>5</item>
+        <item>10</item>
+        <item>20</item>
+        <item>999</item>
+    </string-array>
 
     <!-- TripItem -->
     <string name="str_frequency_exact">Alle %s Minuten</string>

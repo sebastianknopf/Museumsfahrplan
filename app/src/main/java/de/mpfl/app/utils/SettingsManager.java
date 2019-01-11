@@ -65,4 +65,16 @@ public final class SettingsManager {
         return defaultPreference.getBoolean(SettingsFragment.KEY_BIKES_ALLOWED, false);
     }
 
+    public int getPreferencesNumResults() {
+        SharedPreferences defaultPreference = PreferenceManager.getDefaultSharedPreferences(this.context);
+        int result = 10;
+
+        try {
+            result = Integer.parseInt(defaultPreference.getString(SettingsFragment.KEY_NUM_RESULTS, "10"));
+        } catch (Exception ignored) {
+        }
+
+        return result;
+    }
+
 }

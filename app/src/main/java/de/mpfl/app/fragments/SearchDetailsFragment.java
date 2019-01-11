@@ -175,7 +175,8 @@ public class SearchDetailsFragment extends Fragment implements OnTripItemClickLi
         filter.setDate(Request.Filter.Date.fromJavaDate(this.currentSearchDate));
 
         // set lookup time to *current* only if we look for trips departing today
-        if(this.currentSearchDate.equals(DateTimeFormat.from(new Date()).to(DateTimeFormat.YYYYMMDD))) {
+        String searchDateString = DateTimeFormat.from(this.currentSearchDate).to(DateTimeFormat.YYYYMMDD);
+        if(searchDateString.equals(DateTimeFormat.from(new Date()).to(DateTimeFormat.YYYYMMDD))) {
             filter.setTime(DateTimeFormat.from(new Date()).to(DateTimeFormat.HHMMSS));
         }
 

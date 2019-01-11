@@ -18,11 +18,17 @@
 
     </android.support.v7.preference.PreferenceCategory>
 
-    <!--<android.support.v7.preference.PreferenceCategory
+    <android.support.v7.preference.PreferenceCategory
         android:title="@string/str_preferences_cat_view">
 
+        <ListPreference
+            android:key="KEY_NUM_RESULTS"
+            android:title="@string/str_preferences_num_results"
+            android:icon="@drawable/ic_list_number"
+            android:defaultValue="10"
+            android:entries="@array/str_preferences_num_results_text"
+            android:entryValues="@array/int_preferences_num_results_value"/>
 
-
-    </android.support.v7.preference.PreferenceCategory>-->
+    </android.support.v7.preference.PreferenceCategory>
 
 </android.support.v7.preference.PreferenceScreen>

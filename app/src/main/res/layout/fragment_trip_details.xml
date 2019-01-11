@@ -79,6 +79,56 @@
                                     android:layout_height="wrap_content"
                                     android:scrollbars="vertical" />
 
+                                <android.support.constraint.ConstraintLayout
+                                    android:id="@+id/layoutTripAccessibility"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="@dimen/default_app_space_small"
+                                    android:layout_marginBottom="@dimen/default_app_space"
+                                    android:visibility="gone">
+
+                                    <ImageView
+                                        android:id="@+id/imgWheelchairAccess"
+                                        android:layout_width="20dp"
+                                        android:layout_height="20dp"
+                                        android:src="@drawable/ic_wheelchair"
+                                        android:tint="@color/colorAccentDAY"
+                                        app:layout_constraintLeft_toLeftOf="parent"/>
+
+                                    <TextView
+                                        android:id="@+id/lblWheelchairAccess"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginStart="@dimen/default_app_space_small"
+                                        android:textAppearance="@style/TextAppearance.Small"
+                                        android:textStyle="bold"
+                                        android:text="@string/str_trip_details_na"
+                                        app:layout_constraintLeft_toRightOf="@id/imgWheelchairAccess"/>
+
+                                    <ImageView
+                                        android:id="@+id/imgBikesAllowed"
+                                        android:layout_width="20dp"
+                                        android:layout_height="20dp"
+                                        android:layout_marginTop="6dp"
+                                        android:src="@drawable/ic_bike"
+                                        android:tint="@color/colorAccentDAY"
+                                        app:layout_constraintLeft_toLeftOf="parent"
+                                        app:layout_constraintTop_toBottomOf="@id/imgWheelchairAccess" />
+
+                                    <TextView
+                                        android:id="@+id/lblBikesAllowed"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginTop="6dp"
+                                        android:layout_marginStart="@dimen/default_app_space_small"
+                                        android:textAppearance="@style/TextAppearance.Small"
+                                        android:textStyle="bold"
+                                        android:text="@string/str_trip_details_na"
+                                        app:layout_constraintLeft_toRightOf="@id/imgBikesAllowed"
+                                        app:layout_constraintTop_toBottomOf="@id/lblWheelchairAccess" />
+
+                                </android.support.constraint.ConstraintLayout>
+
                                 <ListView
                                     android:id="@+id/lstTripAlerts"
                                     android:layout_width="match_parent"
