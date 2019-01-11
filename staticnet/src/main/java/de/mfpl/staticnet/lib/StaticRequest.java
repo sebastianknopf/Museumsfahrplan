@@ -22,6 +22,7 @@ public final class StaticRequest {
     private Listener listener;
     private String appId = "";
     private String apiKey = "";
+    private int defaultLimit = 10;
     private boolean isAsync = true;
 
     private StaticAPI createClient() {
@@ -123,6 +124,10 @@ public final class StaticRequest {
         this.apiKey = apiKey;
     }
 
+    public void setDefaultLimit(int defaultLimit) {
+        this.defaultLimit = defaultLimit;
+    }
+
     public void setAsync(boolean async) {
         this.isAsync = async;
     }
@@ -158,6 +163,7 @@ public final class StaticRequest {
         options.setIncludeRoutes(true);
         options.setIncludeAgency(true);
         options.setIncludeRealtime(true);
+        options.setLimit(this.defaultLimit);
 
         Container requestContainer = this.createRequestContainer(request, options, filter);
 
@@ -193,7 +199,7 @@ public final class StaticRequest {
         options.setIncludeRoutes(true);
         options.setIncludeAgency(true);
         options.setIncludeRealtime(true);
-        options.setLimit(10);
+        options.setLimit(this.defaultLimit);
 
         Container requestContainer = this.createRequestContainer(request, options, filter);
 
@@ -202,7 +208,7 @@ public final class StaticRequest {
         this.executeCall(apiCall);
     }
 
-    public void loadTrips(String routeId, Request.Filter filter, int limit) {
+    public void loadTrips(String routeId, Request.Filter filter) {
         Request request = new Request();
         request.setRouteId(routeId);
 
@@ -212,7 +218,7 @@ public final class StaticRequest {
         options.setIncludeRoutes(true);
         options.setIncludeAgency(true);
         options.setIncludeRealtime(true);
-        options.setLimit(limit);
+        options.setLimit(this.defaultLimit);
 
         Container requestContainer = this.createRequestContainer(request, options, filter);
 

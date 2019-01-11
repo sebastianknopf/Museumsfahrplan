@@ -6,6 +6,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 
 import de.mfpl.staticnet.lib.data.LocationReference;
+import de.mfpl.staticnet.lib.data.Trip;
 
 public final class Request {
 
@@ -188,6 +189,12 @@ public final class Request {
         @SerializedName("route_types")
         private int[] routeTypes;
 
+        @SerializedName("wheelchair_accessible")
+        private Trip.WheelchairAccessible wheelchairAccessible;
+
+        @SerializedName("bikes_allowed")
+        private Trip.BikesAllowed bikesAllowed;
+
         public Date getDate() {
             return date;
         }
@@ -212,6 +219,24 @@ public final class Request {
 
         public Filter setTime(String time) {
             this.time = time;
+            return this;
+        }
+
+        public Trip.WheelchairAccessible getWheelchairAccessible() {
+            return wheelchairAccessible;
+        }
+
+        public Filter setWheelchairAccessible(Trip.WheelchairAccessible wheelchairAccessible) {
+            this.wheelchairAccessible = wheelchairAccessible;
+            return this;
+        }
+
+        public Trip.BikesAllowed getBikesAllowed() {
+            return bikesAllowed;
+        }
+
+        public Filter setBikesAllowed(Trip.BikesAllowed bikesAllowed) {
+            this.bikesAllowed = bikesAllowed;
             return this;
         }
 
