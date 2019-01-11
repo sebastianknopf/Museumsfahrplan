@@ -84,6 +84,7 @@ public class TripDetailsFragment extends Fragment {
         args.putString(KEY_TRIP_ID, tripId);
         args.putString(KEY_TRIP_DATE, tripDate);
         args.putString(KEY_TRIP_TIME, tripTime);
+
         fragment.setArguments(args);
 
         return fragment;
@@ -111,7 +112,7 @@ public class TripDetailsFragment extends Fragment {
         this.components.layoutSwipeRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                loadTripDetails(currentTripId, currentTripDate, currentTripTime);
+                loadTripDetails(currentTripId, currentTripDate);
             }
         });
 
@@ -124,7 +125,7 @@ public class TripDetailsFragment extends Fragment {
                 this.setAlertAdapter(this.resultTrip.getRealtime().getAlerts());
             }
         } else {
-            this.loadTripDetails(this.currentTripId, this.currentTripDate, this.currentTripTime);
+            this.loadTripDetails(this.currentTripId, this.currentTripDate);
         }
 
         // set action bar title from itself
@@ -459,14 +460,14 @@ public class TripDetailsFragment extends Fragment {
         });
     }
 
-    private void loadTripDetails(String tripId, Date tripDate, String tripTime) {
+    private void loadTripDetails(String tripId, Date tripDate) {
         StaticRequest staticRequest = new StaticRequest();
         staticRequest.setAppId(this.getContext().getString(R.string.MFPL_APP_ID));
         staticRequest.setApiKey(this.getContext().getString(R.string.MFPL_API_KEY));
 
         Request.Filter filter = new Request.Filter();
         filter.setDate(new Request.Filter.Date().fromJavaDate(tripDate));
-        filter.setTime(tripTime);
+        filter.setTime(this.currentTripTime);
         
         this.components.layoutSwipeRefresh.setRefreshing(true);
         staticRequest.setListener(new StaticRequest.Listener() {
@@ -515,7 +516,7 @@ public class TripDetailsFragment extends Fragment {
                 // stop displaying refresh progress bar and display trip error view
                 components.layoutSwipeRefresh.setRefreshing(false);
 
-                showNetworkErrorDialog(() -> loadTripDetails(currentTripId, currentTripDate, currentTripTime));
+                showNetworkErrorDialog(() -> loadTripDetails(currentTripId, currentTripDate));
             }
         }).loadTripDetails(tripId, filter, true);
     }

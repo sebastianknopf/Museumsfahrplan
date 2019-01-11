@@ -180,8 +180,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 String routeId = arguments.getString(SearchInputFragment.KEY_SEARCH_ROUTE_ID);
                 String routeName = arguments.getString(SearchInputFragment.KEY_SEARCH_ROUTE_NAME);
                 String searchDate = arguments.getString(SearchInputFragment.KEY_SEARCH_DATE);
+                String searchTime = arguments.getString(SearchInputFragment.KEY_SEARCH_TIME);
 
-                SearchDetailsFragment searchDetailsFragment = SearchDetailsFragment.newInstance(routeId, routeName, searchDate);
+                SearchDetailsFragment searchDetailsFragment = SearchDetailsFragment.newInstance(routeId, routeName, searchDate, searchTime);
                 this.navigationManager.setNextAnimation(R.anim.fragment_enter_right, R.anim.fragment_exit_right);
                 this.navigationManager.navigateTo(searchDetailsFragment);
             } else if(arguments.getInt(SearchInputFragment.KEY_FRAGMENT_ACTION) == SearchInputFragment.ACTION_SHOW_SETTINGS) {

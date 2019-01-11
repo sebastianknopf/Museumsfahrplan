@@ -33,7 +33,7 @@ import de.mpfl.app.R;
 import de.mpfl.app.adapters.NominatimResultListAdapter;
 import de.mpfl.app.adapters.RouteListAdapter;
 import de.mpfl.app.databinding.FragmentSearchInputBinding;
-import de.mpfl.app.dialogs.DateDialog;
+import de.mpfl.app.dialogs.DateTimeDialog;
 import de.mpfl.app.dialogs.ErrorDialog;
 import de.mpfl.app.listeners.OnFragmentInteractionListener;
 import de.mpfl.app.listeners.OnNominatimResultClickListener;
@@ -56,6 +56,7 @@ public class SearchInputFragment extends Fragment implements OnRouteItemClickLis
     public final static String KEY_SEARCH_ROUTE_ID = "KEY_SEARCH_ROUTE_ID";
     public final static String KEY_SEARCH_ROUTE_NAME = "KEY_SEARCH_ROUTE_NAME";
     public final static String KEY_SEARCH_DATE = "KEY_SEARCH_DATE";
+    public final static String KEY_SEARCH_TIME = "KEY_SEARCH_TIME";
 
     public final static int ACTION_SELECT_ROUTE = 0;
     public final static int ACTION_SHOW_SETTINGS = 1;
@@ -112,7 +113,7 @@ public class SearchInputFragment extends Fragment implements OnRouteItemClickLis
         }
 
         // display current search parameters
-        this.components.lblSearchParamDate.setText(DateTimeFormat.from(this.currentSearchDate).to(DateTimeFormat.DDMMYYYY));
+        this.components.lblSearchParamDate.setText(DateTimeFormat.from(this.currentSearchDate).to(DateTimeFormat.DDMMYYYY_HHMM));
         this.components.skbSearchParamRadius.setProgress(this.currentSearchRadius / 1000);
 
         // add seek bar listener for reloading data when radius has changed
@@ -139,7 +140,6 @@ public class SearchInputFragment extends Fragment implements OnRouteItemClickLis
 
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
             }
 
             @Override
@@ -211,7 +211,6 @@ public class SearchInputFragment extends Fragment implements OnRouteItemClickLis
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
-
         inflater.inflate(R.menu.menu_settings_shortcut, menu);
     }
 
@@ -252,6 +251,7 @@ public class SearchInputFragment extends Fragment implements OnRouteItemClickLis
             arguments.putString(KEY_SEARCH_ROUTE_ID, routeItem.getRouteId());
             arguments.putString(KEY_SEARCH_ROUTE_NAME, routeItem.getRouteLongName());
             arguments.putString(KEY_SEARCH_DATE, DateTimeFormat.from(this.currentSearchDate).to(DateTimeFormat.DDMMYYYY));
+            arguments.putString(KEY_SEARCH_TIME, DateTimeFormat.from(this.currentSearchDate).to(DateTimeFormat.HHMMSS));
 
             this.fragmentInteractionListener.onFragmentInteraction(this, arguments);
         }
@@ -269,11 +269,11 @@ public class SearchInputFragment extends Fragment implements OnRouteItemClickLis
     }
 
     public void lblSearchParamDateClick(View view) {
-        DateDialog dateDialog = new DateDialog(this.getContext());
-        dateDialog.setSearchDate(this.currentSearchDate);
-        dateDialog.setOnDateChangedListener(date -> {
+        DateTimeDialog dateDialog = new DateTimeDialog(this.getContext());
+        dateDialog.setSearchDateTime(this.currentSearchDate);
+        dateDialog.setOnDateTimeChangedListener(date -> {
             this.currentSearchDate = date;
-            this.components.lblSearchParamDate.setText(DateTimeFormat.from(date).to(DateTimeFormat.DDMMYYYY));
+            this.components.lblSearchParamDate.setText(DateTimeFormat.from(date).to(DateTimeFormat.DDMMYYYY_HHMM));
             this.loadRouteResults();
         });
         dateDialog.show();

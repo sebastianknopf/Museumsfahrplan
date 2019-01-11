@@ -12,6 +12,7 @@
 
         <item name="android:windowBackground">@color/windowBackgroundColorDAY</item>
         <item name="android:alertDialogTheme">@style/AppTheme.AlertDialog</item>
+        <item name="android:colorControlNormal">@color/colorAccentDAY</item>
     </style>
 
     <style name="AppTheme.LAUNCHER" parent="Theme.AppCompat.Light.NoActionBar">
@@ -22,6 +23,10 @@
     <style name="DefaultTextViewStyle" parent="android:Widget.TextView">
         <item name="android:fontFamily">sans-serif-light</item>
         <item name="android:textStyle">normal</item>
+    </style>
+
+    <style name="AppTheme.TimePicker" parent="@android:style/Widget.Material.TimePicker">
+        <item name="android:colorControlNormal">@color/colorAccentDAY</item>
     </style>
 
     <!-- Dialog Styles -->

@@ -38,6 +38,7 @@ public class SearchDetailsFragment extends Fragment implements OnTripItemClickLi
     public final static String KEY_SEARCH_ROUTE_ID = "KEY_SEARCH_ROUTE_ID";
     public final static String KEY_SEARCH_ROUTE_NAME = "KEY_SEARCH_ROUTE_NAME";
     public final static String KEY_SEARCH_DATE = "KEY_SEARCH_DATE";
+    public final static String KEY_SEARCH_TIME = "KEY_SEARCH_TIME";
     public final static String KEY_TRIP_ID = "KEY_TRIP_ID";
     public final static String KEY_TRIP_TIME = "KEY_TRIP_TIME";
     public final static String KEY_TRIP_DATE = "KEY_TRIP_DATE";
@@ -50,6 +51,7 @@ public class SearchDetailsFragment extends Fragment implements OnTripItemClickLi
     private String currentSearchRouteId;
     private String currentSearchRouteName;
     private Date currentSearchDate = new Date();
+    private String currentSearchTime;
 
     // needed for retain behaviour when returning from back stack to this fragment
     private List<Trip> resultList = null;
@@ -58,13 +60,14 @@ public class SearchDetailsFragment extends Fragment implements OnTripItemClickLi
         // Required empty public constructor
     }
 
-    public static SearchDetailsFragment newInstance(String routeId, String routeName, String date) {
+    public static SearchDetailsFragment newInstance(String routeId, String routeName, String searchDate, String searchTime) {
         SearchDetailsFragment fragment = new SearchDetailsFragment();
 
         Bundle arguments = new Bundle();
         arguments.putString(KEY_SEARCH_ROUTE_ID, routeId);
         arguments.putString(KEY_SEARCH_ROUTE_NAME, routeName);
-        arguments.putString(KEY_SEARCH_DATE, date);
+        arguments.putString(KEY_SEARCH_DATE, searchDate);
+        arguments.putString(KEY_SEARCH_TIME, searchTime);
         fragment.setArguments(arguments);
 
         return fragment;
@@ -78,6 +81,7 @@ public class SearchDetailsFragment extends Fragment implements OnTripItemClickLi
             this.currentSearchRouteId = this.getArguments().getString(KEY_SEARCH_ROUTE_ID);
             this.currentSearchRouteName = this.getArguments().getString(KEY_SEARCH_ROUTE_NAME);
             this.currentSearchDate = DateTimeFormat.from(this.getArguments().getString(KEY_SEARCH_DATE), DateTimeFormat.DDMMYYYY).toDate();
+            this.currentSearchTime = this.getArguments().getString(KEY_SEARCH_TIME);
         }
     }
 
@@ -175,14 +179,9 @@ public class SearchDetailsFragment extends Fragment implements OnTripItemClickLi
 
         Request.Filter filter = new Request.Filter();
         filter.setDate(Request.Filter.Date.fromJavaDate(this.currentSearchDate));
+        filter.setTime(this.currentSearchTime);
         filter.setWheelchairAccessible(settingsManager.getPreferenceWheelchairAccessible() ? Trip.WheelchairAccessible.YES : Trip.WheelchairAccessible.NO);
         filter.setBikesAllowed(settingsManager.getPreferenceBikesAllowed() ? Trip.BikesAllowed.YES : Trip.BikesAllowed.NO);
-
-        // set lookup time to *current* only if we look for trips departing today
-        String searchDateString = DateTimeFormat.from(this.currentSearchDate).to(DateTimeFormat.YYYYMMDD);
-        if(searchDateString.equals(DateTimeFormat.from(new Date()).to(DateTimeFormat.YYYYMMDD))) {
-            filter.setTime(DateTimeFormat.from(new Date()).to(DateTimeFormat.HHMMSS));
-        }
 
         staticRequest.setListener(new StaticRequest.Listener() {
             @Override
@@ -196,27 +195,6 @@ public class SearchDetailsFragment extends Fragment implements OnTripItemClickLi
                 // no need for check result count here (only for error purposes)
                 // api returns this route id only if there's at least one scheduled trip
                 resultList = delivery.getTrips();
-
-                // apply filter methods from api result
-                SettingsManager settingsManager = new SettingsManager(getContext());
-                boolean wheelchairRequired = settingsManager.getPreferenceWheelchairAccessible();
-                boolean bikeRequired = settingsManager.getPreferenceBikesAllowed();
-
-                // old filter implementation - maybe need this again
-                /*for(Trip trip : delivery.getTrips()) {
-                    // skip this result, if the wheelchair accessibility is not defined entirely
-                    if(wheelchairRequired && trip.getWheelchairAccessible() != Trip.WheelchairAccessible.YES) {
-                        continue;
-                    }
-
-                    // skip this result, if the bike carriage is not defined entirely
-                    if(bikeRequired && trip.getBikesAllowed() != Trip.BikesAllowed.YES) {
-                        continue;
-                    }
-
-                    // add the trip to the list, after we passed every filter
-                    resultList.add(trip);
-                }*/
 
                 // set list adapter
                 setListAdapter(resultList);
