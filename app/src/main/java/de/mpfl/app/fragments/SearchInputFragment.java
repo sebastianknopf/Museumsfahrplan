@@ -28,6 +28,7 @@ import de.mfpl.staticnet.lib.base.Delivery;
 import de.mfpl.staticnet.lib.base.Request;
 import de.mfpl.staticnet.lib.data.Position;
 import de.mfpl.staticnet.lib.data.Route;
+import de.mfpl.staticnet.lib.data.Trip;
 import de.mpfl.app.R;
 import de.mpfl.app.adapters.NominatimResultListAdapter;
 import de.mpfl.app.adapters.RouteListAdapter;
@@ -40,6 +41,7 @@ import de.mpfl.app.listeners.OnRouteItemClickListener;
 import de.mpfl.app.network.NominatimRequest;
 import de.mpfl.app.network.NominatimResult;
 import de.mpfl.app.utils.DateTimeFormat;
+import de.mpfl.app.utils.SettingsManager;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -384,12 +386,17 @@ public class SearchInputFragment extends Fragment implements OnRouteItemClickLis
         // todo: add skeleton adapter in next few versions here...
         this.components.rcvSearchInputRouteResults.setAdapter(null);
 
+        SettingsManager settingsManager = new SettingsManager(this.getContext());
+
         StaticRequest staticRequest = new StaticRequest();
         staticRequest.setAppId(this.getString(R.string.MFPL_APP_ID));
         staticRequest.setApiKey(this.getString(R.string.MFPL_API_KEY));
+        staticRequest.setDefaultLimit(settingsManager.getPreferencesNumResults());
 
         Request.Filter filter = new Request.Filter();
         filter.setDate(Request.Filter.Date.fromJavaDate(this.currentSearchDate));
+        filter.setWheelchairAccessible(settingsManager.getPreferenceWheelchairAccessible() ? Trip.WheelchairAccessible.YES : Trip.WheelchairAccessible.NO);
+        filter.setBikesAllowed(settingsManager.getPreferenceBikesAllowed() ? Trip.BikesAllowed.YES : Trip.BikesAllowed.NO);
 
         this.showRouteResultList();
         staticRequest.setListener(new StaticRequest.Listener() {

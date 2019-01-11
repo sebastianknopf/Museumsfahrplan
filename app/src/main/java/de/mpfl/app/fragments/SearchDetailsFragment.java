@@ -14,7 +14,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -167,12 +166,17 @@ public class SearchDetailsFragment extends Fragment implements OnTripItemClickLi
     private void loadRouteTrips() {
         // todo: display skeleton adapter here
 
+        SettingsManager settingsManager = new SettingsManager(this.getContext());
+
         StaticRequest staticRequest = new StaticRequest();
         staticRequest.setAppId(this.getString(R.string.MFPL_APP_ID));
         staticRequest.setApiKey(this.getString(R.string.MFPL_API_KEY));
+        staticRequest.setDefaultLimit(settingsManager.getPreferencesNumResults());
 
         Request.Filter filter = new Request.Filter();
         filter.setDate(Request.Filter.Date.fromJavaDate(this.currentSearchDate));
+        filter.setWheelchairAccessible(settingsManager.getPreferenceWheelchairAccessible() ? Trip.WheelchairAccessible.YES : Trip.WheelchairAccessible.NO);
+        filter.setBikesAllowed(settingsManager.getPreferenceBikesAllowed() ? Trip.BikesAllowed.YES : Trip.BikesAllowed.NO);
 
         // set lookup time to *current* only if we look for trips departing today
         String searchDateString = DateTimeFormat.from(this.currentSearchDate).to(DateTimeFormat.YYYYMMDD);
@@ -191,14 +195,15 @@ public class SearchDetailsFragment extends Fragment implements OnTripItemClickLi
 
                 // no need for check result count here (only for error purposes)
                 // api returns this route id only if there's at least one scheduled trip
-                resultList = new ArrayList<>();
+                resultList = delivery.getTrips();
 
                 // apply filter methods from api result
                 SettingsManager settingsManager = new SettingsManager(getContext());
                 boolean wheelchairRequired = settingsManager.getPreferenceWheelchairAccessible();
                 boolean bikeRequired = settingsManager.getPreferenceBikesAllowed();
 
-                for(Trip trip : delivery.getTrips()) {
+                // old filter implementation - maybe need this again
+                /*for(Trip trip : delivery.getTrips()) {
                     // skip this result, if the wheelchair accessibility is not defined entirely
                     if(wheelchairRequired && trip.getWheelchairAccessible() != Trip.WheelchairAccessible.YES) {
                         continue;
@@ -211,7 +216,7 @@ public class SearchDetailsFragment extends Fragment implements OnTripItemClickLi
 
                     // add the trip to the list, after we passed every filter
                     resultList.add(trip);
-                }
+                }*/
 
                 // set list adapter
                 setListAdapter(resultList);
@@ -221,6 +226,6 @@ public class SearchDetailsFragment extends Fragment implements OnTripItemClickLi
             public void onError(Throwable throwable) {
                 showNetworkErrorDialog(() -> loadRouteTrips());
             }
-        }).loadTrips(this.currentSearchRouteId, filter, 999); // limit 999 to display all trips
+        }).loadTrips(this.currentSearchRouteId, filter);
     }
 }

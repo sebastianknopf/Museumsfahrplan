@@ -355,7 +355,8 @@ public class TripDetailsFragment extends Fragment {
         }
 
         // display trip progress with colored line only when the trip is departing today
-        if(this.currentTripDate.equals(DateTimeFormat.from(new Date()).to(DateTimeFormat.YYYYMMDD))) {
+        String currentDateString = DateTimeFormat.from(this.currentTripDate).to(DateTimeFormat.YYYYMMDD);
+        if(currentDateString.equals(DateTimeFormat.from(new Date()).to(DateTimeFormat.YYYYMMDD))) {
             stopTimesAdapter.setLineActiveColor(tripColor);
         } else {
             stopTimesAdapter.setLineActiveColor(ContextCompat.getColor(this.getContext(), R.color.colorBackgroundDarkGray));

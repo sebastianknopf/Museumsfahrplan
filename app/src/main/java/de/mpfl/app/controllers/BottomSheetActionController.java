@@ -17,6 +17,7 @@ import de.mpfl.app.R;
 import de.mpfl.app.adapters.TripListAdapter;
 import de.mpfl.app.databinding.LayoutMapBottomSheetBinding;
 import de.mpfl.app.listeners.OnTripItemClickListener;
+import de.mpfl.app.utils.SettingsManager;
 
 public final class BottomSheetActionController {
 
@@ -34,13 +35,18 @@ public final class BottomSheetActionController {
     }
 
     public void loadDepartures(String stopId) {
+        SettingsManager settingsManager = new SettingsManager(this.context);
+
         StaticRequest staticRequest = new StaticRequest();
         staticRequest.setAppId(this.context.getString(R.string.MFPL_APP_ID));
         staticRequest.setApiKey(this.context.getString(R.string.MFPL_API_KEY));
+        staticRequest.setDefaultLimit(settingsManager.getPreferencesNumResults());
 
         Request.Filter filter = new Request.Filter();
         filter.setDate(Request.Filter.Date.fromJavaDate(new Date()));
         filter.setTime(new SimpleDateFormat("HH:mm:ss").format(new Date()));
+        filter.setWheelchairAccessible(settingsManager.getPreferenceWheelchairAccessible() ? Trip.WheelchairAccessible.YES : Trip.WheelchairAccessible.NO);
+        filter.setBikesAllowed(settingsManager.getPreferenceBikesAllowed() ? Trip.BikesAllowed.YES : Trip.BikesAllowed.NO);
 
         this.components.rcvTripList.setVisibility(View.GONE);
         this.components.layErrorView.setVisibility(View.GONE);
