@@ -79,6 +79,10 @@ public final class FavoritesListAdapter extends RecyclerView.Adapter<RecyclerVie
             String tripName = favoriteItem.getTripName();
             favoriteItemViewHolder.components.lblTripName.setText(tripName);
 
+            // set trip route info
+            String tripRouteName = favoriteItem.getTripDesc();
+            favoriteItemViewHolder.components.lblTripDesc.setText(tripRouteName);
+
             // set trip date / time as text
             String tripDateTime = DateTimeFormat.from(favoriteItem.getTripDate(), DateTimeFormat.YYYYMMDD).to(DateTimeFormat.DDMMYYYY);
             if(favoriteItem.getTripTime() != null && !favoriteItem.getTripTime().equals("")) {

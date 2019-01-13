@@ -236,6 +236,7 @@ public class TripDetailsFragment extends Fragment {
         favorite.setTripId(this.resultTrip.getTripId());
         favorite.setTripType(this.resultTrip.getRoute().getRouteType().toString());
         favorite.setTripName((!this.resultTrip.getTripShortName().equals("") ? this.resultTrip.getTripShortName() + " " : "") + this.resultTrip.getTripHeadsign());
+        favorite.setTripDesc(this.resultTrip.getRoute().getRouteLongName());
         favorite.setTripDate(DateTimeFormat.from(this.currentTripDate).to(DateTimeFormat.YYYYMMDD));
         favorite.setTripTime(this.resultTrip.getStopTimes().get(0).getDepartureTime());
 
