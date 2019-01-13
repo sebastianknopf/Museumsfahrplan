@@ -140,25 +140,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     public void onFragmentInteraction(Fragment fragment, Bundle arguments) {
         if(fragment instanceof  InfoListFragment) {
-            Fragment infoDetailsFragment = null;
-            switch(arguments.getInt(InfoListFragment.KEY_INFO_CATEGORY)) {
-                case 0:
-                    infoDetailsFragment = InfoDetailsFragment.newInstance("html_info_default.html");
-                    break;
-
-                case 1:
-                    infoDetailsFragment = InfoDetailsFragment.newInstance("html_info_privacy.html");
-                    break;
-
-                case 2:
-                    infoDetailsFragment = InfoDetailsFragment.newInstance("html_info_opensource.html");
-                    break;
-            }
-
-            // navigate to desired info fragment with keeping the back stack
-            if(infoDetailsFragment != null) {
-                this.navigationManager.navigateTo(infoDetailsFragment);
-            }
+            InfoDetailsFragment infoDetailsFragment = InfoDetailsFragment.newInstance(arguments.getString(InfoListFragment.KEY_INFO_VIEW));
+            this.navigationManager.setNextAnimation(R.anim.fragment_enter_right, R.anim.fragment_exit_right);
+            this.navigationManager.navigateTo(infoDetailsFragment);
         } else if(fragment instanceof MapOverviewFragment) {
             if(arguments.getInt(MapOverviewFragment.KEY_FRAGMENT_ACTION) == MapOverviewFragment.ACTION_OPEN_SEARCH) {
                 double searchLat = arguments.getDouble(MapOverviewFragment.KEY_SEARCH_LAT);

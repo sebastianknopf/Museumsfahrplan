@@ -4,22 +4,20 @@ import android.content.Context;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import de.mpfl.app.R;
 import de.mpfl.app.databinding.FragmentInfoDetailsBinding;
-import de.mpfl.app.utils.AssetReader;
 
 
 public class InfoDetailsFragment extends Fragment {
 
     public static final String TAG = "InfoDetailsFragment";
-    public static final String ARG_INFO_FILENAME = "InfoFileName";
+    public static final String KEY_INFO_VIEW = "KEY_INFO_VIEW";
 
-    private String infoFileName;
+    private String infoViewName;
 
     private FragmentInfoDetailsBinding components;
 
@@ -27,10 +25,11 @@ public class InfoDetailsFragment extends Fragment {
         // Required empty public constructor
     }
 
-    public static InfoDetailsFragment newInstance(String infoFileName) {
-        InfoDetailsFragment fragment = new InfoDetailsFragment();
+    public static InfoDetailsFragment newInstance(String infoViewName) {
         Bundle args = new Bundle();
-        args.putString(ARG_INFO_FILENAME, infoFileName);
+        args.putString(KEY_INFO_VIEW, infoViewName);
+
+        InfoDetailsFragment fragment = new InfoDetailsFragment();
         fragment.setArguments(args);
 
         return fragment;
@@ -40,7 +39,7 @@ public class InfoDetailsFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            this.infoFileName = this.getArguments().getString(ARG_INFO_FILENAME);
+            this.infoViewName = this.getArguments().getString(KEY_INFO_VIEW);
         }
     }
 
@@ -49,8 +48,7 @@ public class InfoDetailsFragment extends Fragment {
         this.components = DataBindingUtil.inflate(inflater, R.layout.fragment_info_details, container, false);
 
         // read info html file from assets and display it in textview
-        AssetReader assetReader = new AssetReader(this.getContext(), this.infoFileName);
-        this.components.tvInfoDetailsText.setText(Html.fromHtml(assetReader.getContent()));
+        this.components.wvInfoDetailsContent.loadUrl("file:///android_asset/" + this.infoViewName + ".html");
 
         return this.components.getRoot();
     }

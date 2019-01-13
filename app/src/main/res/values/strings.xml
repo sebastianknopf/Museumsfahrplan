@@ -69,6 +69,15 @@
 
     <!-- InfoListFragment -->
     <string name="str_info_list_title">Informationen</string>
+    <string name="str_info_app_abstract">Fahrplaninformationen zu historischen Fahrzeugen und Museumsverkehr</string>
+    <string name="str_info_app_version">Version</string>
+    <string name="str_info_app_privacy">Datenschutz</string>
+    <string name="str_info_app_licenses">OpenSource Lizenzen</string>
+    <string name="str_info_app_github_project">GitHub Projekt</string>
+    <string name="str_info_contributors">Mitwirkende</string>
+    <string name="str_info_contributors_name_1">Sebastian Knopf</string>
+    <string name="str_info_contributors_info_1">Entwickler, Hochschule Karlsruhe</string>
+    <string name="str_info_contributors_partners">Unsere Partner</string>
     <string-array name="str_array_information_categories">
         <item>Allgemeine Informationen</item>
         <item>Datenschutz</item>

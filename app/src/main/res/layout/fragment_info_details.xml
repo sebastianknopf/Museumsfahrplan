@@ -8,8 +8,8 @@
         android:padding="@dimen/default_app_space"
         tools:context="de.mpfl.app.fragments.InfoDetailsFragment">
 
-        <TextView
-            android:id="@+id/tvInfoDetailsText"
+        <WebView
+            android:id="@+id/wvInfoDetailsContent"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
 

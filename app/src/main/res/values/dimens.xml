@@ -7,10 +7,11 @@
 
     <dimen name="default_separation_space">6dp</dimen>
 
-    <!-- StopTimeItem -->
+    <!-- ListItems -->
     <dimen name="stop_time_item_min_height">60dp</dimen>
     <dimen name="stop_time_item_timeline_size">3dp</dimen>
     <dimen name="stop_time_item_point_size">18dp</dimen>
+    <dimen name="icon_item_height">64dp</dimen>
 
     <!-- FAB Menu -->
     <dimen name="fab_menu_level_1">88dp</dimen>

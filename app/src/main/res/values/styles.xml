@@ -79,4 +79,9 @@
         <item name="android:textColor">@color/colorTextRed</item>
     </style>
 
+    <style name="TextAppearance.Caption" parent="@style/TextAppearance.Light">
+        <item name="android:textSize">12sp</item>
+        <item name="android:textColor">@color/colorTextSecondary</item>
+    </style>
+
 </resources>
