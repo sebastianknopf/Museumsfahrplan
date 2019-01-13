@@ -61,6 +61,7 @@ dependencies {
     // external libraries for mfpl
     implementation 'com.mapbox.mapboxsdk:mapbox-android-sdk:6.7.1'
     implementation 'com.google.android.gms:play-services-location:15.0.1'
+    implementation 'com.facebook.shimmer:shimmer:0.1.0@aar'
 
     implementation project(':staticnet')
 

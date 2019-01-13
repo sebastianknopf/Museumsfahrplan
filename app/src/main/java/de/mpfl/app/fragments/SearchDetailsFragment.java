@@ -10,6 +10,7 @@ import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,6 +23,7 @@ import de.mfpl.staticnet.lib.base.Delivery;
 import de.mfpl.staticnet.lib.base.Request;
 import de.mfpl.staticnet.lib.data.Trip;
 import de.mpfl.app.R;
+import de.mpfl.app.adapters.SkeletonAdapter;
 import de.mpfl.app.adapters.TripListAdapter;
 import de.mpfl.app.databinding.FragmentSearchDetailsBinding;
 import de.mpfl.app.dialogs.ErrorDialog;
@@ -46,6 +48,7 @@ public class SearchDetailsFragment extends Fragment implements OnTripItemClickLi
     public final static int ACTION_SELECT_TRIP = 0;
 
     private FragmentSearchDetailsBinding components;
+    private RecyclerView.ItemDecoration itemDecoration;
     private OnFragmentInteractionListener fragmentInteractionListener;
 
     private String currentSearchRouteId;
@@ -90,15 +93,14 @@ public class SearchDetailsFragment extends Fragment implements OnTripItemClickLi
         this.components = DataBindingUtil.inflate(inflater, R.layout.fragment_search_details, container, false);
         this.components.setFragment(this);
 
-        // divider setup
-        DividerItemDecoration itemDecor = new DividerItemDecoration(this.getContext(), DividerItemDecoration.VERTICAL);
-        this.components.rcvSearchDetailsResults.addItemDecoration(itemDecor);
-
         // set activity title
         AppCompatActivity activity = (AppCompatActivity) this.getActivity();
         if(activity != null) {
             activity.getSupportActionBar().setTitle(this.currentSearchRouteName);
         }
+
+        // item decor
+        this.itemDecoration = new DividerItemDecoration(this.getContext(), DividerItemDecoration.VERTICAL);
 
         // load route related trips at startup if there's a route id
         if(this.resultList != null && this.resultList.size() > 0) {
@@ -106,6 +108,11 @@ public class SearchDetailsFragment extends Fragment implements OnTripItemClickLi
         } else if(this.currentSearchRouteId != null) {
             this.loadRouteTrips();
         }
+
+        // layout manager for recycler view
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
+        layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+        this.components.rcvSearchDetailsResults.setLayoutManager(layoutManager);
 
         return this.components.getRoot();
     }
@@ -147,11 +154,21 @@ public class SearchDetailsFragment extends Fragment implements OnTripItemClickLi
         TripListAdapter listAdapter = new TripListAdapter(getContext(), resultList);
         listAdapter.setOnTripItemClickListener(SearchDetailsFragment.this);
 
-        LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
-        layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-        this.components.rcvSearchDetailsResults.setLayoutManager(layoutManager);
+        // divider setup
+        this.components.rcvSearchDetailsResults.addItemDecoration(this.itemDecoration);
 
         this.components.rcvSearchDetailsResults.setAdapter(listAdapter);
+    }
+
+    private void setSkeletonAdapter() {
+        SkeletonAdapter skeletonAdapter = new SkeletonAdapter(this.getContext(), 5);
+        skeletonAdapter.setViewType(SkeletonAdapter.TYPE_DATA_ICON);
+        skeletonAdapter.setFirstItemDifferent(true);
+
+        // divider setup
+        this.components.rcvSearchDetailsResults.removeItemDecoration(this.itemDecoration);
+
+        this.components.rcvSearchDetailsResults.setAdapter(skeletonAdapter);
     }
 
     private void showNetworkErrorDialog(ErrorDialog.OnRetryClickListener retryListener) {
@@ -169,6 +186,7 @@ public class SearchDetailsFragment extends Fragment implements OnTripItemClickLi
 
     private void loadRouteTrips() {
         // todo: display skeleton adapter here
+        this.setSkeletonAdapter();
 
         SettingsManager settingsManager = new SettingsManager(this.getContext());
 

@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="@dimen/default_app_space">
+
+    <com.facebook.shimmer.ShimmerFrameLayout
+        android:id="@+id/shimmerLayoutDataOnly"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <android.support.constraint.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <View
+                android:id="@+id/viewSkeletonDataOnlyTitle"
+                android:layout_width="match_parent"
+                android:layout_height="16dp"
+                android:background="@color/colorBackgroundDarkGray"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <View
+                android:id="@+id/viewSkeletonDataOnlyContent"
+                android:layout_width="match_parent"
+                android:layout_height="32dp"
+                android:layout_marginTop="@dimen/default_app_space_small"
+                android:background="@color/colorBackgroundDarkGray"
+                app:layout_constraintTop_toBottomOf="@id/viewSkeletonDataOnlyTitle" />
+
+        </android.support.constraint.ConstraintLayout>
+
+    </com.facebook.shimmer.ShimmerFrameLayout>
+
+</RelativeLayout>

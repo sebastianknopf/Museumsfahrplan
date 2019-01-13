@@ -9,6 +9,7 @@ import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
@@ -32,6 +33,7 @@ import de.mfpl.staticnet.lib.data.Trip;
 import de.mpfl.app.R;
 import de.mpfl.app.adapters.NominatimResultListAdapter;
 import de.mpfl.app.adapters.RouteListAdapter;
+import de.mpfl.app.adapters.SkeletonAdapter;
 import de.mpfl.app.databinding.FragmentSearchInputBinding;
 import de.mpfl.app.dialogs.DateTimeDialog;
 import de.mpfl.app.dialogs.ErrorDialog;
@@ -62,6 +64,7 @@ public class SearchInputFragment extends Fragment implements OnRouteItemClickLis
     public final static int ACTION_SHOW_SETTINGS = 1;
 
     private FragmentSearchInputBinding components;
+    private RecyclerView.ItemDecoration itemDecoration;
     private OnFragmentInteractionListener fragmentInteractionListener;
 
     private double currentSearchLatitude;
@@ -112,6 +115,18 @@ public class SearchInputFragment extends Fragment implements OnRouteItemClickLis
             activity.getSupportActionBar().setTitle(R.string.str_search_input_title);
         }
 
+        // divider setup
+        this.itemDecoration = new DividerItemDecoration(this.getContext(), DividerItemDecoration.VERTICAL);
+
+        // layout manager for recycler views
+        LinearLayoutManager layoutRouteManager = new LinearLayoutManager(getContext());
+        layoutRouteManager.setOrientation(LinearLayoutManager.VERTICAL);
+        this.components.rcvSearchInputRouteResults.setLayoutManager(layoutRouteManager);
+
+        LinearLayoutManager layoutLocationManager = new LinearLayoutManager(getContext());
+        layoutLocationManager.setOrientation(LinearLayoutManager.VERTICAL);
+        this.components.rcvSearchInputLocationResults.setLayoutManager(layoutLocationManager);
+
         // display current search parameters
         this.components.lblSearchParamDate.setText(DateTimeFormat.from(this.currentSearchDate).to(DateTimeFormat.DDMMYYYY_HHMM));
         this.components.skbSearchParamRadius.setProgress(this.currentSearchRadius / 1000);
@@ -150,6 +165,7 @@ public class SearchInputFragment extends Fragment implements OnRouteItemClickLis
                     // display progress
                     components.pgbUserLocation.setVisibility(View.VISIBLE);
                     showLocationResultList();
+                    setLocationSkeletonAdapter();
                 }
             }
 
@@ -279,19 +295,44 @@ public class SearchInputFragment extends Fragment implements OnRouteItemClickLis
         dateDialog.show();
     }
 
-    private void setRouteListAdapter(List<Route> resultList) {
-        RouteListAdapter routeListAdapter = new RouteListAdapter(getContext(), resultList);
-        routeListAdapter.setOnRouteItemClickListener(SearchInputFragment.this);
-
-        LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
-        layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-        this.components.rcvSearchInputRouteResults.setLayoutManager(layoutManager);
+    private void setLocationListAdapter(List<NominatimResult> resultList) {
+        NominatimResultListAdapter nominatimResultListAdapter = new NominatimResultListAdapter(this.getContext(), resultList);
+        nominatimResultListAdapter.setOnNominatimResultClickListener(this);
 
         // divider setup
-        DividerItemDecoration itemDecor = new DividerItemDecoration(this.getContext(), DividerItemDecoration.VERTICAL);
-        this.components.rcvSearchInputRouteResults.addItemDecoration(itemDecor);
+        components.rcvSearchInputLocationResults.addItemDecoration(this.itemDecoration);
+
+        components.rcvSearchInputLocationResults.setAdapter(nominatimResultListAdapter);
+    }
+
+    private void setLocationSkeletonAdapter() {
+        SkeletonAdapter skeletonAdapter = new SkeletonAdapter(this.getContext(), 5);
+        skeletonAdapter.setViewType(SkeletonAdapter.TYPE_DATA_ONLY);
+
+        // divider setup
+        this.components.rcvSearchInputLocationResults.removeItemDecoration(this.itemDecoration);
+
+        this.components.rcvSearchInputLocationResults.setAdapter(skeletonAdapter);
+    }
+
+    private void setRouteListAdapter(List<Route> resultList) {
+        RouteListAdapter routeListAdapter = new RouteListAdapter(this.getContext(), resultList);
+        routeListAdapter.setOnRouteItemClickListener(this);
+
+        // divider setup
+        this.components.rcvSearchInputRouteResults.addItemDecoration(this.itemDecoration);
 
         this.components.rcvSearchInputRouteResults.setAdapter(routeListAdapter);
+    }
+
+    private void setRouteSkeletonAdapter() {
+        SkeletonAdapter skeletonAdapter = new SkeletonAdapter(this.getContext(), 5);
+        skeletonAdapter.setViewType(SkeletonAdapter.TYPE_DATA_ONLY);
+
+        // divider setup
+        this.components.rcvSearchInputRouteResults.removeItemDecoration(this.itemDecoration);
+
+        this.components.rcvSearchInputRouteResults.setAdapter(skeletonAdapter);
     }
 
     private void showRouteResultList() {
@@ -329,9 +370,6 @@ public class SearchInputFragment extends Fragment implements OnRouteItemClickLis
     }
 
     private void loadGeocodingResults(String queryString) {
-        // todo: add skeleton adapter here in next updates...
-        this.components.rcvSearchInputLocationResults.setAdapter(null);
-
         this.components.pgbUserLocation.setVisibility(View.VISIBLE);
 
         this.showLocationResultList();
@@ -359,18 +397,7 @@ public class SearchInputFragment extends Fragment implements OnRouteItemClickLis
                         components.layoutSearchInputLocationEmpty.setVisibility(View.GONE);
                     }
 
-                    NominatimResultListAdapter nominatimResultListAdapter = new NominatimResultListAdapter(getContext(), resultList);
-                    nominatimResultListAdapter.setOnNominatimResultClickListener(SearchInputFragment.this);
-
-                    LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
-                    layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-                    components.rcvSearchInputLocationResults.setLayoutManager(layoutManager);
-
-                    // divider setup
-                    DividerItemDecoration itemDecor = new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL);
-                    components.rcvSearchInputLocationResults.addItemDecoration(itemDecor);
-
-                    components.rcvSearchInputLocationResults.setAdapter(nominatimResultListAdapter);
+                    setLocationListAdapter(resultList);
                 }
             }
 
@@ -383,9 +410,6 @@ public class SearchInputFragment extends Fragment implements OnRouteItemClickLis
     }
 
     private void loadRouteResults() {
-        // todo: add skeleton adapter in next few versions here...
-        this.components.rcvSearchInputRouteResults.setAdapter(null);
-
         SettingsManager settingsManager = new SettingsManager(this.getContext());
 
         StaticRequest staticRequest = new StaticRequest();
@@ -399,6 +423,7 @@ public class SearchInputFragment extends Fragment implements OnRouteItemClickLis
         filter.setBikesAllowed(settingsManager.getPreferenceBikesAllowed() ? Trip.BikesAllowed.YES : Trip.BikesAllowed.NO);
 
         this.showRouteResultList();
+        this.setRouteSkeletonAdapter();
         staticRequest.setListener(new StaticRequest.Listener() {
             @Override
             public void onSuccess(Delivery delivery) {
