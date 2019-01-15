@@ -58,10 +58,8 @@ public class InfoListFragment extends Fragment {
 
         // populate app info card
         List<IconListAdapter.IconListItem> infoAppList = new ArrayList<IconListAdapter.IconListItem>();
-        infoAppList.add(new IconListAdapter.IconListItem(this.getString(R.string.str_info_app_version), BuildConfig.VERSION_NAME, R.drawable.ic_version));
-        infoAppList.add(new IconListAdapter.IconListItem(this.getString(R.string.str_info_app_privacy), null, R.drawable.ic_privacy));
-        infoAppList.add(new IconListAdapter.IconListItem(this.getString(R.string.str_info_app_licenses), null, R.drawable.ic_license));
-        infoAppList.add(new IconListAdapter.IconListItem(this.getString(R.string.str_info_app_github_project), null, R.drawable.ic_code));
+        infoAppList.add(new IconListAdapter.IconListItem(this.getString(R.string.str_info_list_app_version), BuildConfig.VERSION_NAME, R.drawable.ic_version));
+        infoAppList.add(new IconListAdapter.IconListItem(this.getString(R.string.str_info_list_app_github_project), null, R.drawable.ic_code));
 
         IconListAdapter infoAppAdapter = new IconListAdapter(this.getContext(), infoAppList);
         this.components.lstInfoApp.setAdapter(infoAppAdapter);
@@ -70,23 +68,9 @@ public class InfoListFragment extends Fragment {
 
         // notify parent activity about the user's selection
         this.components.lstInfoApp.setOnItemClickListener((parent, view, position, id) -> {
-            if(position == 1) {
-                // privacy view
-                Bundle arguments = new Bundle();
-                arguments.putString(KEY_INFO_VIEW, "html_info_privacy");
-
-                if(this.listener != null) {
-                    listener.onFragmentInteraction(this, arguments);
-                }
-            } else if(position == 2) {
-                // licenses view
-                Bundle arguments = new Bundle();
-                arguments.putString(KEY_INFO_VIEW, "html_info_opensource");
-
-                if(this.listener != null) {
-                    listener.onFragmentInteraction(this, arguments);
-                }
-            } else if(position == 3) {
+            if(position == 0) {
+                // todo: add secondary authentification in next few versions here
+            } else if(position == 1) {
                 // okay stop! this is the link to github project of this app
                 Intent githubWebIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/sebastianknopf/Museumsfahrplan"));
                 this.getActivity().startActivity(githubWebIntent);
@@ -95,8 +79,15 @@ public class InfoListFragment extends Fragment {
 
         // populate contributors info card
         List<IconListAdapter.IconListItem> infoContributorsList = new ArrayList<IconListAdapter.IconListItem>();
-        infoContributorsList.add(new IconListAdapter.IconListItem(this.getString(R.string.str_info_contributors_name_1), this.getString(R.string.str_info_contributors_info_1), R.drawable.ic_person));
-        infoContributorsList.add(new IconListAdapter.IconListItem(this.getString(R.string.str_info_contributors_partners), null, R.drawable.ic_agency));
+
+        String[] contributorNames = this.getResources().getStringArray(R.array.str_info_list_contributor_names);
+        String[] contributorInfos = this.getResources().getStringArray(R.array.str_info_list_contributor_infos);
+        if(contributorNames.length == contributorInfos.length) {
+            for(int i = 0; i < contributorNames.length; i++) {
+                IconListAdapter.IconListItem contributorItem = new IconListAdapter.IconListItem(contributorNames[i], contributorInfos[i], R.drawable.ic_person);
+                infoContributorsList.add(contributorItem);
+            }
+        }
 
         IconListAdapter infoContributorsAdapter = new IconListAdapter(this.getContext(), infoContributorsList);
         this.components.lstInfoContributors.setAdapter(infoContributorsAdapter);
@@ -106,6 +97,37 @@ public class InfoListFragment extends Fragment {
         // notify parent activity about the user's selection
         this.components.lstInfoContributors.setOnItemClickListener((parent, view, position, id) -> {
 
+        });
+
+        // populate legal info card
+        List<IconListAdapter.IconListItem> infoLegalList = new ArrayList<>();
+        infoLegalList.add(new IconListAdapter.IconListItem(this.getString(R.string.str_info_list_legal_privacy), null, R.drawable.ic_privacy));
+        infoLegalList.add(new IconListAdapter.IconListItem(this.getString(R.string.str_info_list_legal_licenses), null, R.drawable.ic_license));
+
+        IconListAdapter infoLegalAdapter = new IconListAdapter(this.getContext(), infoLegalList);
+        this.components.lstInfoLegal.setAdapter(infoLegalAdapter);
+
+        this.adaptListViewHeight(this.components.lstInfoLegal, baseHeight, infoLegalList.size());
+
+        // notify parent activity about the user's selection
+        this.components.lstInfoLegal.setOnItemClickListener((parent, view, position, id) -> {
+            if(position == 0) {
+                // privacy view
+                Bundle arguments = new Bundle();
+                arguments.putString(KEY_INFO_VIEW, "html_info_privacy");
+
+                if(this.listener != null) {
+                    listener.onFragmentInteraction(this, arguments);
+                }
+            } else if(position == 1) {
+                // licenses view
+                Bundle arguments = new Bundle();
+                arguments.putString(KEY_INFO_VIEW, "html_info_opensource");
+
+                if(this.listener != null) {
+                    listener.onFragmentInteraction(this, arguments);
+                }
+            }
         });
 
         return this.components.getRoot();

@@ -36,12 +36,16 @@
     </style>
 
     <!-- Text Appearances -->
+    <style name="TextAppearance.ActionBar.Subtitle" parent="TextAppearance.Widget.AppCompat.Toolbar.Subtitle">
+        <item name="android:textSize">13sp</item>
+        <item name="android:textColor">@android:color/white</item>
+    </style>
+
     <style name="TextAppearance.Light" parent="TextAppearance.AppCompat">
         <item name="android:fontFamily">sans-serif-light</item>
     </style>
 
     <style name="TextAppearance.Large" parent="TextAppearance.AppCompat.Large">
-
     </style>
 
     <style name="TextAppearance.Medium" parent="TextAppearance.AppCompat.Medium">

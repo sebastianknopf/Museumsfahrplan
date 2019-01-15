@@ -58,7 +58,7 @@ public final class RouteListAdapter extends RecyclerView.Adapter<RecyclerView.Vi
             // display distance in km's if there's a distance available
             if(routeItem.getPosition() != null && routeItem.getPosition().getDistance() != 0) {
                 routeItemViewHolder.components.lblRouteDistance.setVisibility(View.VISIBLE);
-                routeItemViewHolder.components.lblRouteDistance.setText(context.getString(R.string.str_distance_km, Math.ceil((double)routeItem.getPosition().getDistance()/1000.0)));
+                routeItemViewHolder.components.lblRouteDistance.setText(context.getString(R.string.str_route_item_distance_km, Math.ceil((double)routeItem.getPosition().getDistance()/1000.0)));
             }
 
             // agency name

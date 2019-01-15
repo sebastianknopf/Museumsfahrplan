@@ -120,7 +120,7 @@ public final class AppDatabase extends SQLiteOpenHelper {
         List<Favorite> favoritesList = new ArrayList<>();
         SQLiteDatabase db = this.getReadableDatabase();
 
-        String selectFavoritesQuery = String.format("SELECT * FROM %s", TABLE_FAVORITES);
+        String selectFavoritesQuery = String.format("SELECT * FROM %s ORDER BY trip_date, trip_time", TABLE_FAVORITES);
         Cursor cursor = db.rawQuery(selectFavoritesQuery, null);
 
         try {

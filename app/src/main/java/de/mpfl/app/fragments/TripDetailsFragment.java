@@ -118,7 +118,7 @@ public class TripDetailsFragment extends Fragment {
 
         // initiate loading of trip times the first time
         if(this.resultTrip != null) {
-            this.setTripDetails(this.resultTrip.getTripShortName(), this.resultTrip.getTripHeadsign(), this.currentTripDate, this.resultTrip.getWheelchairAccessible(), this.resultTrip.getBikesAllowed());
+            this.setTripDetails(this.resultTrip);
             this.setStopTimesAdapter(this.resultTrip.getStopTimes(), this.resultTrip.getRoute().getRouteColor());
 
             if(this.resultTrip.getRealtime() != null && this.resultTrip.getRealtime().hasAlerts()) {
@@ -132,6 +132,7 @@ public class TripDetailsFragment extends Fragment {
         AppCompatActivity activity = (AppCompatActivity) this.getActivity();
         if(activity != null) {
             activity.getSupportActionBar().setTitle(R.string.str_trip_details_title);
+            activity.getSupportActionBar().setSubtitle(this.getString(R.string.str_trip_details_date, DateTimeFormat.from(this.currentTripDate).to(DateTimeFormat.DDMMYYYY)));
         }
 
         return this.components.getRoot();
@@ -168,7 +169,7 @@ public class TripDetailsFragment extends Fragment {
     @Override
     public void onPause() {
         super.onPause();
-        //this.components.mapView.onPause();
+        this.components.mapView.onPause();
     }
 
     @Override
@@ -181,6 +182,12 @@ public class TripDetailsFragment extends Fragment {
     public void onDestroyView() {
         super.onDestroyView();
         this.components.mapView.onDestroy();
+
+        // restore default subtitle
+        AppCompatActivity activity = (AppCompatActivity) this.getActivity();
+        if(activity != null) {
+            activity.getSupportActionBar().setSubtitle(null);
+        }
     }
 
     public void viewFabBackgroundClick(View view) {
@@ -198,7 +205,6 @@ public class TripDetailsFragment extends Fragment {
     public void fabFareInfoClick(View view) {
         this.hideFabMenu();
 
-        // todo: add complete action here
         if(this.fragmentInteractionListener != null) {
             Bundle arguments = new Bundle();
             arguments.putInt(KEY_FRAGMENT_ACTION, ACTION_VIEW_FAREINFO);
@@ -210,7 +216,6 @@ public class TripDetailsFragment extends Fragment {
     public void fabMapViewClick(View view) {
         this.hideFabMenu();
 
-        // todo: check action is complete?
         if(!this.components.getDoublePane()) {
             if(!this.components.getMapVisible()) {
                 this.showTripDetailsMap();
@@ -243,7 +248,7 @@ public class TripDetailsFragment extends Fragment {
         appDatabase.addFavorite(favorite);
 
         // inform user
-        Snackbar.make(this.components.getRoot(), R.string.str_favorite_added, Snackbar.LENGTH_LONG).setAction(R.string.str_view, v -> {
+        Snackbar.make(this.components.getRoot(), R.string.str_trip_details_favorite_added, Snackbar.LENGTH_LONG).setAction(R.string.str_view, v -> {
             if(this.fragmentInteractionListener != null) {
                 Bundle arguments = new Bundle();
                 arguments.putInt(KEY_FRAGMENT_ACTION, ACTION_VIEW_FAVORITES);
@@ -253,33 +258,43 @@ public class TripDetailsFragment extends Fragment {
         }).show();
     }
 
-    private void setTripDetails(String tripShortName, String tripHeadsign, Date tripDate, Trip.WheelchairAccessible wheelchairAccessible, Trip.BikesAllowed bikesAllowed) {
-        String tripNameString = tripHeadsign;
-        if (tripShortName != null && !tripShortName.equals("")) {
-            tripNameString = tripShortName + " " + tripNameString;
+    private void setTripDetails(Trip trip) {
+        String tripNameString = trip.getTripHeadsign();
+        if (trip.getTripShortName() != null && !trip.getTripShortName().equals("")) {
+            tripNameString = trip.getTripShortName() + " " + tripNameString;
         }
         this.components.lblTripName.setText(tripNameString);
 
-        // trip date of selected trip
-        String tripDateString = getContext().getString(R.string.str_trip_date, DateTimeFormat.from(tripDate).to(DateTimeFormat.DDMMYYYY));
-        this.components.lblTripDate.setText(tripDateString);
+        // trip information text
+        // todo: display trip schedule relationship in next few versions
+        /*if(trip.getRealtime() != null && trip.getRealtime().getTripUpdate()) {
+
+        }*/
+        int currentDateInt = Integer.parseInt(DateTimeFormat.from(new Date()).to(DateTimeFormat.YYYYMMDD));
+        if(currentDateInt >= Integer.parseInt(DateTimeFormat.from(this.currentTripDate).to(DateTimeFormat.YYYYMMDD))) {
+            Date lastArrivalTime = DateTimeFormat.from(trip.getStopTimes().get(trip.getStopTimes().size() - 1).getArrivalTime(), DateTimeFormat.HHMMSS).toDate();
+            if(lastArrivalTime.before(new Date())) {
+                this.components.lblTripInformation.setVisibility(View.VISIBLE);
+                this.components.lblTripInformation.setText(R.string.str_trip_already_departed);
+            }
+        }
 
         // wheelchair and bike information
         this.components.layoutTripAccessibility.setVisibility(View.VISIBLE);
         String wheelchairString = this.getString(R.string.str_trip_details_na);
         String bikeString = this.getString(R.string.str_trip_details_na);
 
-        if(wheelchairAccessible == Trip.WheelchairAccessible.NO) {
+        if(trip.getWheelchairAccessible() == Trip.WheelchairAccessible.NO) {
             wheelchairString = this.getString(R.string.str_trip_details_wheelchair_no);
             this.components.lblWheelchairAccess.setTextColor(Color.RED);
-        } else if(wheelchairAccessible == Trip.WheelchairAccessible.YES) {
+        } else if(trip.getWheelchairAccessible() == Trip.WheelchairAccessible.YES) {
             wheelchairString = this.getString(R.string.str_trip_details_wheelchair_yes);
         }
 
-        if(bikesAllowed == Trip.BikesAllowed.NO) {
+        if(trip.getBikesAllowed() == Trip.BikesAllowed.NO) {
             bikeString = this.getString(R.string.str_trip_details_bikes_no);
             this.components.lblBikesAllowed.setTextColor(Color.RED);
-        } else if(bikesAllowed == Trip.BikesAllowed.YES) {
+        } else if(trip.getBikesAllowed() == Trip.BikesAllowed.YES) {
             bikeString = this.getString(R.string.str_trip_details_bikes_yes);
         }
 
@@ -496,7 +511,7 @@ public class TripDetailsFragment extends Fragment {
                 components.layoutTripDetailsError.setVisibility(View.GONE);
 
                 // display basic trip information
-                setTripDetails(resultTrip.getTripShortName(), resultTrip.getTripHeadsign(), tripDate, resultTrip.getWheelchairAccessible(), resultTrip.getBikesAllowed());
+                setTripDetails(resultTrip);
 
                 // create trip timeline here...
                 setStopTimesAdapter(resultTrip.getStopTimes(), resultTrip.getRoute().getRouteColor());

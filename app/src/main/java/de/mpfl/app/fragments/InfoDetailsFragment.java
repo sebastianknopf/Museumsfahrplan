@@ -48,6 +48,7 @@ public class InfoDetailsFragment extends Fragment {
         this.components = DataBindingUtil.inflate(inflater, R.layout.fragment_info_details, container, false);
 
         // read info html file from assets and display it in textview
+        this.components.wvInfoDetailsContent.setLayerType(View.LAYER_TYPE_HARDWARE, null);
         this.components.wvInfoDetailsContent.loadUrl("file:///android_asset/" + this.infoViewName + ".html");
 
         return this.components.getRoot();

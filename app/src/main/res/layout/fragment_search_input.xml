@@ -37,7 +37,7 @@
                         android:layout_marginBottom="32dp"
                         android:background="@color/windowBackgroundColorDAY"
                         android:textAppearance="@style/TextAppearance.Medium"
-                        android:hint="@string/str_user_location"
+                        android:hint="@string/str_search_input_user_location"
                         android:padding="@dimen/default_app_space_small"
                         android:maxLines="1"
                         android:inputType="text" />
@@ -82,7 +82,7 @@
                             android:layout_height="wrap_content"
                             android:textAppearance="@style/TextAppearance.Small.Secondary"
                             android:textStyle="bold"
-                            android:text="@string/str_search_date"/>
+                            android:text="@string/str_search_input_date"/>
 
                         <LinearLayout
                             android:id="@+id/layoutSearchParamDate"
@@ -128,7 +128,7 @@
                             android:layout_marginTop="@dimen/default_app_space_small"
                             android:textAppearance="@style/TextAppearance.Small.Secondary"
                             android:textStyle="bold"
-                            android:text="@string/str_search_radius"
+                            android:text="@string/str_search_input_radius"
                             app:layout_constraintTop_toBottomOf="@id/viewSearchParamSeparator" />
 
                         <LinearLayout
@@ -186,7 +186,7 @@
                         android:layout_marginRight="@dimen/default_app_space"
                         android:gravity="center"
                         android:textAppearance="@style/TextAppearance.Large"
-                        android:text="@string/str_search_no_route_results_title" />
+                        android:text="@string/str_search_input_no_route_results_title" />
 
                     <TextView
                         android:id="@+id/lblSearchResultRouteEmptyText"
@@ -198,7 +198,7 @@
                         android:layout_below="@id/lblSearchResultRouteEmptyTitle"
                         android:gravity="center"
                         android:textAppearance="@style/TextAppearance.Medium.Accent"
-                        android:text="@string/str_search_no_route_results_text" />
+                        android:text="@string/str_search_input_no_route_results_text" />
 
                     <ImageView
                         android:layout_width="240dp"
@@ -224,7 +224,16 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_alignParentTop="true"
-                    android:layout_alignParentBottom="true"/>
+                    android:layout_above="@id/lblSearchInputLocationAttribution"/>
+
+                <TextView
+                    android:id="@+id/lblSearchInputLocationAttribution"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/default_app_space"
+                    android:layout_alignParentBottom="true"
+                    android:textAppearance="@style/TextAppearance.Small"
+                    android:text="@string/str_search_input_osm_attribution" />
 
                 <RelativeLayout
                     android:id="@+id/layoutSearchInputLocationEmpty"
@@ -242,7 +251,7 @@
                         android:layout_marginRight="@dimen/default_app_space"
                         android:gravity="center"
                         android:textAppearance="@style/TextAppearance.Large"
-                        android:text="@string/str_search_no_location_results_title" />
+                        android:text="@string/str_search_input_no_location_results_title" />
 
                     <TextView
                         android:id="@+id/lblSearchResultLocationEmptyText"
@@ -254,7 +263,7 @@
                         android:layout_below="@id/lblSearchResultLocationEmptyTitle"
                         android:gravity="center"
                         android:textAppearance="@style/TextAppearance.Medium.Accent"
-                        android:text="@string/str_search_no_location_results_text" />
+                        android:text="@string/str_search_input_no_location_results_text" />
 
                     <ImageView
                         android:layout_width="240dp"

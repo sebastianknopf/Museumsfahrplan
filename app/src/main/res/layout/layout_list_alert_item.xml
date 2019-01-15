@@ -45,7 +45,7 @@
             android:layout_marginTop="4dp"
             android:textAppearance="@style/TextAppearance.Small.ErrorText"
             android:textColor="@android:color/holo_red_dark"
-            android:text="@string/str_see_more"
+            android:text="@string/str_alert_item_see_more"
             android:visibility="gone"
             app:layout_constraintTop_toBottomOf="@id/lblAlertDescription"
             app:layout_constraintBottom_toBottomOf="parent"/>

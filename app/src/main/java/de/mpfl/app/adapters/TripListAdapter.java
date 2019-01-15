@@ -133,10 +133,7 @@ public final class TripListAdapter extends RecyclerView.Adapter<RecyclerView.Vie
                 if(!shortNameString.equals("")) {
                     tripItemViewHolder.components.lblTripAdditionalInfo.setVisibility(View.VISIBLE);
                     tripItemViewHolder.components.lblTripAdditionalInfo.setText(shortNameString);
-                } else if(tripItem.getRealtime().hasAlerts()) {
-                    tripItemViewHolder.components.lblTripAdditionalInfo.setVisibility(View.VISIBLE);
-                    tripItemViewHolder.components.lblTripAdditionalInfo.setText(R.string.str_exceptional);
-                } else {
+                }  else {
                     tripItemViewHolder.components.lblTripAdditionalInfo.setVisibility(View.GONE);
                 }
 
@@ -144,9 +141,9 @@ public final class TripListAdapter extends RecyclerView.Adapter<RecyclerView.Vie
                 if(tripItem.getFrequency() != null && !tripItem.getFrequency().getEndTime().equals(tripItem.getFrequency().getTripTime())) {
                     tripItemViewHolder.components.lblTripFrequencyInfo.setVisibility(View.VISIBLE);
                     if(tripItem.getFrequency().getExactTimes() == Frequency.ExactTimes.YES) {
-                        tripItemViewHolder.components.lblTripFrequencyInfo.setText(this.context.getString(R.string.str_frequency_exact, String.valueOf(tripItem.getFrequency().getHeadway())));
+                        tripItemViewHolder.components.lblTripFrequencyInfo.setText(this.context.getString(R.string.str_trip_item_frequency_exact, String.valueOf(tripItem.getFrequency().getHeadway())));
                     } else {
-                        tripItemViewHolder.components.lblTripFrequencyInfo.setText(this.context.getString(R.string.str_frequency_demand, String.valueOf(tripItem.getFrequency().getHeadway())));
+                        tripItemViewHolder.components.lblTripFrequencyInfo.setText(this.context.getString(R.string.str_trip_item_frequency_demand, String.valueOf(tripItem.getFrequency().getHeadway())));
                     }
                 } else {
                     tripItemViewHolder.components.lblTripFrequencyInfo.setVisibility(View.GONE);
@@ -175,7 +172,7 @@ public final class TripListAdapter extends RecyclerView.Adapter<RecyclerView.Vie
                 // display distance in km's if there's a distance available
                 if(routeItem.getPosition() != null && routeItem.getPosition().getDistance() != 0) {
                     routeItemViewHolder.components.lblRouteDistance.setVisibility(View.VISIBLE);
-                    routeItemViewHolder.components.lblRouteDistance.setText(context.getString(R.string.str_distance_km, routeItem.getPosition().getDistance()/1000));
+                    routeItemViewHolder.components.lblRouteDistance.setText(context.getString(R.string.str_route_item_distance_km, routeItem.getPosition().getDistance()/1000));
                 }
 
                 // agency name

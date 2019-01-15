@@ -100,7 +100,7 @@ public final class BottomSheetActionController {
                 components.progressBar.setVisibility(View.GONE);
                 components.layErrorView.setVisibility(View.VISIBLE);
 
-                components.lblErrorText.setText(R.string.str_request_error);
+                components.lblErrorText.setText(R.string.str_default_request_error);
             }
         }).loadDepartures(stopId, filter);
     }

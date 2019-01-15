@@ -1,19 +1,22 @@
 <resources>
-    <!-- Default Strings -->
+
+    <!-- Debugging / Development Strings -->
     <string name="str_placeholder">Placeholder Text</string>
+
+    <!-- Default Strings -->
+    <string name="app_name">Museums Fahrplan</string>
     <string name="str_ok">OK</string>
     <string name="str_cancel">Abbrechen</string>
     <string name="str_enable">Freigeben</string>
     <string name="str_activate">Aktivieren</string>
     <string name="str_view">Anzeigen</string>
     <string name="str_retry">Nochmal</string>
-    <string name="str_missing_connection">Keine Internetverbindung!</string>
-    <string name="str_request_error">Fehler bei der Anfrage!</string>
+    <string name="str_default_missing_connection">Keine Internetverbindung!</string>
+    <string name="str_default_request_error">Fehler bei der Anfrage!</string>
     <string name="str_default_network_error_title">Hier ist etwas schief gelaufen!</string>
     <string name="str_default_network_error_text">Bei dieser Anfrage ist ein Fehler aufgetreten. Am Besten versuchen Sie es später noch einmal.</string>
 
     <!-- MainMenu -->
-    <string name="app_name">Museums Fahrplan</string>
     <string name="str_menu_user_title">Fahrplanauskunft</string>
     <string name="str_menu_map">Karte</string>
     <string name="str_menu_search">Suche</string>
@@ -25,71 +28,72 @@
     <!-- MapOverviewFragment -->
     <string name="str_map_overview_title">Karte</string>
     <string name="str_location_access_error">Leider können wir nicht auf den Standort zugreifen!</string>
-    <string name="str_location_provider_error">Leider ist GPS deaktiviert!</string>
-    <string name="str_zoom_level_hint">Zoomen Sie in die Karte, um mehr zu sehen</string>
+    <string name="str_location_provider_error">Leider ist das GPS deaktiviert!</string>
+    <string name="str_zoom_level_hint">Zoome in die Karte, um mehr zu sehen</string>
     <string name="str_no_departures_found">Leider wurden keine Abfahrten gefunden!</string>
-    <string name="str_invalid_url">Ungültige URL!</string>
 
     <!-- SearchInputFragment -->
     <string name="str_search_input_title">Suche</string>
-    <string name="str_search_options">Suchoptionen</string>
-    <string name="str_user_location">Standort</string>
-    <string name="str_user_search_params_info">Suchergebnisse am %s - Suchradius %d km</string>
-    <string name="str_current_user_location">Aktueller Standort</string>
-    <string name="str_search_date">Datum</string>
-    <string name="str_search_radius">Suchradius</string>
-    <string name="str_search_no_location_results_title">Wir konnten keine Orte finden!</string>
-    <string name="str_search_no_location_results_text">Sind Sie sicher, dass Sie sich nicht vertippt haben und dass es den Ort so wirklich gibt?</string>
-    <string name="str_search_no_route_results_title">Wir konnten keine Fahrten finden!</string>
-    <string name="str_search_no_route_results_text">Am besten suchen Sie an einem anderen Datum oder wählen einen größeren Suchradius.</string>
+    <string name="str_search_input_options">Suchoptionen</string>
+    <string name="str_search_input_user_location">Standort / Adresse</string>
+    <string name="str_search_input_current_location">Aktueller Standort</string>
+    <string name="str_search_input_user_params_info">Suchergebnisse am %s - Suchradius %d km</string>
+    <string name="str_search_input_date">Datum</string>
+    <string name="str_search_input_radius">Suchradius</string>
+    <string name="str_search_input_osm_attribution">Datengrundlage © OpenStreetMap Mitwirkende</string>
+    <string name="str_search_input_no_location_results_title">Wir konnten keine Orte finden!</string>
+    <string name="str_search_input_no_location_results_text">Bist Du sicher, dass Du Dich nicht vertippt hast und dass es den Ort wirklich gibt?</string>
+    <string name="str_search_input_no_route_results_title">Wir konnten keine Fahrten finden!</string>
+    <string name="str_search_input_no_route_results_text">Am besten suchst Du an einem anderen Datum oder wählst einen größeren Suchradius.</string>
 
     <!-- SearchDetailsFragment -->
     <string name="str_search_details_no_results_title">Leider konnten wir keine Ergebnisse finden!</string>
-    <string name="str_search_details_no_results_text">Anscheinend gibt es zu diesem Zeitpunkt keine Fahrten mehr.</string>
-
-    <!-- FavoritesFragment -->
-    <string name="str_favorites_title">Favoriten</string>
+    <string name="str_search_details_no_results_text">Anscheinend verkehren es zu diesem Zeitpunkt keine Fahrten mehr.</string>
 
     <!-- TripDetailsFragment -->
-    <string name="str_trip_date">Am %s</string>
     <string name="str_trip_details_title">Fahrtverlauf</string>
-    <string name="str_change_no_entrance">Kein Einstieg</string>
-    <string name="str_change_no_exit">Kein Ausstieg</string>
-    <string name="str_change_demand">Bedarfshalt</string>
-    <string name="str_favorite_added">Fahrt als Favorit gespeichert!</string>
+    <string name="str_trip_details_date">Am %s</string>
+    <string name="str_trip_details_favorite_added">Fahrt als Favorit gespeichert!</string>
     <string name="str_trip_details_wheelchair_yes">Barrierefreiheit</string>
     <string name="str_trip_details_wheelchair_no">Keine Barrierefreiheit</string>
     <string name="str_trip_details_bikes_yes">Begrenzte Fahrradmitnahme</string>
     <string name="str_trip_details_bikes_no">Keine Fahrradmitnahme</string>
     <string name="str_trip_details_na">Keine Informationen</string>
+    <string name="str_trip_already_departed">Die Fahrt liegt bereits in der Vergangenheit!</string>
 
     <!-- FavoritesFragment -->
+    <string name="str_favorites_title">Favoriten</string>
     <string name="str_favorites_no_results_title">Hier ist noch nichts!</string>
-    <string name="str_favorites_no_results_text">Sobald Sie Fahrten als Favoriten abspeichern, werden diese hier angezeigt.</string>
+    <string name="str_favorites_no_results_text">Sobald Du Fahrten als Favoriten abspeicherst, werden diese hier angezeigt.</string>
 
     <!-- InfoListFragment -->
     <string name="str_info_list_title">Informationen</string>
-    <string name="str_info_app_abstract">Fahrplaninformationen zu historischen Fahrzeugen und Museumsverkehr</string>
-    <string name="str_info_app_version">Version</string>
-    <string name="str_info_app_privacy">Datenschutz</string>
-    <string name="str_info_app_licenses">OpenSource Lizenzen</string>
-    <string name="str_info_app_github_project">GitHub Projekt</string>
-    <string name="str_info_contributors">Mitwirkende</string>
-    <string name="str_info_contributors_name_1">Sebastian Knopf</string>
-    <string name="str_info_contributors_info_1">Entwickler, Hochschule Karlsruhe</string>
-    <string name="str_info_contributors_partners">Unsere Partner</string>
-    <string-array name="str_array_information_categories">
-        <item>Allgemeine Informationen</item>
-        <item>Datenschutz</item>
-        <item>OpenSource Lizenzen</item>
+    <string name="str_info_list_app_abstract">Fahrplaninformationen zu historischen Fahrzeugen und Museumsverkehr</string>
+    <string name="str_info_list_app_version">Version</string>
+    <string name="str_info_list_app_privacy">Datenschutz</string>
+    <string name="str_info_list_app_licenses">OpenSource Lizenzen</string>
+    <string name="str_info_list_app_github_project">GitHub Repository</string>
+    <string name="str_info_list_contributors">Mitwirkende</string>
+    <string name="str_info_list_contributors_partners">Unsere Partner</string>
+    <string name="str_info_list_legal">Rechtliche Informationen</string>
+    <string name="str_info_list_legal_privacy">Datenschutz</string>
+    <string name="str_info_list_legal_licenses">OpenSource Lizenzen</string>
+
+    <!-- Contributor Information ... MUST ALWAYS BE EXACTLY THE SAME NUMBER OF ENTRIES -->
+    <string-array name="str_info_list_contributor_names">
+        <item>Sebastian Knopf</item>
+    </string-array>
+
+    <string-array name="str_info_list_contributor_infos">
+        <item>Entwickler, Hochschule Karlsruhe</item>
     </string-array>
 
     <!-- SettingsFragmentment -->
     <string name="str_preferences_title">Einstellungen</string>
     <string name="str_preferences_cat_search">Suchoptionen</string>
-    <string name="str_preferences_cat_view">Anzeigeoptionen</string>
     <string name="str_preferences_wheelchair_accessible">Barrierefreiheit</string>
     <string name="str_preferences_bikes_allowed">Fahrradmitnahme</string>
+    <string name="str_preferences_cat_view">Anzeigeoptionen</string>
     <string name="str_preferences_num_results">Anzahl Suchergebnisse</string>
 
     <string-array name="str_preferences_num_results_text">
@@ -99,7 +103,7 @@
         <item>Alle Ergebnisse</item>
     </string-array>
 
-    <string-array name="int_preferences_num_results_value">
+    <string-array name="str_preferences_num_results_value">
         <item>5</item>
         <item>10</item>
         <item>20</item>
@@ -107,17 +111,21 @@
     </string-array>
 
     <!-- TripItem -->
-    <string name="str_frequency_exact">Alle %s Minuten</string>
-    <string name="str_frequency_demand">Etwa alle %s Minuten und bei Bedarf</string>
-    <string name="str_exceptional">Es liegen aktuelle Meldungen vor!</string>
+    <string name="str_trip_item_frequency_exact">Alle %s Minuten</string>
+    <string name="str_trip_item_frequency_demand">Etwa alle %s Minuten und bei Bedarf</string>
 
     <!-- RouteItem -->
-    <string name="str_distance_km">%1$.0f km</string>
+    <string name="str_route_item_distance_km">%1$.0f km</string>
 
     <!-- AlertItem -->
-    <string name="str_see_more">Weitere Informationen</string>
+    <string name="str_alert_item_see_more">Weitere Informationen</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
+    <!-- StopTimeItem -->
+    <string name="str_stoptime_item_change_no_entrance">Kein Einstieg</string>
+    <string name="str_stoptime_item_change_no_exit">Kein Ausstieg</string>
+    <string name="str_stoptime_item_change_demand">Bedarfshalt</string>
+
+    <!-- dummy for creating a new fragment ... leave it here -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 
 </resources>

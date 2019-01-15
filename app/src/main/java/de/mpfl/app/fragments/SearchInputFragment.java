@@ -197,7 +197,7 @@ public class SearchInputFragment extends Fragment implements OnRouteItemClickLis
                     if(response.isSuccessful() && !result.getAddress().toString().equals("")) {
                         components.edtUserLocationInput.setText(result.getAddress().toString());
                     } else {
-                        components.edtUserLocationInput.setText(R.string.str_current_user_location);
+                        components.edtUserLocationInput.setText(R.string.str_search_input_current_location);
                     }
 
                     textInputBlocked = false;
@@ -206,7 +206,7 @@ public class SearchInputFragment extends Fragment implements OnRouteItemClickLis
                 @Override
                 public void onFailure(Call<NominatimResult> call, Throwable t) {
                     components.pgbUserLocation.setVisibility(View.GONE);
-                    components.edtUserLocationInput.setText(R.string.str_current_user_location);
+                    components.edtUserLocationInput.setText(R.string.str_search_input_current_location);
 
                     textInputBlocked = false;
                 }
@@ -346,6 +346,7 @@ public class SearchInputFragment extends Fragment implements OnRouteItemClickLis
 
         // display list instead of error screen
         this.components.rcvSearchInputLocationResults.setVisibility(View.VISIBLE);
+        this.components.lblSearchInputLocationAttribution.setVisibility(View.VISIBLE);
         this.components.layoutSearchInputLocationEmpty.setVisibility(View.GONE);
     }
 
@@ -390,6 +391,7 @@ public class SearchInputFragment extends Fragment implements OnRouteItemClickLis
                     // check whether we have results
                     if(resultList.size() == 0) {
                         components.rcvSearchInputLocationResults.setVisibility(View.GONE);
+                        components.lblSearchInputLocationAttribution.setVisibility(View.GONE);
                         components.layoutSearchInputLocationEmpty.setVisibility(View.VISIBLE);
                         return;
                     } else {

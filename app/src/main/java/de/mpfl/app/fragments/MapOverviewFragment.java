@@ -316,7 +316,7 @@ public class MapOverviewFragment extends Fragment implements MapboxMap.OnCameraI
 
                 @Override
                 public void onError(Throwable throwable) {
-                    Toast.makeText(getContext(), R.string.str_missing_connection, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), R.string.str_default_missing_connection, Toast.LENGTH_SHORT).show();
                 }
             }).loadStops(new Position().setLatitude(cameraPosition.target.getLatitude()).setLongitude(cameraPosition.target.getLongitude()), 15000, filter);
         } else {

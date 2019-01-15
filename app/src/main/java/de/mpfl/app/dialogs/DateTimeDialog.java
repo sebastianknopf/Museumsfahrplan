@@ -2,6 +2,7 @@ package de.mpfl.app.dialogs;
 
 import android.app.AlertDialog;
 import android.content.Context;
+import android.content.res.Resources;
 import android.databinding.DataBindingUtil;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
@@ -9,7 +10,10 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.NumberPicker;
+import android.widget.TimePicker;
 
+import java.lang.reflect.Field;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
@@ -63,6 +67,9 @@ public final class DateTimeDialog {
         });
 
         this.components.tabLayout.getTabAt(0).getIcon().setColorFilter(ContextCompat.getColor(context, R.color.colorAccentDAY), PorterDuff.Mode.SRC_IN);
+
+        // hacky style setup for timepicker
+        this.adaptDatePickerDividers(this.components.tmpSearchTime, ContextCompat.getColor(this.context, R.color.colorAccentDAY));
     }
 
     public void setOnDateTimeChangedListener(OnDateTimeChangedListener onDateTimeChangedListener) {
@@ -101,6 +108,31 @@ public final class DateTimeDialog {
 
         AlertDialog dialog = dialogBuilder.create();
         dialog.show();
+    }
+
+    private void adaptDatePickerDividers(TimePicker picker, int color) {
+        try {
+            Class<?> internalRID = Class.forName("com.android.internal.R$id");
+
+            // enter id's of the desired number picker children here
+            Field hour = internalRID.getField("hour");
+            Field minute = internalRID.getField("minute");
+
+            NumberPicker npHour = picker.findViewById(hour.getInt(null));
+            NumberPicker npMinute = picker.findViewById(minute.getInt(null));
+
+            // get access to number picker divider drawable and change it in both pickers
+            Class<?> numberPickerClass = Class.forName("android.widget.NumberPicker");
+            Field selectionDivider = numberPickerClass.getDeclaredField("mSelectionDivider");
+            selectionDivider.setAccessible(true);
+            selectionDivider.set(npHour, this.context.getDrawable(R.drawable.shape_custom_divider));
+            selectionDivider.set(npMinute, this.context.getDrawable(R.drawable.shape_custom_divider));
+        } catch(ClassNotFoundException ignored) {
+        } catch(NoSuchFieldException ignored) {
+        } catch (IllegalArgumentException ignored) {
+        } catch (Resources.NotFoundException ignored) {
+        } catch (IllegalAccessException ignored) {
+        }
     }
 
     public interface OnDateTimeChangedListener {

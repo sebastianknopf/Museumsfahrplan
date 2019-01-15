@@ -9,7 +9,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.Toast;
 
 import java.util.List;
 
@@ -77,7 +76,6 @@ public final class AlertListAdapter extends BaseAdapter {
                         Intent viewIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(urlComponent));
                         context.startActivity(viewIntent);
                     } catch (Exception e) {
-                        Toast.makeText(context, R.string.str_invalid_url, Toast.LENGTH_SHORT).show();
                     }
 
                 }
