@@ -110,8 +110,14 @@ public final class AppDatabase extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
         db.beginTransaction();
 
-        String deleteFavoriteCommand = String.format("DELETE FROM %s WHERE %s = %s", TABLE_FAVORITES, KEY_FAVORITES_ID, String.valueOf(favorite.getId()));
-        db.execSQL(deleteFavoriteCommand);
+        try {
+            String deleteFavoriteCommand = String.format("DELETE FROM %s WHERE %s = %s", TABLE_FAVORITES, KEY_FAVORITES_ID, String.valueOf(favorite.getId()));
+            db.execSQL(deleteFavoriteCommand);
+            db.setTransactionSuccessful();
+        } catch (Exception ex) {
+        } finally {
+            db.endTransaction();
+        }
     }
 
     public List<Favorite> getAllFavorites() {

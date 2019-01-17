@@ -11,6 +11,7 @@
     <string name="str_activate">Aktivieren</string>
     <string name="str_view">Anzeigen</string>
     <string name="str_retry">Nochmal</string>
+    <string name="str_undo">Rückgängig</string>
     <string name="str_default_missing_connection">Keine Internetverbindung!</string>
     <string name="str_default_request_error">Fehler bei der Anfrage!</string>
     <string name="str_default_network_error_title">Hier ist etwas schief gelaufen!</string>
@@ -44,11 +45,11 @@
     <string name="str_search_input_no_location_results_title">Wir konnten keine Orte finden!</string>
     <string name="str_search_input_no_location_results_text">Bist Du sicher, dass Du Dich nicht vertippt hast und dass es den Ort wirklich gibt?</string>
     <string name="str_search_input_no_route_results_title">Wir konnten keine Fahrten finden!</string>
-    <string name="str_search_input_no_route_results_text">Am besten suchst Du an einem anderen Datum oder wählst einen größeren Suchradius.</string>
+    <string name="str_search_input_no_route_results_text">Am besten suchst Du an einem anderen Datum oder wählst einen größeren Suchradius</string>
 
     <!-- SearchDetailsFragment -->
     <string name="str_search_details_no_results_title">Leider konnten wir keine Ergebnisse finden!</string>
-    <string name="str_search_details_no_results_text">Anscheinend verkehren es zu diesem Zeitpunkt keine Fahrten mehr.</string>
+    <string name="str_search_details_no_results_text">Anscheinend verkehren es zu diesem Zeitpunkt keine Fahrten mehr</string>
 
     <!-- TripDetailsFragment -->
     <string name="str_trip_details_title">Fahrtverlauf</string>
@@ -64,7 +65,8 @@
     <!-- FavoritesFragment -->
     <string name="str_favorites_title">Favoriten</string>
     <string name="str_favorites_no_results_title">Hier ist noch nichts!</string>
-    <string name="str_favorites_no_results_text">Sobald Du Fahrten als Favoriten abspeicherst, werden diese hier angezeigt.</string>
+    <string name="str_favorites_no_results_text">Sobald Du Fahrten als Favoriten abspeicherst, werden diese hier angezeigt</string>
+    <string name="str_favorites_item_deleted">Favorit gelöscht</string>
 
     <!-- InfoListFragment -->
     <string name="str_info_list_title">Informationen</string>

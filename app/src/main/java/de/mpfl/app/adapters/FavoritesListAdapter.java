@@ -106,6 +106,26 @@ public final class FavoritesListAdapter extends RecyclerView.Adapter<RecyclerVie
         }
     }
 
+    public List<Favorite> getFavoritesList() {
+        return this.favoritesList;
+    }
+
+    public void removeItem(int position) {
+        try {
+            this.favoritesList.remove(position);
+            this.notifyItemRemoved(position);
+        } catch (Exception e) {
+        }
+    }
+
+    public void insertItem(int position, Favorite favorite) {
+        try {
+            this.favoritesList.add(position, favorite);
+            this.notifyItemInserted(position);
+        } catch (Exception e) {
+        }
+    }
+
     static class FavoriteItemViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         public LayoutListFavoriteItemBinding components;
