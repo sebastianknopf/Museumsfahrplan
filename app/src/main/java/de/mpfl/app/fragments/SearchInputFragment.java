@@ -31,24 +31,25 @@ import de.mfpl.staticnet.lib.data.Position;
 import de.mfpl.staticnet.lib.data.Route;
 import de.mfpl.staticnet.lib.data.Trip;
 import de.mpfl.app.R;
-import de.mpfl.app.adapters.NominatimResultListAdapter;
+import de.mpfl.app.adapters.OpenCageResultListAdapter;
 import de.mpfl.app.adapters.RouteListAdapter;
 import de.mpfl.app.adapters.SkeletonAdapter;
 import de.mpfl.app.databinding.FragmentSearchInputBinding;
 import de.mpfl.app.dialogs.DateTimeDialog;
 import de.mpfl.app.dialogs.ErrorDialog;
 import de.mpfl.app.listeners.OnFragmentInteractionListener;
-import de.mpfl.app.listeners.OnNominatimResultClickListener;
+import de.mpfl.app.listeners.OnOpenCageResultClickListener;
 import de.mpfl.app.listeners.OnRouteItemClickListener;
-import de.mpfl.app.network.NominatimRequest;
-import de.mpfl.app.network.NominatimResult;
+import de.mpfl.app.network.OpenCageRequest;
+import de.mpfl.app.network.OpenCageResponse;
+import de.mpfl.app.network.OpenCageResult;
 import de.mpfl.app.utils.DateTimeFormat;
 import de.mpfl.app.utils.SettingsManager;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class SearchInputFragment extends Fragment implements OnRouteItemClickListener, OnNominatimResultClickListener {
+public class SearchInputFragment extends Fragment implements OnRouteItemClickListener, OnOpenCageResultClickListener {
 
     public final static String TAG ="SearchInputFragment";
 
@@ -187,15 +188,15 @@ public class SearchInputFragment extends Fragment implements OnRouteItemClickLis
             // request geo information on current location
             this.textInputBlocked = true;
             this.components.pgbUserLocation.setVisibility(View.VISIBLE);
-            Call<NominatimResult> reverseCall = NominatimRequest.createReverseCall(this.currentSearchLatitude, this.currentSearchLongitude);
-            reverseCall.enqueue(new Callback<NominatimResult>() {
+            Call<OpenCageResponse> reverseCall = OpenCageRequest.createReverseCall(this.getString(R.string.OPENCAGE_PUBLIC_KEY), this.currentSearchLatitude, this.currentSearchLongitude);
+            reverseCall.enqueue(new Callback<OpenCageResponse>() {
                 @Override
-                public void onResponse(Call<NominatimResult> call, Response<NominatimResult> response) {
+                public void onResponse(Call<OpenCageResponse> call, Response<OpenCageResponse> response) {
                     components.pgbUserLocation.setVisibility(View.GONE);
 
-                    NominatimResult result = response.body();
-                    if(response.isSuccessful() && !result.getAddress().toString().equals("")) {
-                        components.edtUserLocationInput.setText(result.getAddress().toString());
+                    if(response.isSuccessful() && response.body().getResultList().size() == 1) {
+                        OpenCageResult result = response.body().getResultList().get(0);
+                        components.edtUserLocationInput.setText(result.toString());
                     } else {
                         components.edtUserLocationInput.setText(R.string.str_search_input_current_location);
                     }
@@ -204,7 +205,7 @@ public class SearchInputFragment extends Fragment implements OnRouteItemClickLis
                 }
 
                 @Override
-                public void onFailure(Call<NominatimResult> call, Throwable t) {
+                public void onFailure(Call<OpenCageResponse> call, Throwable t) {
                     components.pgbUserLocation.setVisibility(View.GONE);
                     components.edtUserLocationInput.setText(R.string.str_search_input_current_location);
 
@@ -274,13 +275,13 @@ public class SearchInputFragment extends Fragment implements OnRouteItemClickLis
     }
 
     @Override
-    public void onNominatimResultClick(NominatimResult nominatimResult) {
+    public void onOpenCageResultClick(OpenCageResult openCageResult) {
         this.textInputBlocked = true;
-        this.components.edtUserLocationInput.setText(nominatimResult.getName());
+        this.components.edtUserLocationInput.setText(openCageResult.toString());
         this.textInputBlocked = false;
 
-        this.currentSearchLatitude = nominatimResult.getLatitude();
-        this.currentSearchLongitude = nominatimResult.getLongitude();
+        this.currentSearchLatitude = openCageResult.getGeometry().getLatitude();
+        this.currentSearchLongitude = openCageResult.getGeometry().getLongitude();
         this.loadRouteResults();
     }
 
@@ -295,14 +296,14 @@ public class SearchInputFragment extends Fragment implements OnRouteItemClickLis
         dateDialog.show();
     }
 
-    private void setLocationListAdapter(List<NominatimResult> resultList) {
-        NominatimResultListAdapter nominatimResultListAdapter = new NominatimResultListAdapter(this.getContext(), resultList);
-        nominatimResultListAdapter.setOnNominatimResultClickListener(this);
+    private void setLocationListAdapter(List<OpenCageResult> resultList) {
+        OpenCageResultListAdapter openCageResultListAdapter = new OpenCageResultListAdapter(this.getContext(), resultList);
+        openCageResultListAdapter.setOnOpenCageResultClickListener(this);
 
         // divider setup
         components.rcvSearchInputLocationResults.addItemDecoration(this.itemDecoration);
 
-        components.rcvSearchInputLocationResults.setAdapter(nominatimResultListAdapter);
+        components.rcvSearchInputLocationResults.setAdapter(openCageResultListAdapter);
     }
 
     private void setLocationSkeletonAdapter() {
@@ -374,17 +375,20 @@ public class SearchInputFragment extends Fragment implements OnRouteItemClickLis
         this.components.pgbUserLocation.setVisibility(View.VISIBLE);
 
         this.showLocationResultList();
-        Call<List<NominatimResult>> forwardCall = NominatimRequest.createForwardCall(queryString);
-        forwardCall.enqueue(new Callback<List<NominatimResult>>() {
+        Call<OpenCageResponse> forwardCall = OpenCageRequest.createForwardCall(this.getString(R.string.OPENCAGE_PUBLIC_KEY), queryString);
+        forwardCall.enqueue(new Callback<OpenCageResponse>() {
             @Override
-            public void onResponse(Call<List<NominatimResult>> call, Response<List<NominatimResult>> response) {
+            public void onResponse(Call<OpenCageResponse> call, Response<OpenCageResponse> response) {
                 components.pgbUserLocation.setVisibility(View.GONE);
 
                 if(response.isSuccessful()) {
-                    List<NominatimResult> resultList = new ArrayList<NominatimResult>();
-                    for(NominatimResult currentResult : response.body()) {
-                        if(currentResult.getType().matches("city|administrative")) {
-                            resultList.add(currentResult);
+                    List<OpenCageResult> resultList = new ArrayList<OpenCageResult>();
+                    //resultList = response.body().getResultList();
+                    for(OpenCageResult currentResult : response.body().getResultList()) {
+                        if(currentResult.getComponents() != null) {
+                            if(currentResult.getComponents().getType().matches("city|administrative")) {
+                                resultList.add(currentResult);
+                            }
                         }
                     }
 
@@ -404,7 +408,7 @@ public class SearchInputFragment extends Fragment implements OnRouteItemClickLis
             }
 
             @Override
-            public void onFailure(Call<List<NominatimResult>> call, Throwable t) {
+            public void onFailure(Call<OpenCageResponse> call, Throwable t) {
                 components.pgbUserLocation.setVisibility(View.GONE);
                 showNetworkErrorDialog(() -> loadGeocodingResults(queryString));
             }
