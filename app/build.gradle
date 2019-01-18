@@ -3,30 +3,16 @@ apply plugin: 'com.android.application'
 android {
     compileSdkVersion 27
 
-    def versionPropsFile = file('version.build')
+    defaultConfig {
+        applicationId "de.mfpl.app"
+        minSdkVersion 21
+        targetSdkVersion 27
+        versionCode 10
+        versionName "0.1.0"
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        multiDexEnabled true
 
-    if (versionPropsFile.canRead()) {
-        def Properties versionProps = new Properties()
-        versionProps.load(new FileInputStream(versionPropsFile))
-
-        def buildNumber = versionProps['BUILD_NUMBER'].toInteger() + 1
-
-        versionProps['BUILD_NUMBER'] = buildNumber.toString()
-        versionProps.store(versionPropsFile.newWriter(), null)
-
-        defaultConfig {
-            applicationId "de.mfpl.app"
-            minSdkVersion 21
-            targetSdkVersion 27
-            versionCode buildNumber
-            versionName "1.0 " + buildNumber
-            testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
-            multiDexEnabled true
-
-            vectorDrawables.useSupportLibrary = true
-        }
-    } else {
-        throw new GradleException("Could not read version.build!")
+        vectorDrawables.useSupportLibrary = true
     }
 
     // needed only for MapBox!
