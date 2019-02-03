@@ -17,7 +17,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public final class StaticRequest {
 
-    private final static String API_ENDPOINT = "http://gtfs.swexp.de/w/";
+    private final static String API_ENDPOINT = "https://gtfs.svtest02.info/w/";
 
     private Listener listener;
     private String appId = "";
