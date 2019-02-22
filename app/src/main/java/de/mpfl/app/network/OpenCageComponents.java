@@ -22,6 +22,9 @@ public final class OpenCageComponents {
     @SerializedName("village")
     private String village;
 
+    @SerializedName("county")
+    private String county;
+
     public String getType() {
         return type;
     }
@@ -43,5 +46,7 @@ public final class OpenCageComponents {
     }
 
     public String getTown() { return town; }
+
+    public String getCounty() {return county;}
 
 }

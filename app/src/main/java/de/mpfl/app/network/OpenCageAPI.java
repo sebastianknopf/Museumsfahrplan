@@ -6,7 +6,7 @@ import retrofit2.http.Query;
 
 interface OpenCageAPI {
 
-    @GET("json?language=de&no_annotations=1&pretty=0")
+    @GET("json?language=de&no_annotations=1&pretty=0&countrycode=de")
     Call<OpenCageResponse> apiCall(@Query("key") String apiKey, @Query("q") String queryString);
 
 }

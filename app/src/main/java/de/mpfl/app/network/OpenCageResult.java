@@ -32,9 +32,11 @@ public final class OpenCageResult {
                 return this.components.getTown();
             } else if(this.components.getVillage() != null && !this.components.getVillage().equals("")) {
                 return this.components.getVillage();
+            } else if(this.components.getCounty() != null && !this.components.getCounty().equals("")) {
+                return this.components.getCounty();
             }
         }
 
-        return super.toString();
+        return new String();
     }
 }

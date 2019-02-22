@@ -386,7 +386,7 @@ public class SearchInputFragment extends Fragment implements OnRouteItemClickLis
                     //resultList = response.body().getResultList();
                     for(OpenCageResult currentResult : response.body().getResultList()) {
                         if(currentResult.getComponents() != null) {
-                            if(currentResult.getComponents().getType().matches("city|administrative")) {
+                            if(currentResult.getComponents().getType().matches("city|administrative|village|county") && !currentResult.toString().equals("")) {
                                 resultList.add(currentResult);
                             }
                         }
