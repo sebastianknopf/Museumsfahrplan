@@ -101,6 +101,12 @@ public final class Request {
         @SerializedName("include_realtime")
         private boolean includeRealtime = false;
 
+        @SerializedName("start_date")
+        private Filter.Date startDate;
+
+        @SerializedName("end_date")
+        private Filter.Date endDate;
+
         @SerializedName("limit")
         private int limit = 10;
 
@@ -165,6 +171,18 @@ public final class Request {
         public Options setLimit(int limit) {
             this.limit = limit;
             return this;
+        }
+
+        public Filter.Date getStartDate() {return this.startDate;}
+
+        public void setStartDate(Filter.Date startDate) {
+            this.startDate = startDate;
+        }
+
+        public Filter.Date getEndDate() { return this.endDate;}
+
+        public void setEndDate(Filter.Date endDate) {
+            this.endDate = endDate;
         }
 
         public boolean isIncludeRealtime() {

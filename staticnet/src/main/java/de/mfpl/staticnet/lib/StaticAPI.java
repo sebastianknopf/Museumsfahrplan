@@ -16,4 +16,7 @@ public interface StaticAPI {
     @POST("StopInformationService")
     Call<Container> stopInformationService(@Body Container body);
 
+    @POST("CalendarService")
+    Call<Container> calendarService(@Body Container body);
+
 }

@@ -172,23 +172,6 @@ public final class StaticRequest {
         this.executeCall(apiCall);
     }
 
-    public void loadPlaces(String placeMatch) {
-        Request request = new Request();
-
-        LocationReference locationReference = new LocationReference();
-        locationReference.setInitialInput(placeMatch);
-        request.setLocationReference(locationReference);
-
-        Request.Options options = new Request.Options();
-        options.setIncludePlaces(true);
-
-        Container requestContainer = this.createRequestContainer(request, options, null);
-
-        StaticAPI staticApi = this.createClient();
-        Call<Container> apiCall = staticApi.locationInformationService(requestContainer);
-        this.executeCall(apiCall);
-    }
-
     public void loadDepartures(String stopId, Request.Filter filter) {
         Request request = new Request();
         request.setStopId(stopId);
@@ -243,6 +226,31 @@ public final class StaticRequest {
 
         StaticAPI staticApi = this.createClient();
         Call<Container> apiCall = staticApi.tripInformationService(requestContainer);
+        this.executeCall(apiCall);
+    }
+
+    public void loadCalendar(Request.Filter.Date startDate, Request.Filter.Date endDate, Request.Filter filter) {
+        Request request = new Request();
+
+        Request.Options options = new Request.Options();
+        options.setStartDate(startDate);
+        options.setEndDate(endDate);
+
+        Container requestContainer = this.createRequestContainer(request, options, filter);
+
+        StaticAPI staticApi = this.createClient();
+        Call<Container> apiCall = staticApi.calendarService(requestContainer);
+        this.executeCall(apiCall);
+    }
+
+    public void loadCalendar(String routeId, Request.Filter filter) {
+        Request request = new Request();
+        request.setRouteId(routeId);
+
+        Container requestContainer = this.createRequestContainer(request, null, filter);
+
+        StaticAPI staticApi = this.createClient();
+        Call<Container> apiCall = staticApi.calendarService(requestContainer);
         this.executeCall(apiCall);
     }
 
