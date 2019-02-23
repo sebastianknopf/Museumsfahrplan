@@ -323,6 +323,19 @@ public class TripDetailsFragment extends Fragment {
 
             // get stop
             Bitmap stopBitmap = VectorIconFactory.fromVectorDrawable(this.getContext(), R.drawable.ic_stop);
+
+            // hacky way to change the bitmap color to the route color
+            int [] stopBitmapPixels = new int [stopBitmap.getHeight() * stopBitmap.getWidth()];
+            stopBitmap.getPixels(stopBitmapPixels, 0, stopBitmap.getWidth(), 0, 0, stopBitmap.getWidth(), stopBitmap.getHeight());
+            for(int i = 0; i < stopBitmapPixels.length; i++) {
+                if(stopBitmapPixels[i] == Color.BLACK)
+                {
+                    stopBitmapPixels[i] = routeColor;
+                }
+            }
+            stopBitmap.setPixels(stopBitmapPixels,0,stopBitmap.getWidth(),0, 0, stopBitmap.getWidth(),stopBitmap.getHeight());
+
+            // set bitmap as stop icon
             Icon stopIcon = IconFactory.getInstance(this.getContext()).fromBitmap(stopBitmap);
 
             // display all stops on the map

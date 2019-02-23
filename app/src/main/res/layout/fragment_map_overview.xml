@@ -27,7 +27,7 @@
                 mapbox:mapbox_cameraTargetLat="51.1657"
                 mapbox:mapbox_cameraTargetLng="10.4515"
                 mapbox:mapbox_cameraZoom="5.15"
-                mapbox:mapbox_cameraZoomMax="18"
+                mapbox:mapbox_cameraZoomMax="15"
                 mapbox:mapbox_cameraZoomMin="5"
                 mapbox:mapbox_styleUrl="mapbox://styles/sebastianknopf/cjp042n58ati52so77w931alz"
                 mapbox:mapbox_uiRotateGestures="false" />

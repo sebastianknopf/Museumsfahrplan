@@ -97,6 +97,7 @@ public class SearchDetailsFragment extends Fragment implements OnTripItemClickLi
         AppCompatActivity activity = (AppCompatActivity) this.getActivity();
         if(activity != null) {
             activity.getSupportActionBar().setTitle(this.currentSearchRouteName);
+            activity.getSupportActionBar().setSubtitle(this.getString(R.string.str_trip_details_date, DateTimeFormat.from(this.currentSearchDate).to(DateTimeFormat.DDMMYYYY)));
         }
 
         // item decor
@@ -133,6 +134,16 @@ public class SearchDetailsFragment extends Fragment implements OnTripItemClickLi
         this.fragmentInteractionListener = null;
     }
 
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+
+        // restore default subtitle
+        AppCompatActivity activity = (AppCompatActivity) this.getActivity();
+        if(activity != null) {
+            activity.getSupportActionBar().setSubtitle(null);
+        }
+    }
 
     @Override
     public void onTripItemClick(Trip tripItem) {

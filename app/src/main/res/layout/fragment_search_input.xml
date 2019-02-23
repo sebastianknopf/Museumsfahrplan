@@ -146,15 +146,36 @@
                                 android:src="@drawable/ic_settings"
                                 android:tint="@color/colorBackgroundDarkGray" />
 
-                            <SeekBar
-                                android:id="@+id/skbSearchParamRadius"
-                                android:layout_width="0dp"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="1"
-                                android:layout_marginStart="@dimen/default_app_space_small"
-                                android:min="25"
-                                android:progress="25"
-                                android:max="250" />
+                            <android.support.constraint.ConstraintLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content">
+
+                                <SeekBar
+                                    android:id="@+id/skbSearchParamRadius"
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="4dp"
+                                    android:layout_marginStart="@dimen/default_app_space_small"
+                                    android:min="25"
+                                    android:progress="25"
+                                    android:max="250"
+                                    app:layout_constraintTop_toTopOf="parent"
+                                    app:layout_constraintStart_toStartOf="parent"
+                                    app:layout_constraintEnd_toStartOf="@id/lblSearchParamRadiusValue"
+                                    app:layout_constraintBottom_toBottomOf="parent" />
+
+                                <TextView
+                                    android:id="@+id/lblSearchParamRadiusValue"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:textAppearance="@style/TextAppearance.Medium.Accent"
+                                    android:textStyle="bold"
+                                    android:text="25 km"
+                                    app:layout_constraintTop_toTopOf="parent"
+                                    app:layout_constraintEnd_toEndOf="parent"
+                                    app:layout_constraintBottom_toBottomOf="parent"/>
+
+                            </android.support.constraint.ConstraintLayout>
 
                         </LinearLayout>
 

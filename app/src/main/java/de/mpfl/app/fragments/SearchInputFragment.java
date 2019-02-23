@@ -137,6 +137,7 @@ public class SearchInputFragment extends Fragment implements OnRouteItemClickLis
         this.components.skbSearchParamRadius.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                components.lblSearchParamRadiusValue.setText(String.format("%d km", progress));
             }
 
             @Override
