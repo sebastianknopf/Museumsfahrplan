@@ -63,6 +63,7 @@ public class SearchInputFragment extends Fragment implements OnRouteItemClickLis
 
     public final static int ACTION_SELECT_ROUTE = 0;
     public final static int ACTION_SHOW_SETTINGS = 1;
+    public final static int ACTION_SHOW_CALENDAR = 2;
 
     private FragmentSearchInputBinding components;
     private RecyclerView.ItemDecoration itemDecoration;
@@ -228,7 +229,7 @@ public class SearchInputFragment extends Fragment implements OnRouteItemClickLis
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
-        inflater.inflate(R.menu.menu_settings_shortcut, menu);
+        inflater.inflate(R.menu.menu_search_input_fragment, menu);
     }
 
     @Override
@@ -236,6 +237,11 @@ public class SearchInputFragment extends Fragment implements OnRouteItemClickLis
         if(item.getItemId() == R.id.optionsMenuSettings && this.fragmentInteractionListener != null) {
             Bundle arguments = new Bundle();
             arguments.putInt(KEY_FRAGMENT_ACTION, ACTION_SHOW_SETTINGS);
+
+            this.fragmentInteractionListener.onFragmentInteraction(this, arguments);
+        } else if(item.getItemId() == R.id.optionsMenuCalendar && this.fragmentInteractionListener != null) {
+            Bundle arguments = new Bundle();
+            arguments.putInt(KEY_FRAGMENT_ACTION, ACTION_SHOW_CALENDAR);
 
             this.fragmentInteractionListener.onFragmentInteraction(this, arguments);
         }

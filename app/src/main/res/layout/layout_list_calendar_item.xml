@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <android.support.constraint.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/default_app_space"
+        android:background="?attr/selectableItemBackground">
+
+        <TextView
+            android:id="@+id/lblCalendarTitle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:textAppearance="@style/TextAppearance.Medium"
+            android:textStyle="bold"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toLeftOf="@id/lblCalendarDate"
+            app:layout_constraintHorizontal_chainStyle="spread"/>
+
+        <TextView
+            android:id="@+id/lblCalendarDate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="@style/TextAppearance.Medium.Accent"
+            android:textStyle="bold"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintHorizontal_chainStyle="spread"/>
+
+        <TextView
+            android:id="@+id/lblCalendarSubtitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textAppearance="@style/TextAppearance.Small"
+            android:paddingBottom="@dimen/default_separation_space"
+            app:layout_constraintTop_toBottomOf="@id/lblCalendarTitle"
+            app:layout_constraintBottom_toTopOf="@id/lblCalendarDescription" />
+
+        <TextView
+            android:id="@+id/lblCalendarDescription"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textAppearance="@style/TextAppearance.Small.Secondary"
+            android:paddingBottom="@dimen/default_separation_space"
+            android:visibility="gone"
+            app:layout_constraintTop_toBottomOf="@id/lblCalendarSubtitle"
+            app:layout_constraintBottom_toTopOf="@id/lblInfoURL"/>
+
+        <TextView
+            android:id="@+id/lblInfoURL"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="@style/TextAppearance.Small"
+            android:autoLink="web"
+            android:visibility="gone"
+            app:layout_constraintTop_toBottomOf="@id/lblCalendarDescription"
+            app:layout_constraintLeft_toLeftOf="parent" />
+
+        <TextView
+            android:id="@+id/lblInfoPhone"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="@style/TextAppearance.Small"
+            android:layout_marginStart="12dp"
+            android:autoLink="phone"
+            android:visibility="gone"
+            app:layout_constraintTop_toBottomOf="@id/lblCalendarDescription"
+            app:layout_constraintLeft_toRightOf="@id/lblInfoURL"/>
+
+        <ListView
+            android:id="@+id/lstCalendarAlerts"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:visibility="gone"
+            app:layout_constraintTop_toBottomOf="@id/lblInfoURL"/>
+
+    </android.support.constraint.ConstraintLayout>
+
+</layout>

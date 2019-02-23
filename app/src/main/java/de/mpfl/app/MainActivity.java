@@ -14,6 +14,7 @@ import de.mpfl.app.fragments.FavoritesFragment;
 import de.mpfl.app.fragments.InfoDetailsFragment;
 import de.mpfl.app.fragments.InfoListFragment;
 import de.mpfl.app.fragments.MapOverviewFragment;
+import de.mpfl.app.fragments.SearchCalendarFragment;
 import de.mpfl.app.fragments.SearchDetailsFragment;
 import de.mpfl.app.fragments.SearchInputFragment;
 import de.mpfl.app.fragments.SettingsFragment;
@@ -170,6 +171,25 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 this.navigationManager.setNextAnimation(R.anim.fragment_enter_right, R.anim.fragment_exit_right);
                 this.navigationManager.navigateTo(searchDetailsFragment);
             } else if(arguments.getInt(SearchInputFragment.KEY_FRAGMENT_ACTION) == SearchInputFragment.ACTION_SHOW_SETTINGS) {
+                SettingsFragment settingsFragment = SettingsFragment.newInstance();
+                this.navigationManager.setNextAnimation(R.anim.fragment_enter_right, R.anim.fragment_exit_right);
+                this.navigationManager.navigateTo(settingsFragment);
+            } else if(arguments.getInt(SearchInputFragment.KEY_FRAGMENT_ACTION) == SearchInputFragment.ACTION_SHOW_CALENDAR) {
+                SearchCalendarFragment calendarFragment = SearchCalendarFragment.newInstance();
+                this.navigationManager.setNextAnimation(R.anim.fragment_enter_right, R.anim.fragment_exit_right);
+                this.navigationManager.navigateTo(calendarFragment);
+            }
+        } else if(fragment instanceof SearchCalendarFragment) {
+            if(arguments.getInt(SearchCalendarFragment.KEY_FRAGMENT_ACTION) == SearchCalendarFragment.ACTION_SELECT_ROUTE) {
+                String routeId = arguments.getString(SearchCalendarFragment.KEY_SEARCH_ROUTE_ID);
+                String routeName = arguments.getString(SearchCalendarFragment.KEY_SEARCH_ROUTE_NAME);
+                String searchDate = arguments.getString(SearchCalendarFragment.KEY_SEARCH_DATE);
+                String searchTime = arguments.getString(SearchCalendarFragment.KEY_SEARCH_TIME);
+
+                SearchDetailsFragment searchDetailsFragment = SearchDetailsFragment.newInstance(routeId, routeName, searchDate, searchTime);
+                this.navigationManager.setNextAnimation(R.anim.fragment_enter_right, R.anim.fragment_exit_right);
+                this.navigationManager.navigateTo(searchDetailsFragment);
+            } else if(arguments.getInt(SearchCalendarFragment.KEY_FRAGMENT_ACTION) == SearchCalendarFragment.ACTION_SHOW_SETTINGS) {
                 SettingsFragment settingsFragment = SettingsFragment.newInstance();
                 this.navigationManager.setNextAnimation(R.anim.fragment_enter_right, R.anim.fragment_exit_right);
                 this.navigationManager.navigateTo(settingsFragment);

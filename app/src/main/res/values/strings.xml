@@ -15,7 +15,7 @@
     <string name="str_default_missing_connection">Keine Internetverbindung!</string>
     <string name="str_default_request_error">Fehler bei der Anfrage!</string>
     <string name="str_default_network_error_title">Hier ist etwas schief gelaufen!</string>
-    <string name="str_default_network_error_text">Bei dieser Anfrage ist ein Fehler aufgetreten. Am Besten versuchen Sie es später noch einmal.</string>
+    <string name="str_default_network_error_text">Bei dieser Anfrage ist ein Fehler aufgetreten. Am Besten versuchst Du es später noch einmal.</string>
 
     <!-- MainMenu -->
     <string name="str_menu_user_title">Fahrplanauskunft</string>
@@ -46,6 +46,11 @@
     <string name="str_search_input_no_location_results_text">Bist Du sicher, dass Du Dich nicht vertippt hast und dass es den Ort wirklich gibt?</string>
     <string name="str_search_input_no_route_results_title">Wir konnten keine Fahrten finden!</string>
     <string name="str_search_input_no_route_results_text">Am besten suchst Du an einem anderen Datum oder wählst einen größeren Suchradius</string>
+
+    <!-- SearchCalendarFragment -->
+    <string name="str_search_calendar_title">Kalender</string>
+    <string name="str_search_calendar_no_results_title">Leider konnten wir keine Ergebnisse finden!</string>
+    <string name="str_search_calendar_no_results_text">Anscheinend gibt es in den nächsten 6 Monaten keine passenden Fahrten</string>
 
     <!-- SearchDetailsFragment -->
     <string name="str_search_details_no_results_title">Leider konnten wir keine Ergebnisse finden!</string>

@@ -1,6 +1,5 @@
 package de.mpfl.app.fragments;
 
-
 import android.content.Context;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
@@ -12,109 +11,110 @@ import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
 import java.util.Date;
-import java.util.List;
+import java.util.GregorianCalendar;
 
 import de.mfpl.staticnet.lib.StaticRequest;
 import de.mfpl.staticnet.lib.base.Delivery;
 import de.mfpl.staticnet.lib.base.Request;
+import de.mfpl.staticnet.lib.data.Calendar;
+import de.mfpl.staticnet.lib.data.Day;
 import de.mfpl.staticnet.lib.data.Trip;
 import de.mpfl.app.R;
+import de.mpfl.app.adapters.CalendarAdapter;
 import de.mpfl.app.adapters.SkeletonAdapter;
-import de.mpfl.app.adapters.TripListAdapter;
-import de.mpfl.app.databinding.FragmentSearchDetailsBinding;
+import de.mpfl.app.databinding.FragmentSearchCalendarBinding;
 import de.mpfl.app.dialogs.ErrorDialog;
+import de.mpfl.app.listeners.OnCalendarItemClickListener;
 import de.mpfl.app.listeners.OnFragmentInteractionListener;
-import de.mpfl.app.listeners.OnTripItemClickListener;
 import de.mpfl.app.utils.DateTimeFormat;
 import de.mpfl.app.utils.SettingsManager;
 
-public class SearchDetailsFragment extends Fragment implements OnTripItemClickListener {
+public class SearchCalendarFragment extends Fragment implements OnCalendarItemClickListener {
 
-    public final static String TAG = "SearchDetailsFragment";
+    public final static String TAG = "SearchCalendarFragment";
 
     public final static String KEY_FRAGMENT_ACTION = "KEY_FRAGMENT_ACTION";
     public final static String KEY_SEARCH_ROUTE_ID = "KEY_SEARCH_ROUTE_ID";
     public final static String KEY_SEARCH_ROUTE_NAME = "KEY_SEARCH_ROUTE_NAME";
     public final static String KEY_SEARCH_DATE = "KEY_SEARCH_DATE";
     public final static String KEY_SEARCH_TIME = "KEY_SEARCH_TIME";
-    public final static String KEY_TRIP_ID = "KEY_TRIP_ID";
-    public final static String KEY_TRIP_TIME = "KEY_TRIP_TIME";
-    public final static String KEY_TRIP_DATE = "KEY_TRIP_DATE";
 
-    public final static int ACTION_SELECT_TRIP = 0;
+    public final static int ACTION_SELECT_ROUTE = 0;
+    public final static int ACTION_SHOW_SETTINGS = 1;
 
-    private FragmentSearchDetailsBinding components;
+    private FragmentSearchCalendarBinding components;
     private RecyclerView.ItemDecoration itemDecoration;
     private OnFragmentInteractionListener fragmentInteractionListener;
 
-    private String currentSearchRouteId;
-    private String currentSearchRouteName;
-    private Date currentSearchDate = new Date();
-    private String currentSearchTime;
-
     // needed for retain behaviour when returning from back stack to this fragment
-    private List<Trip> resultList = null;
+    private Calendar resultCalendar = null;
 
-    public SearchDetailsFragment() {
+    public SearchCalendarFragment() {
         // Required empty public constructor
     }
 
-    public static SearchDetailsFragment newInstance(String routeId, String routeName, String searchDate, String searchTime) {
-        SearchDetailsFragment fragment = new SearchDetailsFragment();
-
-        Bundle arguments = new Bundle();
-        arguments.putString(KEY_SEARCH_ROUTE_ID, routeId);
-        arguments.putString(KEY_SEARCH_ROUTE_NAME, routeName);
-        arguments.putString(KEY_SEARCH_DATE, searchDate);
-        arguments.putString(KEY_SEARCH_TIME, searchTime);
-        fragment.setArguments(arguments);
-
+    public static SearchCalendarFragment newInstance() {
+        SearchCalendarFragment fragment = new SearchCalendarFragment();
         return fragment;
     }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        if(this.getArguments() != null) {
-            this.currentSearchRouteId = this.getArguments().getString(KEY_SEARCH_ROUTE_ID);
-            this.currentSearchRouteName = this.getArguments().getString(KEY_SEARCH_ROUTE_NAME);
-            this.currentSearchDate = DateTimeFormat.from(this.getArguments().getString(KEY_SEARCH_DATE), DateTimeFormat.DDMMYYYY).toDate();
-            this.currentSearchTime = this.getArguments().getString(KEY_SEARCH_TIME);
-        }
+        this.setHasOptionsMenu(true);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        this.components = DataBindingUtil.inflate(inflater, R.layout.fragment_search_details, container, false);
+        this.components = DataBindingUtil.inflate(inflater, R.layout.fragment_search_calendar, container, false);
         this.components.setFragment(this);
 
         // set activity title
         AppCompatActivity activity = (AppCompatActivity) this.getActivity();
         if(activity != null) {
-            activity.getSupportActionBar().setTitle(this.currentSearchRouteName);
+            activity.getSupportActionBar().setTitle(this.getString(R.string.str_search_calendar_title));
         }
 
         // item decor
         this.itemDecoration = new DividerItemDecoration(this.getContext(), DividerItemDecoration.VERTICAL);
 
-        // load route related trips at startup if there's a route id
-        if(this.resultList != null && this.resultList.size() > 0) {
-            this.setListAdapter(this.resultList);
-        } else if(this.currentSearchRouteId != null) {
-            this.loadRouteTrips();
+        // load calendar from server
+        if(this.resultCalendar != null && resultCalendar.getDays().size() > 0) {
+            this.setCalendarAdapter(this.resultCalendar);
+        } else {
+            this.loadCalendar();
         }
 
-        // layout manager for recycler view
-        LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
-        layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-        this.components.rcvSearchDetailsResults.setLayoutManager(layoutManager);
+        LinearLayoutManager layoutLocationManager = new LinearLayoutManager(getContext());
+        layoutLocationManager.setOrientation(LinearLayoutManager.VERTICAL);
+        this.components.rcvCalendarView.setLayoutManager(layoutLocationManager);
 
         return this.components.getRoot();
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        inflater.inflate(R.menu.menu_search_calendar_fragment, menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if(item.getItemId() == R.id.optionsMenuSettings && this.fragmentInteractionListener != null) {
+            Bundle arguments = new Bundle();
+            arguments.putInt(KEY_FRAGMENT_ACTION, ACTION_SHOW_SETTINGS);
+
+            this.fragmentInteractionListener.onFragmentInteraction(this, arguments);
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 
     @Override
@@ -133,42 +133,38 @@ public class SearchDetailsFragment extends Fragment implements OnTripItemClickLi
         this.fragmentInteractionListener = null;
     }
 
-
     @Override
-    public void onTripItemClick(Trip tripItem) {
+    public void onCalendarItemClick(Day day) {
         if(this.fragmentInteractionListener != null) {
             Bundle arguments = new Bundle();
-            arguments.putInt(KEY_FRAGMENT_ACTION, ACTION_SELECT_TRIP);
-            arguments.putString(KEY_TRIP_ID, tripItem.getTripId());
-            arguments.putString(KEY_TRIP_DATE, DateTimeFormat.from(this.currentSearchDate).to(DateTimeFormat.YYYYMMDD));
-
-            if(tripItem.getFrequency() != null) {
-                arguments.putString(KEY_TRIP_TIME, tripItem.getFrequency().getTripTime());
-            }
+            arguments.putInt(KEY_FRAGMENT_ACTION, ACTION_SELECT_ROUTE);
+            arguments.putString(KEY_SEARCH_ROUTE_ID, day.getRoute().getRouteId());
+            arguments.putString(KEY_SEARCH_ROUTE_NAME, day.getRoute().getRouteLongName());
+            arguments.putString(KEY_SEARCH_DATE, DateTimeFormat.from(day.getDate(), DateTimeFormat.YYYYMMDD).to(DateTimeFormat.DDMMYYYY));
+            arguments.putString(KEY_SEARCH_TIME, "00:00:01");
 
             this.fragmentInteractionListener.onFragmentInteraction(this, arguments);
         }
     }
 
-    public void setListAdapter(List<Trip> resultList) {
-        TripListAdapter listAdapter = new TripListAdapter(getContext(), resultList);
-        listAdapter.setOnTripItemClickListener(SearchDetailsFragment.this);
+    public void setCalendarAdapter(Calendar resultCalendar) {
+        CalendarAdapter calendarAdapter = new CalendarAdapter(this.getContext(), this.resultCalendar);
+        calendarAdapter.setOnCalendarItemClickListener(this);
 
         // divider setup
-        this.components.rcvSearchDetailsResults.addItemDecoration(this.itemDecoration);
+        this.components.rcvCalendarView.addItemDecoration(this.itemDecoration);
 
-        this.components.rcvSearchDetailsResults.setAdapter(listAdapter);
+        this.components.rcvCalendarView.setAdapter(calendarAdapter);
     }
 
     private void setSkeletonAdapter() {
         SkeletonAdapter skeletonAdapter = new SkeletonAdapter(this.getContext(), 5);
-        skeletonAdapter.setViewType(SkeletonAdapter.TYPE_DATA_ICON);
-        skeletonAdapter.setFirstItemDifferent(true);
+        skeletonAdapter.setViewType(SkeletonAdapter.TYPE_DATA_ONLY);
 
         // divider setup
-        this.components.rcvSearchDetailsResults.removeItemDecoration(this.itemDecoration);
+        this.components.rcvCalendarView.removeItemDecoration(this.itemDecoration);
 
-        this.components.rcvSearchDetailsResults.setAdapter(skeletonAdapter);
+        this.components.rcvCalendarView.setAdapter(skeletonAdapter);
     }
 
     private void showNetworkErrorDialog(ErrorDialog.OnRetryClickListener retryListener) {
@@ -184,7 +180,7 @@ public class SearchDetailsFragment extends Fragment implements OnTripItemClickLi
         errorDialog.show();
     }
 
-    private void loadRouteTrips() {
+    private void loadCalendar() {
         this.setSkeletonAdapter();
 
         SettingsManager settingsManager = new SettingsManager(this.getContext());
@@ -192,13 +188,18 @@ public class SearchDetailsFragment extends Fragment implements OnTripItemClickLi
         StaticRequest staticRequest = new StaticRequest();
         staticRequest.setAppId(this.getString(R.string.MFPL_APP_ID));
         staticRequest.setApiKey(this.getString(R.string.MFPL_API_KEY));
-        staticRequest.setDefaultLimit(settingsManager.getPreferencesNumResults());
 
         Request.Filter filter = new Request.Filter();
-        filter.setDate(Request.Filter.Date.fromJavaDate(this.currentSearchDate));
-        filter.setTime(this.currentSearchTime);
         filter.setWheelchairAccessible(settingsManager.getPreferenceWheelchairAccessible() ? Trip.WheelchairAccessible.YES : Trip.WheelchairAccessible.NO);
         filter.setBikesAllowed(settingsManager.getPreferenceBikesAllowed() ? Trip.BikesAllowed.YES : Trip.BikesAllowed.NO);
+
+        // calculate start and end date for calendar request
+        String startDate = DateTimeFormat.from(new Date()).to(DateTimeFormat.YYYYMMDD);
+        String endDate = null;
+
+        GregorianCalendar calendar = (GregorianCalendar) GregorianCalendar.getInstance();
+        calendar.add(java.util.Calendar.MONTH, 6);
+        endDate = DateTimeFormat.from(calendar.getTime()).to(DateTimeFormat.YYYYMMDD);
 
         staticRequest.setListener(new StaticRequest.Listener() {
             @Override
@@ -209,26 +210,25 @@ public class SearchDetailsFragment extends Fragment implements OnTripItemClickLi
                     return;
                 }
 
-                // no need for check result count here (only for error purposes)
-                // api returns this route id only if there's at least one scheduled trip
-                resultList = delivery.getTrips();
-                if(resultList.size() == 0) {
-                    components.rcvSearchDetailsResults.setVisibility(View.GONE);
-                    components.layoutSearchDetailsEmpty.setVisibility(View.VISIBLE);
+                // select complete calendar
+                resultCalendar = delivery.getCalendar();
+                if(resultCalendar.getDays().size() == 0) {
+                    components.rcvCalendarView.setVisibility(View.GONE);
+                    components.layoutSearchCalendarEmpty.setVisibility(View.VISIBLE);
                     return;
                 } else {
-                    components.rcvSearchDetailsResults.setVisibility(View.VISIBLE);
-                    components.layoutSearchDetailsEmpty.setVisibility(View.GONE);
+                    components.rcvCalendarView.setVisibility(View.VISIBLE);
+                    components.layoutSearchCalendarEmpty.setVisibility(View.GONE);
                 }
 
                 // set list adapter
-                setListAdapter(resultList);
+                setCalendarAdapter(resultCalendar);
             }
 
             @Override
             public void onError(Throwable throwable) {
-                showNetworkErrorDialog(() -> loadRouteTrips());
+                showNetworkErrorDialog(() -> loadCalendar());
             }
-        }).loadTrips(this.currentSearchRouteId, filter);
+        }).loadCalendar(startDate, endDate, filter);
     }
 }
