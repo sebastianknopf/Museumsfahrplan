@@ -13,6 +13,9 @@ public final class Request {
     @SerializedName("location")
     private LocationReference locationReference;
 
+    @SerializedName("dateRange")
+    private Filter.Date dateRange;
+
     @SerializedName("trip_id")
     private String tripId;
 
@@ -37,6 +40,11 @@ public final class Request {
 
     public Request setLocationReference(LocationReference locationReference) {
         this.locationReference = locationReference;
+        return this;
+    }
+
+    public Request setDateRange(Filter.Date dateRange) {
+        this.dateRange = dateRange;
         return this;
     }
 
@@ -198,7 +206,7 @@ public final class Request {
 
     public final static class Filter {
 
-        @SerializedName("date")
+        @SerializedName("dateRange")
         private Date date;
 
         @SerializedName("time")

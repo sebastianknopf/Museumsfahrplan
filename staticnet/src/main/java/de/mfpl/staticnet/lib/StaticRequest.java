@@ -229,12 +229,18 @@ public final class StaticRequest {
         this.executeCall(apiCall);
     }
 
-    public void loadCalendar(Request.Filter.Date startDate, Request.Filter.Date endDate, Request.Filter filter) {
+    public void loadCalendar(String startDate, String endDate, Request.Filter filter) {
         Request request = new Request();
 
+        Request.Filter.Date dateRange = new Request.Filter.Date();
+        dateRange.getRange().setStartDate(startDate);
+        dateRange.getRange().setEndDate(endDate);
+        request.setDateRange(dateRange);
+
         Request.Options options = new Request.Options();
-        options.setStartDate(startDate);
-        options.setEndDate(endDate);
+        options.setIncludeRoutes(true);
+        options.setIncludeAgency(true);
+        options.setIncludeRealtime(true);
 
         Container requestContainer = this.createRequestContainer(request, options, filter);
 
@@ -247,7 +253,12 @@ public final class StaticRequest {
         Request request = new Request();
         request.setRouteId(routeId);
 
-        Container requestContainer = this.createRequestContainer(request, null, filter);
+        Request.Options options = new Request.Options();
+        options.setIncludeRoutes(true);
+        options.setIncludeAgency(true);
+        options.setIncludeRealtime(true);
+
+        Container requestContainer = this.createRequestContainer(request, options, filter);
 
         StaticAPI staticApi = this.createClient();
         Call<Container> apiCall = staticApi.calendarService(requestContainer);
