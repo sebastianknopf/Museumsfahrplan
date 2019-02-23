@@ -232,9 +232,11 @@ public final class StaticRequest {
     public void loadCalendar(String startDate, String endDate, Request.Filter filter) {
         Request request = new Request();
 
+        Request.Filter.Date.Range rng = new Request.Filter.Date.Range();
+        rng.setStartDate(startDate);
+        rng.setEndDate(endDate);
         Request.Filter.Date dateRange = new Request.Filter.Date();
-        dateRange.getRange().setStartDate(startDate);
-        dateRange.getRange().setEndDate(endDate);
+        dateRange.setRange(rng);
         request.setDateRange(dateRange);
 
         Request.Options options = new Request.Options();

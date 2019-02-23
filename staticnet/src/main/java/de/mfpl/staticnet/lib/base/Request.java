@@ -206,7 +206,7 @@ public final class Request {
 
     public final static class Filter {
 
-        @SerializedName("dateRange")
+        @SerializedName("date")
         private Date date;
 
         @SerializedName("time")
@@ -322,7 +322,7 @@ public final class Request {
                 return this;
             }
 
-            public final class Range {
+            public static final class Range {
 
                 @SerializedName("start_date")
                 private String startDate;
