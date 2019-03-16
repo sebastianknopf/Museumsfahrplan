@@ -13,7 +13,7 @@ public final class Request {
     @SerializedName("location")
     private LocationReference locationReference;
 
-    @SerializedName("dateRange")
+    @SerializedName("date")
     private Filter.Date dateRange;
 
     @SerializedName("trip_id")
