@@ -287,8 +287,8 @@ public class MapOverviewFragment extends Fragment implements MapboxMap.OnCameraI
 
         if(cameraPosition.zoom > 11.0) {
             StaticRequest staticRequest = new StaticRequest();
-            staticRequest.setAppId(this.getString(R.string.MFPL_APP_ID));
-            staticRequest.setApiKey(this.getString(R.string.MFPL_API_KEY));
+            staticRequest.setAppId(settingsManager.getAppId());
+            staticRequest.setApiKey(settingsManager.getApiKey());
 
             Request.Filter filter = new Request.Filter();
             filter.setDate(Request.Filter.Date.fromJavaDate(new Date()));

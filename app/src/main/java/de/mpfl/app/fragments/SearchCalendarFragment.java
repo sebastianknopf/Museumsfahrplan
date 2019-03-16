@@ -186,8 +186,8 @@ public class SearchCalendarFragment extends Fragment implements OnCalendarItemCl
         SettingsManager settingsManager = new SettingsManager(this.getContext());
 
         StaticRequest staticRequest = new StaticRequest();
-        staticRequest.setAppId(this.getString(R.string.MFPL_APP_ID));
-        staticRequest.setApiKey(this.getString(R.string.MFPL_API_KEY));
+        staticRequest.setAppId(settingsManager.getAppId());
+        staticRequest.setApiKey(settingsManager.getApiKey());
 
         Request.Filter filter = new Request.Filter();
         filter.setWheelchairAccessible(settingsManager.getPreferenceWheelchairAccessible() ? Trip.WheelchairAccessible.YES : Trip.WheelchairAccessible.NO);

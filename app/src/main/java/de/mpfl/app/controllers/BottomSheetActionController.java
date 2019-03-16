@@ -38,8 +38,8 @@ public final class BottomSheetActionController {
         SettingsManager settingsManager = new SettingsManager(this.context);
 
         StaticRequest staticRequest = new StaticRequest();
-        staticRequest.setAppId(this.context.getString(R.string.MFPL_APP_ID));
-        staticRequest.setApiKey(this.context.getString(R.string.MFPL_API_KEY));
+        staticRequest.setAppId(settingsManager.getAppId());
+        staticRequest.setApiKey(settingsManager.getApiKey());
         staticRequest.setDefaultLimit(settingsManager.getPreferencesNumResults());
 
         Request.Filter filter = new Request.Filter();

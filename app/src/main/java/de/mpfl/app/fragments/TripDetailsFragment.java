@@ -47,6 +47,7 @@ import de.mpfl.app.databinding.FragmentTripDetailsBinding;
 import de.mpfl.app.dialogs.ErrorDialog;
 import de.mpfl.app.listeners.OnFragmentInteractionListener;
 import de.mpfl.app.utils.DateTimeFormat;
+import de.mpfl.app.utils.SettingsManager;
 import de.mpfl.app.utils.VectorIconFactory;
 
 public class TripDetailsFragment extends Fragment {
@@ -490,9 +491,11 @@ public class TripDetailsFragment extends Fragment {
     }
 
     private void loadTripDetails(String tripId, Date tripDate) {
+        SettingsManager settingsManager = new SettingsManager(this.getContext());
+
         StaticRequest staticRequest = new StaticRequest();
-        staticRequest.setAppId(this.getContext().getString(R.string.MFPL_APP_ID));
-        staticRequest.setApiKey(this.getContext().getString(R.string.MFPL_API_KEY));
+        staticRequest.setAppId(settingsManager.getAppId());
+        staticRequest.setApiKey(settingsManager.getApiKey());
 
         Request.Filter filter = new Request.Filter();
         filter.setDate(new Request.Filter.Date().fromJavaDate(tripDate));

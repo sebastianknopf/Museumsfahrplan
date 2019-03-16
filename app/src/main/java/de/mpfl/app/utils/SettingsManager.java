@@ -6,6 +6,7 @@ import android.location.Location;
 import android.location.LocationManager;
 import android.support.v7.preference.PreferenceManager;
 
+import de.mpfl.app.R;
 import de.mpfl.app.fragments.SettingsFragment;
 
 public final class SettingsManager {
@@ -15,6 +16,8 @@ public final class SettingsManager {
     public final static String MAP_LAST_LATITUDE = "MAP_LAST_LATITUDE";
     public final static String MAP_LAST_LONGITUDE = "MAP_LAST_LONGITUDE";
     public final static String MAP_LAST_ZOOMLEVEL = "MAP_LAST_ZOOMLEVEL";
+    public final static String MFPL_APP_ID = "APP_ID";
+    public final static String MFPL_API_KEY = "API_KEY";
 
     private Context context;
 
@@ -75,6 +78,28 @@ public final class SettingsManager {
         }
 
         return result;
+    }
+
+    public String getAppId() {
+        SharedPreferences defaultPreference = this.context.getSharedPreferences(SETTINGS_MANAGER, Context.MODE_PRIVATE);
+        return defaultPreference.getString(MFPL_APP_ID, this.context.getString(R.string.MFPL_APP_ID));
+    }
+
+    public void setAppId(String appId) {
+        SharedPreferences.Editor sp = this.context.getSharedPreferences(SETTINGS_MANAGER, Context.MODE_PRIVATE).edit();
+        sp.putString(MFPL_APP_ID, appId);
+        sp.commit();
+    }
+
+    public String getApiKey() {
+        SharedPreferences defaultPreference = this.context.getSharedPreferences(SETTINGS_MANAGER, Context.MODE_PRIVATE);
+        return defaultPreference.getString(MFPL_API_KEY, this.context.getString(R.string.MFPL_API_KEY));
+    }
+
+    public void setApiKey(String apiKey) {
+        SharedPreferences.Editor sp = this.context.getSharedPreferences(SETTINGS_MANAGER, Context.MODE_PRIVATE).edit();
+        sp.putString(MFPL_API_KEY, apiKey);
+        sp.commit();
     }
 
 }
