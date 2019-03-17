@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
@@ -26,8 +27,15 @@ public class InfoListFragment extends Fragment {
     public final static String TAG = "InfoListFragment";
     public final static String KEY_INFO_VIEW = "KEY_INFO_VIEW";
 
+    public final static String KEY_FRAGMENT_ACTION = "KEY_FRAGMENT_ACTION";
+
+    public final static int ACTION_SHOW_DETAILS = 0;
+    public final static int ACTION_START_AUTH = 1;
+
     private OnFragmentInteractionListener listener;
     private FragmentInfoListBinding components;
+
+    private int infoTapCount = 0;
 
     public InfoListFragment() {
         // Required empty public constructor
@@ -69,7 +77,22 @@ public class InfoListFragment extends Fragment {
         // notify parent activity about the user's selection
         this.components.lstInfoApp.setOnItemClickListener((parent, view, position, id) -> {
             if(position == 0) {
-                // todo: add secondary authentification in next few versions here
+                if(this.infoTapCount == 0) {
+                    this.infoTapCount++;
+                    Handler handler = new Handler();
+                    handler.postDelayed(() -> this.infoTapCount = 0, 20000);
+                } else if(this.infoTapCount == 4) {
+                    this.infoTapCount = 0;
+
+                    if(this.listener != null) {
+                        Bundle arguments = new Bundle();
+                        arguments.putInt(KEY_FRAGMENT_ACTION, ACTION_START_AUTH);
+
+                        this.listener.onFragmentInteraction(this, arguments);
+                    }
+                } else {
+                    this.infoTapCount++;
+                }
             } else if(position == 1) {
                 // okay stop! this is the link to github project of this app
                 Intent githubWebIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/sebastianknopf/Museumsfahrplan"));
@@ -114,6 +137,7 @@ public class InfoListFragment extends Fragment {
             if(position == 0) {
                 // privacy view
                 Bundle arguments = new Bundle();
+                arguments.putInt(KEY_FRAGMENT_ACTION, ACTION_SHOW_DETAILS);
                 arguments.putString(KEY_INFO_VIEW, "html_info_privacy");
 
                 if(this.listener != null) {
@@ -122,6 +146,7 @@ public class InfoListFragment extends Fragment {
             } else if(position == 1) {
                 // licenses view
                 Bundle arguments = new Bundle();
+                arguments.putInt(KEY_FRAGMENT_ACTION, ACTION_SHOW_DETAILS);
                 arguments.putString(KEY_INFO_VIEW, "html_info_opensource");
 
                 if(this.listener != null) {

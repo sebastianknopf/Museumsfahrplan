@@ -141,9 +141,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     public void onFragmentInteraction(Fragment fragment, Bundle arguments) {
         if(fragment instanceof  InfoListFragment) {
-            InfoDetailsFragment infoDetailsFragment = InfoDetailsFragment.newInstance(arguments.getString(InfoListFragment.KEY_INFO_VIEW));
-            this.navigationManager.setNextAnimation(R.anim.fragment_enter_right, R.anim.fragment_exit_right);
-            this.navigationManager.navigateTo(infoDetailsFragment);
+            if(arguments.getInt(InfoListFragment.KEY_FRAGMENT_ACTION) == InfoListFragment.ACTION_SHOW_DETAILS) {
+                InfoDetailsFragment infoDetailsFragment = InfoDetailsFragment.newInstance(arguments.getString(InfoListFragment.KEY_INFO_VIEW));
+                this.navigationManager.setNextAnimation(R.anim.fragment_enter_right, R.anim.fragment_exit_right);
+                this.navigationManager.navigateTo(infoDetailsFragment);
+            } else if(arguments.getInt(InfoListFragment.KEY_FRAGMENT_ACTION) == InfoListFragment.ACTION_START_AUTH) {
+                // todo: call and process scanner activity here
+            }
+
         } else if(fragment instanceof MapOverviewFragment) {
             if(arguments.getInt(MapOverviewFragment.KEY_FRAGMENT_ACTION) == MapOverviewFragment.ACTION_OPEN_SEARCH) {
                 double searchLat = arguments.getDouble(MapOverviewFragment.KEY_SEARCH_LAT);
