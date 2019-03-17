@@ -1,5 +1,6 @@
 package de.mpfl.app;
 
+import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -8,6 +9,9 @@ import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Gravity;
 import android.view.MenuItem;
+
+import com.google.zxing.integration.android.IntentIntegrator;
+import com.google.zxing.integration.android.IntentResult;
 
 import de.mpfl.app.databinding.ActivityMainBinding;
 import de.mpfl.app.fragments.FavoritesFragment;
@@ -24,6 +28,8 @@ import de.mpfl.app.utils.NavigationManager;
 import de.mpfl.app.utils.SettingsManager;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, OnFragmentInteractionListener {
+
+    private final static int REQUEST_SCAN_RESULT = 0;
 
     private ActivityMainBinding components;
     private NavigationManager navigationManager;
@@ -139,6 +145,16 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
+        if(result != null) {
+
+        } else {
+            super.onActivityResult(requestCode, resultCode, data);
+        }
+    }
+
+    @Override
     public void onFragmentInteraction(Fragment fragment, Bundle arguments) {
         if(fragment instanceof  InfoListFragment) {
             if(arguments.getInt(InfoListFragment.KEY_FRAGMENT_ACTION) == InfoListFragment.ACTION_SHOW_DETAILS) {
@@ -146,7 +162,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 this.navigationManager.setNextAnimation(R.anim.fragment_enter_right, R.anim.fragment_exit_right);
                 this.navigationManager.navigateTo(infoDetailsFragment);
             } else if(arguments.getInt(InfoListFragment.KEY_FRAGMENT_ACTION) == InfoListFragment.ACTION_START_AUTH) {
-                // todo: call and process scanner activity here
+                IntentIntegrator intent = new IntentIntegrator(this);
+                intent.setCaptureActivity(ScanActivity.class);
+                intent.setPrompt("");
+                intent.setBeepEnabled(false);
+                intent.setOrientationLocked(false);
+                intent.initiateScan();
             }
 
         } else if(fragment instanceof MapOverviewFragment) {
