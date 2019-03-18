@@ -122,17 +122,18 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 break;
         }
 
-        // navigate to target fragment without keeping the back stack
         if(targetFragment != null) {
+            // navigate to target fragment without keeping the back stack
             this.navigationManager.navigateTo(targetFragment, false);
+
             // set checked item
-            item.setChecked(true);
+            this.components.navigationView.setCheckedItem(item.getItemId());
         }
 
         //  and hide drawer
         this.components.navigationDrawer.closeDrawers();
 
-        return true;
+        return false;
     }
 
     @Override
