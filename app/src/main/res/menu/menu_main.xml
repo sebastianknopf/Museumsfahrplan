@@ -7,7 +7,9 @@
 
             <menu>
 
-                <group android:checkableBehavior="single">
+                <group
+                    android:id="@+id/navigationGroupUser"
+                    android:checkableBehavior="single">
 
                     <item
                         android:id="@+id/navigationMenuMap"
@@ -42,12 +44,27 @@
 
         <item
             android:id="@+id/navigationMenuAgency"
-            android:title="@string/str_menu_agency_title"
-            android:visible="false">
+            android:title="@string/str_menu_agency_title">
 
             <menu>
 
+                <group
+                    android:id="@+id/navigationGroupAgency"
+                    android:checkableBehavior="single">
 
+                    <!--
+                    <item
+                        android:id="@+id/navigationMenuPlaceholder"
+                        android:icon="@drawable/ic_menu_map"
+                        android:title="@string/str_menu_map" />
+                        -->
+
+                    <item
+                        android:id="@+id/navigationMenuReset"
+                        android:icon="@drawable/ic_menu_reset"
+                        android:title="@string/str_menu_reset" />
+
+                </group>
 
             </menu>
 

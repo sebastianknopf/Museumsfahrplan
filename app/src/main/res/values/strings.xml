@@ -6,16 +6,22 @@
     <!-- Default Strings -->
     <string name="app_name">Museums Fahrplan</string>
     <string name="str_ok">OK</string>
+    <string name="str_yes">Ja</string>
+    <string name="str_no">Nein</string>
     <string name="str_cancel">Abbrechen</string>
     <string name="str_enable">Freigeben</string>
     <string name="str_activate">Aktivieren</string>
     <string name="str_view">Anzeigen</string>
     <string name="str_retry">Nochmal</string>
     <string name="str_undo">Rückgängig</string>
+    <string name="str_reset">Zurücksetzen</string>
     <string name="str_default_missing_connection">Keine Internetverbindung!</string>
     <string name="str_default_request_error">Fehler bei der Anfrage!</string>
     <string name="str_default_network_error_title">Hier ist etwas schief gelaufen!</string>
     <string name="str_default_network_error_text">Bei dieser Anfrage ist ein Fehler aufgetreten. Am Besten versuchst Du es später noch einmal.</string>
+    <string name="str_secauth_reset_confirmation">Möchten Sie die Zugangsdaten wirklich zurücksetzen? Sie können diese jederzeit erneut einscannen.</string>
+    <string name="str_secauth_authentification_successful">Authentifizierung erfolgreich</string>
+    <string name="str_secauth_authentification_failed">Authentifizierung fehlgeschlagen</string>
 
     <!-- MainMenu -->
     <string name="str_menu_user_title">Fahrplanauskunft</string>
@@ -25,6 +31,8 @@
     <string name="str_menu_settings">Einstellungen</string>
     <string name="str_menu_information">Informationen</string>
     <string name="str_menu_agency_title">Fahrbetrieb</string>
+    <string name="str_menu_placeholder">Platzhalter</string>
+    <string name="str_menu_reset">Zurücksetzen</string>
 
     <!-- MapOverviewFragment -->
     <string name="str_map_overview_title">Karte</string>

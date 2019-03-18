@@ -85,21 +85,27 @@ public final class SettingsManager {
         return defaultPreference.getString(MFPL_APP_ID, this.context.getString(R.string.MFPL_APP_ID));
     }
 
-    public void setAppId(String appId) {
-        SharedPreferences.Editor sp = this.context.getSharedPreferences(SETTINGS_MANAGER, Context.MODE_PRIVATE).edit();
-        sp.putString(MFPL_APP_ID, appId);
-        sp.commit();
-    }
-
     public String getApiKey() {
         SharedPreferences defaultPreference = this.context.getSharedPreferences(SETTINGS_MANAGER, Context.MODE_PRIVATE);
         return defaultPreference.getString(MFPL_API_KEY, this.context.getString(R.string.MFPL_API_KEY));
     }
 
-    public void setApiKey(String apiKey) {
+    public void setApiCredentials(String appId, String apiKey) {
         SharedPreferences.Editor sp = this.context.getSharedPreferences(SETTINGS_MANAGER, Context.MODE_PRIVATE).edit();
+        sp.putString(MFPL_APP_ID, appId);
         sp.putString(MFPL_API_KEY, apiKey);
         sp.commit();
+    }
+
+    public void resetApiCredentials() {
+        SharedPreferences.Editor sp = this.context.getSharedPreferences(SETTINGS_MANAGER, Context.MODE_PRIVATE).edit();
+        sp.putString(MFPL_APP_ID, this.context.getString(R.string.MFPL_APP_ID));
+        sp.putString(MFPL_API_KEY, this.context.getString(R.string.MFPL_API_KEY));
+        sp.commit();
+    }
+
+    public boolean isSecondaryAuthentification() {
+        return !this.getAppId().equals(this.context.getString(R.string.MFPL_APP_ID));
     }
 
 }

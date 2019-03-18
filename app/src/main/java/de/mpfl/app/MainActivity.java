@@ -6,9 +6,12 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Gravity;
+import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
@@ -28,8 +31,6 @@ import de.mpfl.app.utils.NavigationManager;
 import de.mpfl.app.utils.SettingsManager;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, OnFragmentInteractionListener {
-
-    private final static int REQUEST_SCAN_RESULT = 0;
 
     private ActivityMainBinding components;
     private NavigationManager navigationManager;
@@ -59,6 +60,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         // select the first item by default
         this.components.navigationView.setCheckedItem(R.id.navigationMenuMap);
         this.onNavigationItemSelected(this.components.navigationView.getMenu().findItem(R.id.navigationMenuMap));
+
+        // display agency menu if there's a secondary authentification
+        this.displayAgencyMenu();
     }
 
     // make navigation manager accessible for further purposes
@@ -112,15 +116,20 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             case R.id.navigationMenuInformation:
                 targetFragment = InfoListFragment.newInstance();
                 break;
+
+            case R.id.navigationMenuReset:
+                this.resetSecondaryAuthentification();
+                break;
         }
 
         // navigate to target fragment without keeping the back stack
         if(targetFragment != null) {
             this.navigationManager.navigateTo(targetFragment, false);
+            // set checked item
+            item.setChecked(true);
         }
 
-        // set checked item and hide drawer
-        item.setChecked(true);
+        //  and hide drawer
         this.components.navigationDrawer.closeDrawers();
 
         return true;
@@ -147,8 +156,16 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
-        if(result != null) {
+        if(result != null && result.getContents() != null) {
+            String[] scanResults = result.getContents().split(";");
+            if(scanResults.length > 1) {
+                this.settingsManager.setApiCredentials(scanResults[0], scanResults[1]);
+                this.displayAgencyMenu();
 
+                Toast.makeText(this, R.string.str_secauth_authentification_successful, Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(this, R.string.str_secauth_authentification_failed, Toast.LENGTH_SHORT).show();
+            }
         } else {
             super.onActivityResult(requestCode, resultCode, data);
         }
@@ -246,6 +263,29 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 this.navigationManager.setNextAnimation(R.anim.fragment_enter_right, R.anim.fragment_exit_right);
                 this.navigationManager.navigateTo(tripDetailsFragment);
             }
+        }
+    }
+
+    private void resetSecondaryAuthentification() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle(R.string.str_reset);
+        builder.setMessage(R.string.str_secauth_reset_confirmation);
+        builder.setPositiveButton(R.string.str_reset, (dialog, which) -> {
+            this.settingsManager.resetApiCredentials();
+            this.displayAgencyMenu();
+        });
+        builder.setNegativeButton(R.string.str_no, null);
+        builder.show();
+    }
+
+    private void displayAgencyMenu() {
+        Menu mainMenu = this.components.navigationView.getMenu();
+        MenuItem agencyMenuItem = mainMenu.findItem(R.id.navigationMenuAgency);
+
+        if(this.settingsManager.isSecondaryAuthentification()) {
+            agencyMenuItem.getSubMenu().setGroupVisible(R.id.navigationGroupAgency, true);
+        } else {
+            agencyMenuItem.getSubMenu().setGroupVisible(R.id.navigationGroupAgency, false);
         }
     }
 }
