@@ -6,7 +6,7 @@
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        tools:context="de.mpfl.app.fragments.InfoListFragment">
+        tools:context="de.mfpl.app.fragments.InfoListFragment">
 
         <ScrollView
             android:layout_width="match_parent"

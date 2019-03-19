@@ -5,7 +5,7 @@
 
     <data>
 
-        <variable name="fragment" type="de.mpfl.app.fragments.TripDetailsFragment" />
+        <variable name="fragment" type="de.mfpl.app.fragments.TripDetailsFragment" />
 
         <variable name="doublePane" type="boolean" android:value="false" />
 
@@ -16,7 +16,7 @@
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context="de.mpfl.app.fragments.TripDetailsFragment">
+        tools:context="de.mfpl.app.fragments.TripDetailsFragment">
 
         <RelativeLayout
             android:id="@+id/layoutTripDetailsList"

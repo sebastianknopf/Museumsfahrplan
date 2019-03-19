@@ -4,14 +4,14 @@
 
     <data>
 
-        <variable name="fragment" type="de.mpfl.app.fragments.SearchDetailsFragment" />
+        <variable name="fragment" type="de.mfpl.app.fragments.SearchDetailsFragment" />
 
     </data>
 
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context="de.mpfl.app.fragments.SearchDetailsFragment">
+        tools:context="de.mfpl.app.fragments.SearchDetailsFragment">
 
         <android.support.constraint.ConstraintLayout
             android:layout_width="match_parent"

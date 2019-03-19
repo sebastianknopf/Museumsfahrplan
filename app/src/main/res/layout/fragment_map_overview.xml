@@ -5,7 +5,7 @@
 
     <data>
 
-        <variable name="fragment" type="de.mpfl.app.fragments.MapOverviewFragment" />
+        <variable name="fragment" type="de.mfpl.app.fragments.MapOverviewFragment" />
 
     </data>
 
@@ -13,7 +13,7 @@
         android:id="@+id/fragmentLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context="de.mpfl.app.fragments.MapOverviewFragment">
+        tools:context="de.mfpl.app.fragments.MapOverviewFragment">
 
         <android.support.design.widget.CoordinatorLayout
             android:id="@+id/layCoordinatorParent"

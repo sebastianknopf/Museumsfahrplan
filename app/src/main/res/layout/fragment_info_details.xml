@@ -5,7 +5,7 @@
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context="de.mpfl.app.fragments.InfoDetailsFragment">
+        tools:context="de.mfpl.app.fragments.InfoDetailsFragment">
 
         <WebView
             android:id="@+id/wvInfoDetailsContent"

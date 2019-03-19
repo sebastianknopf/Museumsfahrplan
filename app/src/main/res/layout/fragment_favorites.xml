@@ -5,7 +5,7 @@
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context="de.mpfl.app.fragments.FavoritesFragment">
+        tools:context="de.mfpl.app.fragments.FavoritesFragment">
 
         <android.support.constraint.ConstraintLayout
             android:layout_width="match_parent"
