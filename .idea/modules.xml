@@ -5,6 +5,7 @@
       <module fileurl="file://$PROJECT_DIR$/Museumsfahrplan.iml" filepath="$PROJECT_DIR$/Museumsfahrplan.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
       <module fileurl="file://$PROJECT_DIR$/staticnet/staticnet.iml" filepath="$PROJECT_DIR$/staticnet/staticnet.iml" />
+      <module fileurl="file://$PROJECT_DIR$/zxing-android-embedded/zxing-android-embedded.iml" filepath="$PROJECT_DIR$/zxing-android-embedded/zxing-android-embedded.iml" />
     </modules>
   </component>
 </project>

@@ -140,6 +140,9 @@
     <string name="str_stoptime_item_change_no_exit">Kein Ausstieg</string>
     <string name="str_stoptime_item_change_demand">Bedarfshalt</string>
 
+    <!-- ScanActivity -->
+    <string name="str_scan_activity_title">Scanner</string>
+
     <!-- dummy for creating a new fragment ... leave it here -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 

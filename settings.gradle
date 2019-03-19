@@ -1,1 +1,1 @@
-include ':app', ':staticnet'
+include ':app', ':staticnet', ':zxing-android-embedded'

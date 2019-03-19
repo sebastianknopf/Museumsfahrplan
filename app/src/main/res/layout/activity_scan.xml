@@ -2,18 +2,43 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <RelativeLayout
+    <android.support.design.widget.CoordinatorLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <com.journeyapps.barcodescanner.DecoratedBarcodeView
-            android:id="@+id/barcodeView"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            app:zxing_preview_scaling_strategy="centerCrop"
-            app:zxing_use_texture_view="false" />
+            android:orientation="vertical">
 
-    </RelativeLayout>
+            <android.support.v7.widget.Toolbar
+                android:id="@+id/scanToolbar"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                android:background="@color/colorPrimaryDAY"
+                android:theme="@style/Base.ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+            <com.journeyapps.barcodescanner.DecoratedBarcodeView
+                android:id="@+id/barcodeView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:zxing_preview_scaling_strategy="centerCrop"
+                app:zxing_use_texture_view="false" />
+
+        </LinearLayout>
+
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/fabTorchToggle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|end"
+            android:layout_margin="@dimen/default_app_space"
+            android:onClick="fabTorchToggleClick"
+            android:src="@drawable/ic_lightbulb"
+            android:tint="@android:color/darker_gray"
+            app:backgroundTint="@android:color/white" />
+
+    </android.support.design.widget.CoordinatorLayout>
 
 </layout>
 

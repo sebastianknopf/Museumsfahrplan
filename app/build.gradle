@@ -49,9 +49,10 @@ dependencies {
     implementation 'com.mapbox.mapboxsdk:mapbox-android-sdk:6.7.1'
     implementation 'com.google.android.gms:play-services-location:15.0.1'
     implementation 'com.facebook.shimmer:shimmer:0.1.0@aar'
-    implementation 'com.journeyapps:zxing-android-embedded:3.6.0'
+    //implementation 'com.journeyapps:zxing-android-embedded:3.6.0'
 
     implementation project(':staticnet')
+    implementation project(':zxing-android-embedded')
 
     // required for test implementation
     implementation 'com.android.support:support-v4:27.0.0'
