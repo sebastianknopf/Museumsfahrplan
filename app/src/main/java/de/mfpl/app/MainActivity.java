@@ -101,9 +101,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 targetFragment = MapOverviewFragment.newInstance();
                 break;
 
-            /*case R.id.navigationMenuSearch:
-                targetFragment = SearchInputFragment.newInstance();
-                break;*/
+            case R.id.navigationMenuSearch:
+                targetFragment = SearchInputFragment.newInstance(this.settingsManager.getLastMapPosition().getLatitude(), this.settingsManager.getLastMapPosition().getLongitude());
+                break;
 
             case R.id.navigationMenuFavorites:
                 targetFragment = FavoritesFragment.newInstance();

@@ -228,6 +228,13 @@ public class SearchInputFragment extends Fragment implements OnRouteItemClickLis
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+
+        this.components.lblSearchParamRadiusValue.setText(String.format("%d km", this.currentSearchRadius / 1000));
+    }
+
+    @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
         inflater.inflate(R.menu.menu_search_input_fragment, menu);

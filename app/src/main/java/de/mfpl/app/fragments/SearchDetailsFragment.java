@@ -55,6 +55,7 @@ public class SearchDetailsFragment extends Fragment implements OnTripItemClickLi
     private String currentSearchRouteName;
     private Date currentSearchDate = new Date();
     private String currentSearchTime;
+    private int overloadCount = 0;
 
     // needed for retain behaviour when returning from back stack to this fragment
     private List<Trip> resultList = null;
@@ -224,8 +225,15 @@ public class SearchDetailsFragment extends Fragment implements OnTripItemClickLi
                 // api returns this route id only if there's at least one scheduled trip
                 resultList = delivery.getTrips();
                 if(resultList.size() == 0) {
-                    components.rcvSearchDetailsResults.setVisibility(View.GONE);
-                    components.layoutSearchDetailsEmpty.setVisibility(View.VISIBLE);
+                    if(overloadCount == 0) {
+                        currentSearchTime = "00:00:01";
+                        overloadCount++;
+                        loadRouteTrips();
+                    } else {
+                        components.rcvSearchDetailsResults.setVisibility(View.GONE);
+                        components.layoutSearchDetailsEmpty.setVisibility(View.VISIBLE);
+                    }
+
                     return;
                 } else {
                     components.rcvSearchDetailsResults.setVisibility(View.VISIBLE);

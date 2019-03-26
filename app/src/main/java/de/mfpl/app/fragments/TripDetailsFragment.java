@@ -349,7 +349,6 @@ public class TripDetailsFragment extends Fragment {
                     map.addMarker(new MarkerOptions()
                             .position(position)
                             .setTitle(stopTime.getStop().getStopName())
-                            .setSnippet(DateTimeFormat.from(stopTime.getDepartureTime(), DateTimeFormat.HHMMSS).to(DateTimeFormat.HHMM))
                             .setIcon(stopIcon)
                     );
                 }

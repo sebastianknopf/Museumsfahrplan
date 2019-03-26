@@ -56,6 +56,7 @@ import de.mfpl.app.R;
 import de.mfpl.app.adapters.AlertListAdapter;
 import de.mfpl.app.controllers.BottomSheetActionController;
 import de.mfpl.app.databinding.FragmentMapOverviewBinding;
+import de.mfpl.app.dialogs.ErrorDialog;
 import de.mfpl.app.listeners.OnFragmentInteractionListener;
 import de.mfpl.app.utils.DateTimeFormat;
 import de.mfpl.app.utils.SettingsManager;
@@ -286,39 +287,7 @@ public class MapOverviewFragment extends Fragment implements MapboxMap.OnCameraI
         settingsManager.setLastMapZoomlevel(cameraPosition.zoom);
 
         if(cameraPosition.zoom > 11.0) {
-            StaticRequest staticRequest = new StaticRequest();
-            staticRequest.setAppId(settingsManager.getAppId());
-            staticRequest.setApiKey(settingsManager.getApiKey());
-
-            Request.Filter filter = new Request.Filter();
-            filter.setDate(Request.Filter.Date.fromJavaDate(new Date()));
-            filter.setTime(new SimpleDateFormat("HH:mm:ss").format(new Date()));
-
-            staticRequest.setListener(new StaticRequest.Listener() {
-                @Override
-                public void onSuccess(Delivery delivery) {
-                    currentStopList = delivery.getStops();
-
-                    // create marker feature list
-                    List<Feature> markerList = new ArrayList<Feature>();
-                    for(int i = 0; i < currentStopList.size(); i++) {
-                        Feature marker = Feature.fromGeometry(Point.fromLngLat(currentStopList.get(i).getPosition().getLongitude(), currentStopList.get(i).getPosition().getLatitude()));
-                        marker.addNumberProperty("stop.index", i);
-                        markerList.add(marker);
-                    }
-
-                    // display markers in source.markers data source
-                    GeoJsonSource markerSource = currentMap.getSourceAs("source.marker");
-                    if(markerSource != null) {
-                        markerSource.setGeoJson(FeatureCollection.fromFeatures(markerList));
-                    }
-                }
-
-                @Override
-                public void onError(Throwable throwable) {
-                    Toast.makeText(getContext(), R.string.str_default_missing_connection, Toast.LENGTH_SHORT).show();
-                }
-            }).loadStops(new Position().setLatitude(cameraPosition.target.getLatitude()).setLongitude(cameraPosition.target.getLongitude()), 15000, filter);
+            this.loadStationData(cameraPosition);
         } else {
             //this.currentMap.clear();
             // remove all markers
@@ -437,6 +406,57 @@ public class MapOverviewFragment extends Fragment implements MapboxMap.OnCameraI
         arguments.putDouble(KEY_SEARCH_LAT, this.currentMap.getCameraPosition().target.getLatitude());
         arguments.putDouble(KEY_SEARCH_LON, this.currentMap.getCameraPosition().target.getLongitude());
         this.fragmentInteractionListener.onFragmentInteraction(this, arguments);
+    }
+
+    private void loadStationData(CameraPosition cameraPosition) {
+        SettingsManager settingsManager = new SettingsManager(this.getContext());
+
+        StaticRequest staticRequest = new StaticRequest();
+        staticRequest.setAppId(settingsManager.getAppId());
+        staticRequest.setApiKey(settingsManager.getApiKey());
+
+        Request.Filter filter = new Request.Filter();
+        filter.setDate(Request.Filter.Date.fromJavaDate(new Date()));
+        filter.setTime(new SimpleDateFormat("HH:mm:ss").format(new Date()));
+
+        staticRequest.setListener(new StaticRequest.Listener() {
+            @Override
+            public void onSuccess(Delivery delivery) {
+                currentStopList = delivery.getStops();
+
+                // create marker feature list
+                List<Feature> markerList = new ArrayList<Feature>();
+                for(int i = 0; i < currentStopList.size(); i++) {
+                    Feature marker = Feature.fromGeometry(Point.fromLngLat(currentStopList.get(i).getPosition().getLongitude(), currentStopList.get(i).getPosition().getLatitude()));
+                    marker.addNumberProperty("stop.index", i);
+                    markerList.add(marker);
+                }
+
+                // display markers in source.markers data source
+                GeoJsonSource markerSource = currentMap.getSourceAs("source.marker");
+                if(markerSource != null) {
+                    markerSource.setGeoJson(FeatureCollection.fromFeatures(markerList));
+                }
+            }
+
+            @Override
+            public void onError(Throwable throwable) {
+                showNetworkErrorDialog(() -> loadStationData(cameraPosition));
+            }
+        }).loadStops(new Position().setLatitude(cameraPosition.target.getLatitude()).setLongitude(cameraPosition.target.getLongitude()), 15000, filter);
+    }
+
+    private void showNetworkErrorDialog(ErrorDialog.OnRetryClickListener retryListener) {
+        this.showNetworkErrorDialog(R.string.str_default_network_error_title, R.string.str_default_network_error_text, retryListener);
+    }
+
+    private void showNetworkErrorDialog(@StringRes int titleStringRes, @StringRes int textStringRes, ErrorDialog.OnRetryClickListener retryListener) {
+        ErrorDialog errorDialog = new ErrorDialog(this.getContext());
+        errorDialog.setDialogImage(R.drawable.img_error_basic);
+        errorDialog.setDialogTitle(titleStringRes);
+        errorDialog.setDialogText(textStringRes);
+        errorDialog.setOnRetryClickListener(retryListener);
+        errorDialog.show();
     }
 
     private boolean checkPermission(String permissionName) {
