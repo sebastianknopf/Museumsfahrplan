@@ -38,7 +38,7 @@
     <string name="str_map_overview_title">Karte</string>
     <string name="str_location_access_error">Leider können wir nicht auf den Standort zugreifen!</string>
     <string name="str_location_provider_error">Leider ist das GPS deaktiviert!</string>
-    <string name="str_zoom_level_hint">Zoome in die Karte, um mehr zu sehen</string>
+    <string name="str_zoom_level_hint">Zoome in die Karte, um mehr Informationen zu sehen!</string>
     <string name="str_no_departures_found">Leider wurden keine Abfahrten gefunden!</string>
 
     <!-- SearchInputFragment -->

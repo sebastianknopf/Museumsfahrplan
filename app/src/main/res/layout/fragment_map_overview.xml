@@ -20,17 +20,39 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-            <com.mapbox.mapboxsdk.maps.MapView
-                android:id="@+id/mapView"
+            <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                mapbox:mapbox_cameraTargetLat="51.1657"
-                mapbox:mapbox_cameraTargetLng="10.4515"
-                mapbox:mapbox_cameraZoom="5.15"
-                mapbox:mapbox_cameraZoomMax="17"
-                mapbox:mapbox_cameraZoomMin="5"
-                mapbox:mapbox_styleUrl="mapbox://styles/sebastianknopf/cjp042n58ati52so77w931alz"
-                mapbox:mapbox_uiRotateGestures="false" />
+                android:layout_height="match_parent">
+
+                <com.mapbox.mapboxsdk.maps.MapView
+                    android:id="@+id/mapView"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    mapbox:mapbox_cameraTargetLat="51.1657"
+                    mapbox:mapbox_cameraTargetLng="10.4515"
+                    mapbox:mapbox_cameraZoom="5.15"
+                    mapbox:mapbox_cameraZoomMax="17"
+                    mapbox:mapbox_cameraZoomMin="5"
+                    mapbox:mapbox_styleUrl="mapbox://styles/sebastianknopf/cjp042n58ati52so77w931alz"
+                    mapbox:mapbox_uiRotateGestures="false" />
+
+                    <LinearLayout
+                        android:id="@+id/layZoomlevelHint"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:alpha="0"
+                        android:padding="@dimen/default_app_space"
+                        android:background="@color/colorFavoriteYellow">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:text="@string/str_zoom_level_hint" />
+
+                    </LinearLayout>
+
+            </RelativeLayout>
 
             <include
                 android:id="@+id/bottomSheetHolder"

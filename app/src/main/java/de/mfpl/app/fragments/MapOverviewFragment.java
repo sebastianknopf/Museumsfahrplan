@@ -26,7 +26,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
-import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
@@ -286,8 +285,9 @@ public class MapOverviewFragment extends Fragment implements MapboxMap.OnCameraI
         settingsManager.setLastMapLocation(currentMapLocation);
         settingsManager.setLastMapZoomlevel(cameraPosition.zoom);
 
-        if(cameraPosition.zoom > 11.0) {
+        if(cameraPosition.zoom > 8.0) {
             this.loadStationData(cameraPosition);
+            this.components.layZoomlevelHint.animate().setDuration(200).alpha(0.0f).start();
         } else {
             //this.currentMap.clear();
             // remove all markers
@@ -297,11 +297,7 @@ public class MapOverviewFragment extends Fragment implements MapboxMap.OnCameraI
             GeoJsonSource selectedMarkerSource = currentMap.getSourceAs("source.selected.marker");
             selectedMarkerSource.setGeoJson(FeatureCollection.fromFeatures(new Feature[]{}));
 
-            // display zoom level hint only once per fragment lifetime
-            if(!this.zoomLevelHintShown) {
-                Toast.makeText(this.getContext(), R.string.str_zoom_level_hint, Toast.LENGTH_LONG).show();
-                this.zoomLevelHintShown = true;
-            }
+            this.components.layZoomlevelHint.animate().setDuration(200).alpha(1.0f).start();
         }
     }
 
