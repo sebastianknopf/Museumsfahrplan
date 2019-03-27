@@ -54,13 +54,13 @@ import java.util.List;
 
 import de.mfpl.app.R;
 import de.mfpl.app.adapters.AlertListAdapter;
+import de.mfpl.app.common.DateTimeFormat;
+import de.mfpl.app.common.SettingsManager;
+import de.mfpl.app.common.VectorIconFactory;
 import de.mfpl.app.controllers.BottomSheetActionController;
 import de.mfpl.app.databinding.FragmentMapOverviewBinding;
 import de.mfpl.app.dialogs.ErrorDialog;
 import de.mfpl.app.listeners.OnFragmentInteractionListener;
-import de.mfpl.app.utils.DateTimeFormat;
-import de.mfpl.app.utils.SettingsManager;
-import de.mfpl.app.utils.VectorIconFactory;
 import de.mfpl.staticnet.lib.StaticRequest;
 import de.mfpl.staticnet.lib.base.Delivery;
 import de.mfpl.staticnet.lib.base.Request;

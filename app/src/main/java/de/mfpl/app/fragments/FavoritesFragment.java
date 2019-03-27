@@ -23,7 +23,7 @@ import java.util.List;
 
 import de.mfpl.app.R;
 import de.mfpl.app.adapters.FavoritesListAdapter;
-import de.mfpl.app.database.AppDatabase;
+import de.mfpl.app.database.ApplicationDatabase;
 import de.mfpl.app.database.Favorite;
 import de.mfpl.app.databinding.FragmentFavoritesBinding;
 import de.mfpl.app.listeners.OnFavoriteItemClickListener;
@@ -72,8 +72,8 @@ public class FavoritesFragment extends Fragment implements OnFavoriteItemClickLi
         }
 
         // get app database instance and display all favorites
-        AppDatabase appDatabase = AppDatabase.getInstance(this.getContext());
-        List<Favorite> favoriteList = appDatabase.getAllFavorites();
+        ApplicationDatabase applicationDatabase = ApplicationDatabase.getInstance(this.getContext());
+        List<Favorite> favoriteList = applicationDatabase.getAllFavorites();
 
         if(favoriteList.size() == 0) {
             this.showEmptyView();
@@ -132,8 +132,8 @@ public class FavoritesFragment extends Fragment implements OnFavoriteItemClickLi
     private void undoDeleteFavorite() {
         if(this.recentlyRemovedFavorite != null) {
             // re-animate the favorite item :-)
-            AppDatabase appDatabase = AppDatabase.getInstance(this.getContext());
-            appDatabase.addFavorite(this.recentlyRemovedFavorite);
+            ApplicationDatabase applicationDatabase = ApplicationDatabase.getInstance(this.getContext());
+            applicationDatabase.addFavorite(this.recentlyRemovedFavorite);
 
             // display in adapter again
             if(this.favoritesListAdapter != null) {
@@ -177,8 +177,8 @@ public class FavoritesFragment extends Fragment implements OnFavoriteItemClickLi
                 // remove favorite item from database
                 recentlyRemovedFavorite = favoritesListAdapter.getFavoritesList().get(recentlyRemovedIndex);
                 if(recentlyRemovedFavorite != null) {
-                    AppDatabase appDatabase = AppDatabase.getInstance(getContext());
-                    appDatabase.deleteFavorite(recentlyRemovedFavorite);
+                    ApplicationDatabase applicationDatabase = ApplicationDatabase.getInstance(getContext());
+                    applicationDatabase.deleteFavorite(recentlyRemovedFavorite);
                 }
 
                 // remove item from adapter

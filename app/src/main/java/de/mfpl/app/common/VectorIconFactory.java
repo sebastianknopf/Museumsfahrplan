@@ -1,4 +1,4 @@
-package de.mfpl.app.utils;
+package de.mfpl.app.common;
 
 import android.annotation.TargetApi;
 import android.content.Context;

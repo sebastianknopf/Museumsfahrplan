@@ -11,9 +11,9 @@ import java.util.List;
 
 import de.mfpl.app.R;
 import de.mfpl.app.adapters.TripListAdapter;
+import de.mfpl.app.common.SettingsManager;
 import de.mfpl.app.databinding.LayoutMapBottomSheetBinding;
 import de.mfpl.app.listeners.OnTripItemClickListener;
-import de.mfpl.app.utils.SettingsManager;
 import de.mfpl.staticnet.lib.StaticRequest;
 import de.mfpl.staticnet.lib.base.Delivery;
 import de.mfpl.staticnet.lib.base.Request;

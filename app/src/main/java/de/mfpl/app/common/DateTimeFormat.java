@@ -1,4 +1,4 @@
-package de.mfpl.app.utils;
+package de.mfpl.app.common;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;

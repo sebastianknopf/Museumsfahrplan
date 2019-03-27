@@ -10,11 +10,11 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import de.mfpl.app.utils.DateTimeFormat;
+import de.mfpl.app.common.DateTimeFormat;
 
-public final class AppDatabase extends SQLiteOpenHelper {
+public final class ApplicationDatabase extends SQLiteOpenHelper {
     // static instance for singleton pattern
-    private static AppDatabase staticInstance;
+    private static ApplicationDatabase staticInstance;
 
     private final static String DATABASE_NAME = "appdata.db3";  // internal database name
     private final static int DATABASE_VERSION = 12;             // current app version  (contains only favorites)
@@ -33,15 +33,15 @@ public final class AppDatabase extends SQLiteOpenHelper {
     private final static String KEY_FAVORITES_TRIP_DATE = "trip_date";
     private final static String KEY_FAVORITES_TRIP_TIME = "trip_time";
 
-    public static synchronized AppDatabase getInstance(Context context) {
+    public static synchronized ApplicationDatabase getInstance(Context context) {
         if(staticInstance == null) {
-            staticInstance = new AppDatabase(context);
+            staticInstance = new ApplicationDatabase(context);
         }
 
         return staticInstance;
     }
 
-    private AppDatabase(Context context) {
+    private ApplicationDatabase(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
 

@@ -13,11 +13,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import de.mfpl.app.R;
+import de.mfpl.app.common.DateTimeFormat;
 import de.mfpl.app.databinding.LayoutListRouteItemBinding;
 import de.mfpl.app.databinding.LayoutListTripItemBinding;
 import de.mfpl.app.listeners.OnRecyclerViewItemClickListener;
 import de.mfpl.app.listeners.OnTripItemClickListener;
-import de.mfpl.app.utils.DateTimeFormat;
 import de.mfpl.staticnet.lib.data.Frequency;
 import de.mfpl.staticnet.lib.data.Route;
 import de.mfpl.staticnet.lib.data.Trip;

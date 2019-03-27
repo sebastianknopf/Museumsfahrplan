@@ -1,4 +1,4 @@
-package de.mfpl.app.utils;
+package de.mfpl.app.common;
 
 import android.support.annotation.AnimRes;
 import android.support.v4.app.Fragment;

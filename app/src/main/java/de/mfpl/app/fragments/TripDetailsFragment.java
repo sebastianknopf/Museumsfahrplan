@@ -33,14 +33,14 @@ import java.util.List;
 import de.mfpl.app.R;
 import de.mfpl.app.adapters.AlertListAdapter;
 import de.mfpl.app.adapters.StopTimesAdapter;
-import de.mfpl.app.database.AppDatabase;
+import de.mfpl.app.common.DateTimeFormat;
+import de.mfpl.app.common.SettingsManager;
+import de.mfpl.app.common.VectorIconFactory;
+import de.mfpl.app.database.ApplicationDatabase;
 import de.mfpl.app.database.Favorite;
 import de.mfpl.app.databinding.FragmentTripDetailsBinding;
 import de.mfpl.app.dialogs.ErrorDialog;
 import de.mfpl.app.listeners.OnFragmentInteractionListener;
-import de.mfpl.app.utils.DateTimeFormat;
-import de.mfpl.app.utils.SettingsManager;
-import de.mfpl.app.utils.VectorIconFactory;
 import de.mfpl.staticnet.lib.StaticRequest;
 import de.mfpl.staticnet.lib.base.Delivery;
 import de.mfpl.staticnet.lib.base.Request;
@@ -236,7 +236,7 @@ public class TripDetailsFragment extends Fragment {
         this.hideFabMenu();
 
         // add favorite to internal database
-        AppDatabase appDatabase = AppDatabase.getInstance(this.getContext());
+        ApplicationDatabase applicationDatabase = ApplicationDatabase.getInstance(this.getContext());
 
         Favorite favorite = new Favorite();
         favorite.setTripId(this.resultTrip.getTripId());
@@ -246,7 +246,7 @@ public class TripDetailsFragment extends Fragment {
         favorite.setTripDate(DateTimeFormat.from(this.currentTripDate).to(DateTimeFormat.YYYYMMDD));
         favorite.setTripTime(this.resultTrip.getStopTimes().get(0).getDepartureTime());
 
-        appDatabase.addFavorite(favorite);
+        applicationDatabase.addFavorite(favorite);
 
         // inform user
         Snackbar.make(this.components.getRoot(), R.string.str_trip_details_favorite_added, Snackbar.LENGTH_LONG).setAction(R.string.str_view, v -> {

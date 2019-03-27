@@ -16,6 +16,8 @@ import android.widget.Toast;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 
+import de.mfpl.app.common.NavigationManager;
+import de.mfpl.app.common.SettingsManager;
 import de.mfpl.app.databinding.ActivityMainBinding;
 import de.mfpl.app.fragments.FavoritesFragment;
 import de.mfpl.app.fragments.InfoDetailsFragment;
@@ -27,8 +29,6 @@ import de.mfpl.app.fragments.SearchInputFragment;
 import de.mfpl.app.fragments.SettingsFragment;
 import de.mfpl.app.fragments.TripDetailsFragment;
 import de.mfpl.app.listeners.OnFragmentInteractionListener;
-import de.mfpl.app.utils.NavigationManager;
-import de.mfpl.app.utils.SettingsManager;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, OnFragmentInteractionListener {
 
