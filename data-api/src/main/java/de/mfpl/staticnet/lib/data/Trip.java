@@ -97,6 +97,18 @@ public final class Trip {
         return this.realtime;
     }
 
+    public boolean hasTripUpdate() {
+        return this.realtime != null && this.realtime.getTripUpdate() != null;
+    }
+
+    public TripUpdate getTripUpdate() {
+        if(this.hasTripUpdate()) {
+            return this.realtime.getTripUpdate();
+        } else {
+            return null;
+        }
+    }
+
     public enum Direction {
         @SerializedName("0")
         OUTBOUND,

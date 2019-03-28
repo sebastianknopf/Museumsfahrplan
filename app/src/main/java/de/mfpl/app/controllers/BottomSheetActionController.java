@@ -14,7 +14,7 @@ import de.mfpl.app.adapters.TripListAdapter;
 import de.mfpl.app.common.SettingsManager;
 import de.mfpl.app.databinding.LayoutMapBottomSheetBinding;
 import de.mfpl.app.listeners.OnTripItemClickListener;
-import de.mfpl.staticnet.lib.StaticRequest;
+import de.mfpl.staticnet.lib.DataRequest;
 import de.mfpl.staticnet.lib.base.Delivery;
 import de.mfpl.staticnet.lib.base.Request;
 import de.mfpl.staticnet.lib.data.Trip;
@@ -37,10 +37,10 @@ public final class BottomSheetActionController {
     public void loadDepartures(String stopId) {
         SettingsManager settingsManager = new SettingsManager(this.context);
 
-        StaticRequest staticRequest = new StaticRequest();
-        staticRequest.setAppId(settingsManager.getAppId());
-        staticRequest.setApiKey(settingsManager.getApiKey());
-        staticRequest.setDefaultLimit(settingsManager.getPreferencesNumResults());
+        DataRequest dataRequest = new DataRequest();
+        dataRequest.setAppId(settingsManager.getAppId());
+        dataRequest.setApiKey(settingsManager.getApiKey());
+        dataRequest.setDefaultLimit(settingsManager.getPreferencesNumResults());
 
         Request.Filter filter = new Request.Filter();
         filter.setDate(Request.Filter.Date.fromJavaDate(new Date()));
@@ -51,7 +51,7 @@ public final class BottomSheetActionController {
         this.components.rcvTripList.setVisibility(View.GONE);
         this.components.layErrorView.setVisibility(View.GONE);
         this.components.layProgressView.setVisibility(View.VISIBLE);
-        staticRequest.setListener(new StaticRequest.Listener() {
+        dataRequest.setListener(new DataRequest.Listener() {
             @Override
             public void onSuccess(Delivery delivery) {
                 // check api errors here

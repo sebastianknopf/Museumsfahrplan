@@ -5,7 +5,7 @@ import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.POST;
 
-public interface StaticAPI {
+public interface DataAPI {
 
     @POST("LocationInformationService")
     Call<Container> locationInformationService(@Body Container body);

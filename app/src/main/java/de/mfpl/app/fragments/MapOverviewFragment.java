@@ -60,7 +60,7 @@ import de.mfpl.app.controllers.BottomSheetActionController;
 import de.mfpl.app.databinding.FragmentMapOverviewBinding;
 import de.mfpl.app.dialogs.ErrorDialog;
 import de.mfpl.app.listeners.OnFragmentInteractionListener;
-import de.mfpl.staticnet.lib.StaticRequest;
+import de.mfpl.staticnet.lib.DataRequest;
 import de.mfpl.staticnet.lib.base.Delivery;
 import de.mfpl.staticnet.lib.base.Request;
 import de.mfpl.staticnet.lib.data.Position;
@@ -407,15 +407,15 @@ public class MapOverviewFragment extends Fragment implements MapboxMap.OnCameraI
     private void loadStationData(CameraPosition cameraPosition) {
         SettingsManager settingsManager = new SettingsManager(this.getContext());
 
-        StaticRequest staticRequest = new StaticRequest();
-        staticRequest.setAppId(settingsManager.getAppId());
-        staticRequest.setApiKey(settingsManager.getApiKey());
+        DataRequest dataRequest = new DataRequest();
+        dataRequest.setAppId(settingsManager.getAppId());
+        dataRequest.setApiKey(settingsManager.getApiKey());
 
         Request.Filter filter = new Request.Filter();
         filter.setDate(Request.Filter.Date.fromJavaDate(new Date()));
         filter.setTime(new SimpleDateFormat("HH:mm:ss").format(new Date()));
 
-        staticRequest.setListener(new StaticRequest.Listener() {
+        dataRequest.setListener(new DataRequest.Listener() {
             @Override
             public void onSuccess(Delivery delivery) {
                 currentStopList = delivery.getStops();

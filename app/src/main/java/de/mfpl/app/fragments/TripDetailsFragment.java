@@ -41,7 +41,7 @@ import de.mfpl.app.database.Favorite;
 import de.mfpl.app.databinding.FragmentTripDetailsBinding;
 import de.mfpl.app.dialogs.ErrorDialog;
 import de.mfpl.app.listeners.OnFragmentInteractionListener;
-import de.mfpl.staticnet.lib.StaticRequest;
+import de.mfpl.staticnet.lib.DataRequest;
 import de.mfpl.staticnet.lib.base.Delivery;
 import de.mfpl.staticnet.lib.base.Request;
 import de.mfpl.staticnet.lib.data.Alert;
@@ -492,16 +492,16 @@ public class TripDetailsFragment extends Fragment {
     private void loadTripDetails(String tripId, Date tripDate) {
         SettingsManager settingsManager = new SettingsManager(this.getContext());
 
-        StaticRequest staticRequest = new StaticRequest();
-        staticRequest.setAppId(settingsManager.getAppId());
-        staticRequest.setApiKey(settingsManager.getApiKey());
+        DataRequest dataRequest = new DataRequest();
+        dataRequest.setAppId(settingsManager.getAppId());
+        dataRequest.setApiKey(settingsManager.getApiKey());
 
         Request.Filter filter = new Request.Filter();
         filter.setDate(new Request.Filter.Date().fromJavaDate(tripDate));
         filter.setTime(this.currentTripTime);
         
         this.components.layoutSwipeRefresh.setRefreshing(true);
-        staticRequest.setListener(new StaticRequest.Listener() {
+        dataRequest.setListener(new DataRequest.Listener() {
             @Override
             public void onSuccess(Delivery delivery) {
                 // stop displaying refresh progress bar

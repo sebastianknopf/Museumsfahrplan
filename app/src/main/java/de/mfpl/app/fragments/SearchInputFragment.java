@@ -39,7 +39,7 @@ import de.mfpl.app.listeners.OnRouteItemClickListener;
 import de.mfpl.app.network.OpenCageRequest;
 import de.mfpl.app.network.OpenCageResponse;
 import de.mfpl.app.network.OpenCageResult;
-import de.mfpl.staticnet.lib.StaticRequest;
+import de.mfpl.staticnet.lib.DataRequest;
 import de.mfpl.staticnet.lib.base.Delivery;
 import de.mfpl.staticnet.lib.base.Request;
 import de.mfpl.staticnet.lib.data.Position;
@@ -432,10 +432,10 @@ public class SearchInputFragment extends Fragment implements OnRouteItemClickLis
     private void loadRouteResults() {
         SettingsManager settingsManager = new SettingsManager(this.getContext());
 
-        StaticRequest staticRequest = new StaticRequest();
-        staticRequest.setAppId(settingsManager.getAppId());
-        staticRequest.setApiKey(settingsManager.getApiKey());
-        staticRequest.setDefaultLimit(settingsManager.getPreferencesNumResults());
+        DataRequest dataRequest = new DataRequest();
+        dataRequest.setAppId(settingsManager.getAppId());
+        dataRequest.setApiKey(settingsManager.getApiKey());
+        dataRequest.setDefaultLimit(settingsManager.getPreferencesNumResults());
 
         Request.Filter filter = new Request.Filter();
         filter.setDate(Request.Filter.Date.fromJavaDate(this.currentSearchDate));
@@ -444,7 +444,7 @@ public class SearchInputFragment extends Fragment implements OnRouteItemClickLis
 
         this.showRouteResultList();
         this.setRouteSkeletonAdapter();
-        staticRequest.setListener(new StaticRequest.Listener() {
+        dataRequest.setListener(new DataRequest.Listener() {
             @Override
             public void onSuccess(Delivery delivery) {
                 // check for api errors

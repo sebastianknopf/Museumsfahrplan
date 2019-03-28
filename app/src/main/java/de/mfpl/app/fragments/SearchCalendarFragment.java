@@ -29,7 +29,7 @@ import de.mfpl.app.databinding.FragmentSearchCalendarBinding;
 import de.mfpl.app.dialogs.ErrorDialog;
 import de.mfpl.app.listeners.OnCalendarItemClickListener;
 import de.mfpl.app.listeners.OnFragmentInteractionListener;
-import de.mfpl.staticnet.lib.StaticRequest;
+import de.mfpl.staticnet.lib.DataRequest;
 import de.mfpl.staticnet.lib.base.Delivery;
 import de.mfpl.staticnet.lib.base.Request;
 import de.mfpl.staticnet.lib.data.Calendar;
@@ -185,9 +185,9 @@ public class SearchCalendarFragment extends Fragment implements OnCalendarItemCl
 
         SettingsManager settingsManager = new SettingsManager(this.getContext());
 
-        StaticRequest staticRequest = new StaticRequest();
-        staticRequest.setAppId(settingsManager.getAppId());
-        staticRequest.setApiKey(settingsManager.getApiKey());
+        DataRequest dataRequest = new DataRequest();
+        dataRequest.setAppId(settingsManager.getAppId());
+        dataRequest.setApiKey(settingsManager.getApiKey());
 
         Request.Filter filter = new Request.Filter();
         filter.setWheelchairAccessible(settingsManager.getPreferenceWheelchairAccessible() ? Trip.WheelchairAccessible.YES : Trip.WheelchairAccessible.NO);
@@ -201,7 +201,7 @@ public class SearchCalendarFragment extends Fragment implements OnCalendarItemCl
         calendar.add(java.util.Calendar.MONTH, 6);
         endDate = DateTimeFormat.from(calendar.getTime()).to(DateTimeFormat.YYYYMMDD);
 
-        staticRequest.setListener(new StaticRequest.Listener() {
+        dataRequest.setListener(new DataRequest.Listener() {
             @Override
             public void onSuccess(Delivery delivery) {
                 // check for api errors

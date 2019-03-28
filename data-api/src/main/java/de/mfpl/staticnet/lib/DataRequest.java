@@ -15,7 +15,7 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-public final class StaticRequest {
+public final class DataRequest {
 
     private final static String API_ENDPOINT = "https://gtfs.svtest02.info/w/";
 
@@ -25,7 +25,7 @@ public final class StaticRequest {
     private int defaultLimit = 10;
     private boolean isAsync = true;
 
-    private StaticAPI createClient() {
+    private DataAPI createClient() {
         Gson gson = new GsonBuilder().setLenient().create();
 
         ///do NOT add custom client! This seems to increase the loading speed significantly!!!
@@ -39,7 +39,7 @@ public final class StaticRequest {
                                 .client(okHttpClient)
                                 .build();
 
-        return retrofit.create(StaticAPI.class);
+        return retrofit.create(DataAPI.class);
     }
 
     private Container createRequestContainer(Request request, Request.Options options, Request.Filter filter) {
@@ -111,7 +111,7 @@ public final class StaticRequest {
         }
     }
 
-    public StaticRequest setListener(Listener listener) {
+    public DataRequest setListener(Listener listener) {
         this.listener = listener;
         return this;
     }
@@ -146,8 +146,8 @@ public final class StaticRequest {
 
         Container requestContainer = this.createRequestContainer(request, options, filter);
 
-        StaticAPI staticApi = this.createClient();
-        Call<Container> apiCall = staticApi.locationInformationService(requestContainer);
+        DataAPI dataApi = this.createClient();
+        Call<Container> apiCall = dataApi.locationInformationService(requestContainer);
         this.executeCall(apiCall);
     }
 
@@ -167,8 +167,8 @@ public final class StaticRequest {
 
         Container requestContainer = this.createRequestContainer(request, options, filter);
 
-        StaticAPI staticApi = this.createClient();
-        Call<Container> apiCall = staticApi.locationInformationService(requestContainer);
+        DataAPI dataApi = this.createClient();
+        Call<Container> apiCall = dataApi.locationInformationService(requestContainer);
         this.executeCall(apiCall);
     }
 
@@ -186,8 +186,8 @@ public final class StaticRequest {
 
         Container requestContainer = this.createRequestContainer(request, options, filter);
 
-        StaticAPI staticApi = this.createClient();
-        Call<Container> apiCall = staticApi.stopInformationService(requestContainer);
+        DataAPI dataApi = this.createClient();
+        Call<Container> apiCall = dataApi.stopInformationService(requestContainer);
         this.executeCall(apiCall);
     }
 
@@ -205,8 +205,8 @@ public final class StaticRequest {
 
         Container requestContainer = this.createRequestContainer(request, options, filter);
 
-        StaticAPI staticApi = this.createClient();
-        Call<Container> apiCall = staticApi.tripInformationService(requestContainer);
+        DataAPI dataApi = this.createClient();
+        Call<Container> apiCall = dataApi.tripInformationService(requestContainer);
         this.executeCall(apiCall);
     }
 
@@ -224,8 +224,8 @@ public final class StaticRequest {
 
         Container requestContainer = this.createRequestContainer(request, options, filter);
 
-        StaticAPI staticApi = this.createClient();
-        Call<Container> apiCall = staticApi.tripInformationService(requestContainer);
+        DataAPI dataApi = this.createClient();
+        Call<Container> apiCall = dataApi.tripInformationService(requestContainer);
         this.executeCall(apiCall);
     }
 
@@ -246,8 +246,8 @@ public final class StaticRequest {
 
         Container requestContainer = this.createRequestContainer(request, options, filter);
 
-        StaticAPI staticApi = this.createClient();
-        Call<Container> apiCall = staticApi.calendarService(requestContainer);
+        DataAPI dataApi = this.createClient();
+        Call<Container> apiCall = dataApi.calendarService(requestContainer);
         this.executeCall(apiCall);
     }
 
@@ -262,8 +262,8 @@ public final class StaticRequest {
 
         Container requestContainer = this.createRequestContainer(request, options, filter);
 
-        StaticAPI staticApi = this.createClient();
-        Call<Container> apiCall = staticApi.calendarService(requestContainer);
+        DataAPI dataApi = this.createClient();
+        Call<Container> apiCall = dataApi.calendarService(requestContainer);
         this.executeCall(apiCall);
     }
 

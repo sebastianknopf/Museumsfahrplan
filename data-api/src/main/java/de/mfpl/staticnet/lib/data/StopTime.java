@@ -25,6 +25,9 @@ public final class StopTime {
     @SerializedName("stop")
     private Stop stop;
 
+    @SerializedName("realtime")
+    private Realtime realtime;
+
     public String getTripId() {
         return tripId;
     }
@@ -51,6 +54,22 @@ public final class StopTime {
 
     public Stop getStop() {
         return stop;
+    }
+
+    public Realtime getRealtime() {
+        return this.realtime;
+    }
+
+    public boolean hasStopTimeUpdate() {
+        return this.realtime != null && this.realtime.getStopTimeUpdate() != null;
+    }
+
+    public StopTimeUpdate getStopTimeUpdate() {
+        if(this.hasStopTimeUpdate()) {
+            return this.realtime.getStopTimeUpdate();
+        } else {
+            return null;
+        }
     }
 
     public enum ChangeType {

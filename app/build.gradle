@@ -51,7 +51,7 @@ dependencies {
     implementation 'com.facebook.shimmer:shimmer:0.1.0@aar'
     //implementation 'com.journeyapps:zxing-android-embedded:3.6.0'
 
-    implementation project(':staticnet')
+    implementation project(':data-api')
     implementation project(':zxing-android-embedded')
 
     // required for test implementation

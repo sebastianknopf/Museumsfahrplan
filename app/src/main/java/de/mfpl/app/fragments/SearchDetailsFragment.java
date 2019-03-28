@@ -27,7 +27,7 @@ import de.mfpl.app.databinding.FragmentSearchDetailsBinding;
 import de.mfpl.app.dialogs.ErrorDialog;
 import de.mfpl.app.listeners.OnFragmentInteractionListener;
 import de.mfpl.app.listeners.OnTripItemClickListener;
-import de.mfpl.staticnet.lib.StaticRequest;
+import de.mfpl.staticnet.lib.DataRequest;
 import de.mfpl.staticnet.lib.base.Delivery;
 import de.mfpl.staticnet.lib.base.Request;
 import de.mfpl.staticnet.lib.data.Trip;
@@ -201,10 +201,10 @@ public class SearchDetailsFragment extends Fragment implements OnTripItemClickLi
 
         SettingsManager settingsManager = new SettingsManager(this.getContext());
 
-        StaticRequest staticRequest = new StaticRequest();
-        staticRequest.setAppId(settingsManager.getAppId());
-        staticRequest.setApiKey(settingsManager.getApiKey());
-        staticRequest.setDefaultLimit(settingsManager.getPreferencesNumResults());
+        DataRequest dataRequest = new DataRequest();
+        dataRequest.setAppId(settingsManager.getAppId());
+        dataRequest.setApiKey(settingsManager.getApiKey());
+        dataRequest.setDefaultLimit(settingsManager.getPreferencesNumResults());
 
         Request.Filter filter = new Request.Filter();
         filter.setDate(Request.Filter.Date.fromJavaDate(this.currentSearchDate));
@@ -212,7 +212,7 @@ public class SearchDetailsFragment extends Fragment implements OnTripItemClickLi
         filter.setWheelchairAccessible(settingsManager.getPreferenceWheelchairAccessible() ? Trip.WheelchairAccessible.YES : Trip.WheelchairAccessible.NO);
         filter.setBikesAllowed(settingsManager.getPreferenceBikesAllowed() ? Trip.BikesAllowed.YES : Trip.BikesAllowed.NO);
 
-        staticRequest.setListener(new StaticRequest.Listener() {
+        dataRequest.setListener(new DataRequest.Listener() {
             @Override
             public void onSuccess(Delivery delivery) {
                 // check for api errors
