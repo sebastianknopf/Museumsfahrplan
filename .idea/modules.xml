@@ -4,7 +4,8 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/Museumsfahrplan.iml" filepath="$PROJECT_DIR$/Museumsfahrplan.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
-      <module fileurl="file://$PROJECT_DIR$/data-api/staticnet.iml" filepath="$PROJECT_DIR$/data-api/staticnet.iml" />
+      <module fileurl="file://$PROJECT_DIR$/data-api/data-api.iml" filepath="$PROJECT_DIR$/data-api/data-api.iml" />
+      <module fileurl="file://D:\AndroidStudio\Museumsfahrplan\data-api\staticnet.iml" filepath="D:\AndroidStudio\Museumsfahrplan\data-api\staticnet.iml" />
       <module fileurl="file://$PROJECT_DIR$/zxing-android-embedded/zxing-android-embedded.iml" filepath="$PROJECT_DIR$/zxing-android-embedded/zxing-android-embedded.iml" />
     </modules>
   </component>

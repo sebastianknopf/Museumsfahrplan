@@ -49,6 +49,7 @@ import com.mapbox.mapboxsdk.style.sources.GeoJsonSource;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
 
 import de.mfpl.app.R;
@@ -285,11 +286,10 @@ public class MapOverviewFragment extends Fragment implements MapboxMap.OnCameraI
         settingsManager.setLastMapLocation(currentMapLocation);
         settingsManager.setLastMapZoomlevel(cameraPosition.zoom);
 
-        if(cameraPosition.zoom > 8.0) {
+        if(cameraPosition.zoom > 9.5) {
             this.loadStationData(cameraPosition);
             this.components.layZoomlevelHint.animate().setDuration(200).alpha(0.0f).start();
         } else {
-            //this.currentMap.clear();
             // remove all markers
             GeoJsonSource markerSource = currentMap.getSourceAs("source.marker");
             markerSource.setGeoJson(FeatureCollection.fromFeatures(new Feature[]{}));
@@ -411,8 +411,12 @@ public class MapOverviewFragment extends Fragment implements MapboxMap.OnCameraI
         dataRequest.setAppId(settingsManager.getAppId());
         dataRequest.setApiKey(settingsManager.getApiKey());
 
+        GregorianCalendar calendar = (GregorianCalendar) GregorianCalendar.getInstance();
+        calendar.setTime(new Date());
+        calendar.add(GregorianCalendar.MONTH, 6);
+
         Request.Filter filter = new Request.Filter();
-        filter.setDate(Request.Filter.Date.fromJavaDate(new Date()));
+        filter.setDate(Request.Filter.Date.fromJavaDateRange(new Date(), calendar.getTime()));
         filter.setTime(new SimpleDateFormat("HH:mm:ss").format(new Date()));
 
         dataRequest.setListener(new DataRequest.Listener() {
@@ -439,7 +443,7 @@ public class MapOverviewFragment extends Fragment implements MapboxMap.OnCameraI
             public void onError(Throwable throwable) {
                 showNetworkErrorDialog(() -> loadStationData(cameraPosition));
             }
-        }).loadStops(new Position().setLatitude(cameraPosition.target.getLatitude()).setLongitude(cameraPosition.target.getLongitude()), 15000, filter);
+        }).loadStops(new Position().setLatitude(cameraPosition.target.getLatitude()).setLongitude(cameraPosition.target.getLongitude()), 35000, filter);
     }
 
     private void showNetworkErrorDialog(ErrorDialog.OnRetryClickListener retryListener) {
