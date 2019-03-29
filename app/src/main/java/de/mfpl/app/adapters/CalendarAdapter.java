@@ -25,12 +25,19 @@ public final class CalendarAdapter extends RecyclerView.Adapter<RecyclerView.Vie
     private final static int TYPE_DATE = 0;
     private final static int TYPE_ROUTE = 1;
 
+    private final static int DISPLAY_MODE_MONTHS= 0;
+    private final static int DISPLAY_MODE_DAYS = 1;
+
     private Context context;
     private OnCalendarItemClickListener calendarItemClickListener;
     private List<Object> items;
+    private int displayMode;
 
     public CalendarAdapter(Context context, Calendar calendar) {
         this.context = context;
+
+        // default display mode is months
+        this.displayMode = DISPLAY_MODE_MONTHS;
 
         // create internal calendar list
         this.items = new ArrayList<Object>();
@@ -40,6 +47,34 @@ public final class CalendarAdapter extends RecyclerView.Adapter<RecyclerView.Vie
             }
 
             this.items.add(currentDay);
+        }
+    }
+
+    public CalendarAdapter(Context context, Calendar calendar, int displayMode) {
+        this.context = context;
+
+        // set display mode for further processing
+        this.displayMode = displayMode;
+
+        // create internal calendar list accodring to the display mode
+        // do you want to display data grouped by month or by day?
+        this.items = new ArrayList<Object>();
+        if(displayMode == DISPLAY_MODE_DAYS) {
+            for(Day currentDay : calendar.getDays()) {
+                if(!this.items.contains(currentDay.getDate())) {
+                    this.items.add(currentDay.getDate());
+                }
+
+                this.items.add(currentDay);
+            }
+        } else {
+            for(Day currentDay : calendar.getDays()) {
+                if(!this.items.contains(currentDay.getDate().substring(0, 6))) {
+                    this.items.add(currentDay.getDate().substring(0, 6));
+                }
+
+                this.items.add(currentDay);
+            }
         }
     }
 
@@ -74,8 +109,13 @@ public final class CalendarAdapter extends RecyclerView.Adapter<RecyclerView.Vie
             DateItemViewHolder dateItemViewHolder = (DateItemViewHolder) viewHolder;
 
             if(dateString != null) {
-                String dateFromatted = DateTimeFormat.from(dateString, DateTimeFormat.YYYYMM).to(DateTimeFormat.MONTH_YYYY);
-                dateItemViewHolder.components.lblDateFormatted.setText(dateFromatted);
+                if(this.displayMode == DISPLAY_MODE_DAYS) {
+                    String dateFromatted = DateTimeFormat.from(dateString, DateTimeFormat.YYYYMMDD).to(DateTimeFormat.DDMMYYYY);
+                    dateItemViewHolder.components.lblDateFormatted.setText(dateFromatted);
+                } else {
+                    String dateFromatted = DateTimeFormat.from(dateString, DateTimeFormat.YYYYMM).to(DateTimeFormat.MONTH_YYYY);
+                    dateItemViewHolder.components.lblDateFormatted.setText(dateFromatted);
+                }
             }
         } else {
             Day dayItem = (Day) this.items.get(i);
