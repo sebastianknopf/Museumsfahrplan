@@ -251,9 +251,16 @@ public final class DataRequest {
         this.executeCall(apiCall);
     }
 
-    public void loadCalendar(String routeId, Request.Filter filter) {
+    public void loadCalendar(String stopId, String startDate, String endDate, Request.Filter filter) {
         Request request = new Request();
-        request.setRouteId(routeId);
+        request.setStopId(stopId);
+
+        Request.Filter.Date.Range rng = new Request.Filter.Date.Range();
+        rng.setStartDate(startDate);
+        rng.setEndDate(endDate);
+        Request.Filter.Date dateRange = new Request.Filter.Date();
+        dateRange.setRange(rng);
+        request.setDateRange(dateRange);
 
         Request.Options options = new Request.Options();
         options.setIncludeRoutes(true);

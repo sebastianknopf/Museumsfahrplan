@@ -1,6 +1,5 @@
 package de.mfpl.app.fragments;
 
-
 import android.content.Context;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;

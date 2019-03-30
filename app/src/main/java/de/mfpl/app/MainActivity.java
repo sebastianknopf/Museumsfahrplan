@@ -196,13 +196,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 SearchInputFragment searchInputFragment = SearchInputFragment.newInstance(searchLat, searchLon);
                 this.navigationManager.setNextAnimation(R.anim.fragment_enter_up, R.anim.fragment_exit_up);
                 this.navigationManager.navigateTo(searchInputFragment);
-            } else if(arguments.getInt(MapOverviewFragment.KEY_FRAGMENT_ACTION) == MapOverviewFragment.ACTION_SELECT_TRIP) {
-                String tripId = arguments.getString(MapOverviewFragment.KEY_TRIP_ID);
-                String tripDate = arguments.getString(MapOverviewFragment.KEY_TRIP_DATE);
-                String tripTime = arguments.getString(MapOverviewFragment.KEY_TRIP_TIME);
+            } else if(arguments.getInt(MapOverviewFragment.KEY_FRAGMENT_ACTION) == MapOverviewFragment.ACTION_SELECT_ROUTE) {
+                String routeId = arguments.getString(MapOverviewFragment.KEY_ROUTE_ID);
+                String routeName = arguments.getString(MapOverviewFragment.KEY_ROUTE_NAME);
+                String searchDate = arguments.getString(MapOverviewFragment.KEY_ROUTE_DATE);
+                String searchTime = arguments.getString(MapOverviewFragment.KEY_ROUTE_TIME);
 
-                TripDetailsFragment tripDetailsFragment = TripDetailsFragment.newInstance(tripId, tripDate, tripTime);
-                this.navigationManager.navigateTo(tripDetailsFragment);
+                SearchDetailsFragment searchDetailsFragment = SearchDetailsFragment.newInstance(routeId, routeName, searchDate, searchTime);
+                this.navigationManager.setNextAnimation(R.anim.fragment_enter_right, R.anim.fragment_exit_right);
+                this.navigationManager.navigateTo(searchDetailsFragment);
             }
         } else if(fragment instanceof SearchInputFragment) {
             if(arguments.getInt(SearchInputFragment.KEY_FRAGMENT_ACTION) == SearchInputFragment.ACTION_SELECT_ROUTE) {

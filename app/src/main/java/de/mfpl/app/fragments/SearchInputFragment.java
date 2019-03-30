@@ -58,7 +58,7 @@ public class SearchInputFragment extends Fragment implements OnRouteItemClickLis
     public final static String KEY_SEARCH_LON = "KEY_SEARCH_LON";
     public final static String KEY_SEARCH_ROUTE_ID = "KEY_SEARCH_ROUTE_ID";
     public final static String KEY_SEARCH_ROUTE_NAME = "KEY_SEARCH_ROUTE_NAME";
-    public final static String KEY_SEARCH_DATE = "KEY_SEARCH_DATE";
+    public final static String KEY_SEARCH_DATE = "KEY_ROUTE_DATE";
     public final static String KEY_SEARCH_TIME = "KEY_SEARCH_TIME";
 
     public final static int ACTION_SELECT_ROUTE = 0;

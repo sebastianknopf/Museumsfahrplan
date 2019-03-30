@@ -5,7 +5,7 @@
     <data>
 
         <variable name="actionController" type="de.mfpl.app.controllers.BottomSheetActionController" />
-        <variable name="onTripItemClickListener" type="de.mfpl.app.listeners.OnTripItemClickListener" />
+        <variable name="onCalendarItemClickListener" type="de.mfpl.app.listeners.OnCalendarItemClickListener" />
 
     </data>
 

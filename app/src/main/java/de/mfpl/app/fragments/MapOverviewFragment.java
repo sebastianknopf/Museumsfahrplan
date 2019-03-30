@@ -71,14 +71,15 @@ public class MapOverviewFragment extends Fragment implements MapboxMap.OnCameraI
 
     public final static String TAG ="MapOverviewFragment";
     public final static String KEY_FRAGMENT_ACTION = "KEY_FRAGMENT_ACTION";
-    public final static String KEY_TRIP_ID = "KEY_TRIP_ID";
-    public final static String KEY_TRIP_TIME = "KEY_TRIP_TIME";
-    public final static String KEY_TRIP_DATE = "KEY_TRIP_DATE";
     public final static String KEY_SEARCH_LAT = "KEY_SEARCH_LAT";
     public final static String KEY_SEARCH_LON = "KEY_SEARCH_LON";
+    public final static String KEY_ROUTE_ID = "KEY_ROUTE_ID";
+    public final static String KEY_ROUTE_NAME = "KEY_ROUTE_NAME";
+    public final static String KEY_ROUTE_DATE = "KEY_ROUTE_DATE";
+    public final static String KEY_ROUTE_TIME = "KEY_ROUTE_TIME";
 
-    public final static int ACTION_SELECT_TRIP = 0;
     public final static int ACTION_OPEN_SEARCH = 1;
+    public final static int ACTION_SELECT_ROUTE = 2;
 
     private final static int PERMISSION_ACCESS_LOCATION = 0;
 
@@ -93,7 +94,6 @@ public class MapOverviewFragment extends Fragment implements MapboxMap.OnCameraI
     private Snackbar snackbar = null;
 
     private List<Stop> currentStopList;
-    private boolean zoomLevelHintShown = false;
     private boolean markerSelected = false;
 
     public MapOverviewFragment() {
@@ -191,17 +191,15 @@ public class MapOverviewFragment extends Fragment implements MapboxMap.OnCameraI
 
         // set action controller and for bottomsheet and item click fragmentInteractionListener on trip items
         this.components.bottomSheetHolder.setActionController(new BottomSheetActionController(this.getContext(), this.components.bottomSheetHolder));
-        this.components.bottomSheetHolder.setOnTripItemClickListener(tripItem -> {
+        this.components.bottomSheetHolder.setOnCalendarItemClickListener(object -> {
             Bundle arguments = new Bundle();
-            arguments.putInt(KEY_FRAGMENT_ACTION, ACTION_SELECT_TRIP);
-            arguments.putString(KEY_TRIP_ID, tripItem.getTripId());
-            arguments.putString(KEY_TRIP_DATE, DateTimeFormat.from(new Date()).to(DateTimeFormat.YYYYMMDD));
+            arguments.putInt(KEY_FRAGMENT_ACTION, ACTION_SELECT_ROUTE);
+            arguments.putString(KEY_ROUTE_ID, object.getRoute().getRouteId());
+            arguments.putString(KEY_ROUTE_NAME, object.getRoute().getRouteLongName());
+            arguments.putString(KEY_ROUTE_DATE, DateTimeFormat.from(object.getDate(), DateTimeFormat.YYYYMMDD).to(DateTimeFormat.DDMMYYYY));
+            arguments.putString(KEY_ROUTE_TIME, DateTimeFormat.from(new Date()).to(DateTimeFormat.HHMMSS));
 
-            if(tripItem.getFrequency() != null) {
-                arguments.putString(KEY_TRIP_TIME, tripItem.getFrequency().getTripTime());
-            }
-
-            fragmentInteractionListener.onFragmentInteraction(MapOverviewFragment.this, arguments);
+            fragmentInteractionListener.onFragmentInteraction(this, arguments);
         });
 
         // set activity title from itels

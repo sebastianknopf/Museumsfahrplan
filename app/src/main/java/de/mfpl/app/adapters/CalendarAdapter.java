@@ -22,11 +22,11 @@ import de.mfpl.staticnet.lib.data.Day;
 
 public final class CalendarAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> implements OnRecyclerViewItemClickListener {
 
+    public final static int DISPLAY_MODE_MONTHS= 0;
+    public final static int DISPLAY_MODE_DAYS = 1;
+
     private final static int TYPE_DATE = 0;
     private final static int TYPE_ROUTE = 1;
-
-    private final static int DISPLAY_MODE_MONTHS= 0;
-    private final static int DISPLAY_MODE_DAYS = 1;
 
     private Context context;
     private OnCalendarItemClickListener calendarItemClickListener;
@@ -42,11 +42,13 @@ public final class CalendarAdapter extends RecyclerView.Adapter<RecyclerView.Vie
         // create internal calendar list
         this.items = new ArrayList<Object>();
         for(Day currentDay : calendar.getDays()) {
-            if(!this.items.contains(currentDay.getDate().substring(0, 6))) {
-                this.items.add(currentDay.getDate().substring(0, 6));
-            }
+            if(currentDay.getRoute() != null) {
+                if(!this.items.contains(currentDay.getDate().substring(0, 6))) {
+                    this.items.add(currentDay.getDate().substring(0, 6));
+                }
 
-            this.items.add(currentDay);
+                this.items.add(currentDay);
+            }
         }
     }
 
@@ -61,19 +63,23 @@ public final class CalendarAdapter extends RecyclerView.Adapter<RecyclerView.Vie
         this.items = new ArrayList<Object>();
         if(displayMode == DISPLAY_MODE_DAYS) {
             for(Day currentDay : calendar.getDays()) {
-                if(!this.items.contains(currentDay.getDate())) {
-                    this.items.add(currentDay.getDate());
-                }
+                if(currentDay.getRoute() != null) {
+                    if(!this.items.contains(currentDay.getDate())) {
+                        this.items.add(currentDay.getDate());
+                    }
 
-                this.items.add(currentDay);
+                    this.items.add(currentDay);
+                }
             }
         } else {
             for(Day currentDay : calendar.getDays()) {
-                if(!this.items.contains(currentDay.getDate().substring(0, 6))) {
-                    this.items.add(currentDay.getDate().substring(0, 6));
-                }
+                if(currentDay.getRoute() != null) {
+                    if(!this.items.contains(currentDay.getDate().substring(0, 6))) {
+                        this.items.add(currentDay.getDate().substring(0, 6));
+                    }
 
-                this.items.add(currentDay);
+                    this.items.add(currentDay);
+                }
             }
         }
     }
@@ -136,8 +142,10 @@ public final class CalendarAdapter extends RecyclerView.Adapter<RecyclerView.Vie
                 calendarItemViewHolder.components.lblCalendarTitle.setText(stringCalendarTitle);
 
                 // display calendar date
-                String stringCalendarDate = DateTimeFormat.from(dayItem.getDate(), DateTimeFormat.YYYYMMDD).to(DateTimeFormat.DDMMYYYY);
-                calendarItemViewHolder.components.lblCalendarDate.setText(stringCalendarDate);
+                if(this.displayMode == DISPLAY_MODE_MONTHS) {
+                    String stringCalendarDate = DateTimeFormat.from(dayItem.getDate(), DateTimeFormat.YYYYMMDD).to(DateTimeFormat.DDMMYYYY);
+                    calendarItemViewHolder.components.lblCalendarDate.setText(stringCalendarDate);
+                }
 
                 // agency name
                 if(dayItem.getRoute().getAgency() != null) {

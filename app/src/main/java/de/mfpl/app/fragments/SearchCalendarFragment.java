@@ -43,7 +43,7 @@ public class SearchCalendarFragment extends Fragment implements OnCalendarItemCl
     public final static String KEY_FRAGMENT_ACTION = "KEY_FRAGMENT_ACTION";
     public final static String KEY_SEARCH_ROUTE_ID = "KEY_SEARCH_ROUTE_ID";
     public final static String KEY_SEARCH_ROUTE_NAME = "KEY_SEARCH_ROUTE_NAME";
-    public final static String KEY_SEARCH_DATE = "KEY_SEARCH_DATE";
+    public final static String KEY_SEARCH_DATE = "KEY_ROUTE_DATE";
     public final static String KEY_SEARCH_TIME = "KEY_SEARCH_TIME";
 
     public final static int ACTION_SELECT_ROUTE = 0;
