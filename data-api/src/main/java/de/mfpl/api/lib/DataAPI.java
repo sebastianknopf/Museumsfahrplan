@@ -1,6 +1,6 @@
-package de.mfpl.staticnet.lib;
+package de.mfpl.api.lib;
 
-import de.mfpl.staticnet.lib.base.Container;
+import de.mfpl.api.lib.base.Container;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.POST;

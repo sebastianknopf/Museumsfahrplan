@@ -12,15 +12,15 @@ import android.view.ViewGroup;
 import java.util.ArrayList;
 import java.util.List;
 
+import de.mfpl.api.lib.data.Frequency;
+import de.mfpl.api.lib.data.Route;
+import de.mfpl.api.lib.data.Trip;
 import de.mfpl.app.R;
 import de.mfpl.app.common.DateTimeFormat;
 import de.mfpl.app.databinding.LayoutListRouteItemBinding;
 import de.mfpl.app.databinding.LayoutListTripItemBinding;
 import de.mfpl.app.listeners.OnRecyclerViewItemClickListener;
 import de.mfpl.app.listeners.OnTripItemClickListener;
-import de.mfpl.staticnet.lib.data.Frequency;
-import de.mfpl.staticnet.lib.data.Route;
-import de.mfpl.staticnet.lib.data.Trip;
 
 public final class TripListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> implements OnRecyclerViewItemClickListener {
 

@@ -1,6 +1,6 @@
 package de.mfpl.app.listeners;
 
-import de.mfpl.staticnet.lib.data.Route;
+import de.mfpl.api.lib.data.Route;
 
 public interface OnRouteItemClickListener {
 

@@ -1,6 +1,6 @@
 package de.mfpl.app.listeners;
 
-import de.mfpl.staticnet.lib.data.Day;
+import de.mfpl.api.lib.data.Day;
 
 public interface OnCalendarItemClickListener {
 

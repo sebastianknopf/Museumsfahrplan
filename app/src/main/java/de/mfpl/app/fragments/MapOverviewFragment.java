@@ -52,6 +52,11 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
 
+import de.mfpl.api.lib.DataRequest;
+import de.mfpl.api.lib.base.Delivery;
+import de.mfpl.api.lib.base.Request;
+import de.mfpl.api.lib.data.Position;
+import de.mfpl.api.lib.data.Stop;
 import de.mfpl.app.R;
 import de.mfpl.app.adapters.AlertListAdapter;
 import de.mfpl.app.common.DateTimeFormat;
@@ -61,11 +66,6 @@ import de.mfpl.app.controllers.BottomSheetActionController;
 import de.mfpl.app.databinding.FragmentMapOverviewBinding;
 import de.mfpl.app.dialogs.ErrorDialog;
 import de.mfpl.app.listeners.OnFragmentInteractionListener;
-import de.mfpl.staticnet.lib.DataRequest;
-import de.mfpl.staticnet.lib.base.Delivery;
-import de.mfpl.staticnet.lib.base.Request;
-import de.mfpl.staticnet.lib.data.Position;
-import de.mfpl.staticnet.lib.data.Stop;
 
 public class MapOverviewFragment extends Fragment implements MapboxMap.OnCameraIdleListener, MapboxMap.OnMapClickListener {
 
@@ -197,7 +197,13 @@ public class MapOverviewFragment extends Fragment implements MapboxMap.OnCameraI
             arguments.putString(KEY_ROUTE_ID, object.getRoute().getRouteId());
             arguments.putString(KEY_ROUTE_NAME, object.getRoute().getRouteLongName());
             arguments.putString(KEY_ROUTE_DATE, DateTimeFormat.from(object.getDate(), DateTimeFormat.YYYYMMDD).to(DateTimeFormat.DDMMYYYY));
-            arguments.putString(KEY_ROUTE_TIME, DateTimeFormat.from(new Date()).to(DateTimeFormat.HHMMSS));
+
+            String thisDate = DateTimeFormat.from(new Date()).to(DateTimeFormat.DDMMYYYY);
+            if(arguments.getString(KEY_ROUTE_DATE).equals(thisDate)) {
+                arguments.putString(KEY_ROUTE_TIME, DateTimeFormat.from(new Date()).to(DateTimeFormat.HHMMSS));
+            } else {
+                arguments.putString(KEY_ROUTE_TIME, "00:00:01");
+            }
 
             fragmentInteractionListener.onFragmentInteraction(this, arguments);
         });

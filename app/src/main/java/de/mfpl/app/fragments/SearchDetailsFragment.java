@@ -17,6 +17,10 @@ import android.view.ViewGroup;
 import java.util.Date;
 import java.util.List;
 
+import de.mfpl.api.lib.DataRequest;
+import de.mfpl.api.lib.base.Delivery;
+import de.mfpl.api.lib.base.Request;
+import de.mfpl.api.lib.data.Trip;
 import de.mfpl.app.R;
 import de.mfpl.app.adapters.SkeletonAdapter;
 import de.mfpl.app.adapters.TripListAdapter;
@@ -26,10 +30,6 @@ import de.mfpl.app.databinding.FragmentSearchDetailsBinding;
 import de.mfpl.app.dialogs.ErrorDialog;
 import de.mfpl.app.listeners.OnFragmentInteractionListener;
 import de.mfpl.app.listeners.OnTripItemClickListener;
-import de.mfpl.staticnet.lib.DataRequest;
-import de.mfpl.staticnet.lib.base.Delivery;
-import de.mfpl.staticnet.lib.base.Request;
-import de.mfpl.staticnet.lib.data.Trip;
 
 public class SearchDetailsFragment extends Fragment implements OnTripItemClickListener {
 

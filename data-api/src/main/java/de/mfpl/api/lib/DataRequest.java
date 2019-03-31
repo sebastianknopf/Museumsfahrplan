@@ -1,13 +1,13 @@
-package de.mfpl.staticnet.lib;
+package de.mfpl.api.lib;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
-import de.mfpl.staticnet.lib.base.Container;
-import de.mfpl.staticnet.lib.base.Delivery;
-import de.mfpl.staticnet.lib.base.Request;
-import de.mfpl.staticnet.lib.data.LocationReference;
-import de.mfpl.staticnet.lib.data.Position;
+import de.mfpl.api.lib.base.Container;
+import de.mfpl.api.lib.base.Delivery;
+import de.mfpl.api.lib.base.Request;
+import de.mfpl.api.lib.data.LocationReference;
+import de.mfpl.api.lib.data.Position;
 import okhttp3.OkHttpClient;
 import retrofit2.Call;
 import retrofit2.Callback;

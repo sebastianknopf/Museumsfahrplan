@@ -30,6 +30,14 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import de.mfpl.api.lib.DataRequest;
+import de.mfpl.api.lib.base.Delivery;
+import de.mfpl.api.lib.base.Request;
+import de.mfpl.api.lib.data.Alert;
+import de.mfpl.api.lib.data.Position;
+import de.mfpl.api.lib.data.Shape;
+import de.mfpl.api.lib.data.StopTime;
+import de.mfpl.api.lib.data.Trip;
 import de.mfpl.app.R;
 import de.mfpl.app.adapters.AlertListAdapter;
 import de.mfpl.app.adapters.StopTimesAdapter;
@@ -41,14 +49,6 @@ import de.mfpl.app.database.Favorite;
 import de.mfpl.app.databinding.FragmentTripDetailsBinding;
 import de.mfpl.app.dialogs.ErrorDialog;
 import de.mfpl.app.listeners.OnFragmentInteractionListener;
-import de.mfpl.staticnet.lib.DataRequest;
-import de.mfpl.staticnet.lib.base.Delivery;
-import de.mfpl.staticnet.lib.base.Request;
-import de.mfpl.staticnet.lib.data.Alert;
-import de.mfpl.staticnet.lib.data.Position;
-import de.mfpl.staticnet.lib.data.Shape;
-import de.mfpl.staticnet.lib.data.StopTime;
-import de.mfpl.staticnet.lib.data.Trip;
 
 public class TripDetailsFragment extends Fragment {
 

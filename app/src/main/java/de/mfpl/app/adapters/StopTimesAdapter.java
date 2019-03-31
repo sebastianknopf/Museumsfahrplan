@@ -12,10 +12,10 @@ import android.view.ViewGroup;
 import java.util.Date;
 import java.util.List;
 
+import de.mfpl.api.lib.data.StopTime;
 import de.mfpl.app.R;
 import de.mfpl.app.common.DateTimeFormat;
 import de.mfpl.app.databinding.LayoutListStopTimeItemBinding;
-import de.mfpl.staticnet.lib.data.StopTime;
 
 public final class StopTimesAdapter extends RecyclerView.Adapter<StopTimesAdapter.StopTimeItemViewHolder> {
 

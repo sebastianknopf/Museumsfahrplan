@@ -1,4 +1,3 @@
-<manifest package="de.mfpl.staticnet">
-
+<manifest package="de.mfpl.api">
     <application />
 </manifest>

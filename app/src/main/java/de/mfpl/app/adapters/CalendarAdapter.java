@@ -11,14 +11,14 @@ import android.view.ViewGroup;
 import java.util.ArrayList;
 import java.util.List;
 
+import de.mfpl.api.lib.data.Calendar;
+import de.mfpl.api.lib.data.Day;
 import de.mfpl.app.R;
 import de.mfpl.app.common.DateTimeFormat;
 import de.mfpl.app.databinding.LayoutListCalendarItemBinding;
 import de.mfpl.app.databinding.LayoutListDateItemBinding;
 import de.mfpl.app.listeners.OnCalendarItemClickListener;
 import de.mfpl.app.listeners.OnRecyclerViewItemClickListener;
-import de.mfpl.staticnet.lib.data.Calendar;
-import de.mfpl.staticnet.lib.data.Day;
 
 public final class CalendarAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> implements OnRecyclerViewItemClickListener {
 

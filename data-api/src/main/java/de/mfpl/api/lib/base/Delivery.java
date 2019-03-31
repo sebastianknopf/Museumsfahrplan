@@ -1,14 +1,14 @@
-package de.mfpl.staticnet.lib.base;
+package de.mfpl.api.lib.base;
 
 import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
 
-import de.mfpl.staticnet.lib.data.Calendar;
-import de.mfpl.staticnet.lib.data.Error;
-import de.mfpl.staticnet.lib.data.Route;
-import de.mfpl.staticnet.lib.data.Stop;
-import de.mfpl.staticnet.lib.data.Trip;
+import de.mfpl.api.lib.data.Calendar;
+import de.mfpl.api.lib.data.Error;
+import de.mfpl.api.lib.data.Route;
+import de.mfpl.api.lib.data.Stop;
+import de.mfpl.api.lib.data.Trip;
 
 public final class Delivery {
 

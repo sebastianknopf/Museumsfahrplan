@@ -1,4 +1,4 @@
-package de.mfpl.staticnet.lib.base;
+package de.mfpl.api.lib.base;
 
 import com.google.gson.annotations.SerializedName;
 

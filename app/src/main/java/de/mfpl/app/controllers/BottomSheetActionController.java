@@ -7,23 +7,20 @@ import android.view.View;
 
 import java.util.Date;
 import java.util.GregorianCalendar;
-import java.util.List;
 
+import de.mfpl.api.lib.DataRequest;
+import de.mfpl.api.lib.base.Delivery;
+import de.mfpl.api.lib.base.Request;
+import de.mfpl.api.lib.data.Calendar;
+import de.mfpl.api.lib.data.Trip;
 import de.mfpl.app.R;
 import de.mfpl.app.adapters.CalendarAdapter;
 import de.mfpl.app.common.DateTimeFormat;
 import de.mfpl.app.common.SettingsManager;
 import de.mfpl.app.databinding.LayoutMapBottomSheetBinding;
 import de.mfpl.app.listeners.OnCalendarItemClickListener;
-import de.mfpl.staticnet.lib.DataRequest;
-import de.mfpl.staticnet.lib.base.Delivery;
-import de.mfpl.staticnet.lib.base.Request;
-import de.mfpl.staticnet.lib.data.Calendar;
-import de.mfpl.staticnet.lib.data.Trip;
 
 public final class BottomSheetActionController {
-
-    private List<Trip> currentTripList;
 
     private Context context;
     private LayoutMapBottomSheetBinding components;

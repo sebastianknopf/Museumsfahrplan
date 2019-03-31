@@ -1,6 +1,6 @@
 package de.mfpl.app.listeners;
 
-import de.mfpl.staticnet.lib.data.Trip;
+import de.mfpl.api.lib.data.Trip;
 
 public interface OnTripItemClickListener {
 

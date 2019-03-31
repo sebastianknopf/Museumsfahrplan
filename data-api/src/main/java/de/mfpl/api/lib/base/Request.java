@@ -1,12 +1,12 @@
-package de.mfpl.staticnet.lib.base;
+package de.mfpl.api.lib.base;
 
 import com.google.gson.annotations.SerializedName;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 
-import de.mfpl.staticnet.lib.data.LocationReference;
-import de.mfpl.staticnet.lib.data.Trip;
+import de.mfpl.api.lib.data.LocationReference;
+import de.mfpl.api.lib.data.Trip;
 
 public final class Request {
 

@@ -12,9 +12,9 @@ import android.widget.BaseAdapter;
 
 import java.util.List;
 
+import de.mfpl.api.lib.data.Alert;
 import de.mfpl.app.R;
 import de.mfpl.app.databinding.LayoutListAlertItemBinding;
-import de.mfpl.staticnet.lib.data.Alert;
 
 public final class AlertListAdapter extends BaseAdapter {
 

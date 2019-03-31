@@ -10,11 +10,11 @@ import android.view.ViewGroup;
 
 import java.util.List;
 
+import de.mfpl.api.lib.data.Route;
 import de.mfpl.app.R;
 import de.mfpl.app.databinding.LayoutListRouteItemBinding;
 import de.mfpl.app.listeners.OnRecyclerViewItemClickListener;
 import de.mfpl.app.listeners.OnRouteItemClickListener;
-import de.mfpl.staticnet.lib.data.Route;
 
 public final class RouteListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> implements OnRecyclerViewItemClickListener {
 
