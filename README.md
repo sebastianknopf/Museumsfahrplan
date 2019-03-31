@@ -8,9 +8,9 @@ offering some services with historical vehicles. This could be a steam driven to
 train, a historical tram route connecting the inner city with a museum or another special event
 or nearly ever other transport mode with a museum charactre you can imagine!
 
-*Currently this app is in a (re-) development phase to fix up some errors we made during
-our learning process in university! But soon we plan to publish a beta version on Google's
-Play Store where you can test it and make your own expierience!*
+*With April 2019 we're proud to publish the beta version of our app in Google Play Store! That means you can test it for yourself
+now and share your expierience with us. The season of 2019 will be our beta-test with several museum transport agencies and some new features we're currently implementing.
+If this beta-test runs completely without any big crashes, we're planning to run the project in future too!*
 
 ## How does this work?
 The app itself is a simple android application with basic development patterns.
@@ -28,6 +28,19 @@ backend system
 * When the users opens the app, the information are requested via the REST API from the 
 database, including realtime service alerts specified in [GTFS-RT](https://developers.google.com/transit/gtfs-realtime/) and displayed in different
 cases to the end user
+
+## Contributing
+If you want to contribute our project you're welcome of course! This does not have to be in form of programming 
+or with special programming skills, we'd also like to hear some suggestions or your expierience too.
+
+If you want to build your own version or try to implement a new feature, feel free to do so! What you need
+is Android Studio and a file named *secret.xml*. This file contains the api cretentials and some important
+keys you need to access the data APIs. The app will not run or compile without this file, so please contact
+us if you need some contents of the file, so we can talk about that.
+
+You want to use our data API for another project? No problem! Have a look in the [documentations](documentations/) folder,
+where you can find an API reference. We're sorry for providing this in German only, if you want to translate it - feel free ;-)
+To access the API you'll also need some credentials. Please contact us to get your own API key.
 
 ## License 
 The whole application project including the module 'staticnet' is licensed under Apache Version 2.0
