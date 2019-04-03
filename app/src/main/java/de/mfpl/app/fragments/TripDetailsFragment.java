@@ -503,7 +503,7 @@ public class TripDetailsFragment extends Fragment {
         this.components.layoutSwipeRefresh.setRefreshing(true);
         dataRequest.setListener(new DataRequest.Listener() {
             @Override
-            public void onSuccess(Delivery delivery) {
+            public void onSuccess(Delivery delivery, double duration) {
                 // stop displaying refresh progress bar
                 components.layoutSwipeRefresh.setRefreshing(false);
 
@@ -543,7 +543,7 @@ public class TripDetailsFragment extends Fragment {
             }
 
             @Override
-            public void onError(Throwable throwable) {
+            public void onError(Throwable throwable, double duration) {
                 // stop displaying refresh progress bar and display trip error view
                 components.layoutSwipeRefresh.setRefreshing(false);
 

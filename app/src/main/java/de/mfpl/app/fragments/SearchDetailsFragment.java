@@ -213,7 +213,7 @@ public class SearchDetailsFragment extends Fragment implements OnTripItemClickLi
 
         dataRequest.setListener(new DataRequest.Listener() {
             @Override
-            public void onSuccess(Delivery delivery) {
+            public void onSuccess(Delivery delivery, double duration) {
                 // check for api errors
                 if(delivery.getError() != null) {
                     showNetworkErrorDialog(null);
@@ -244,7 +244,7 @@ public class SearchDetailsFragment extends Fragment implements OnTripItemClickLi
             }
 
             @Override
-            public void onError(Throwable throwable) {
+            public void onError(Throwable throwable, double duration) {
                 showNetworkErrorDialog(() -> loadRouteTrips());
             }
         }).loadTrips(this.currentSearchRouteId, filter);

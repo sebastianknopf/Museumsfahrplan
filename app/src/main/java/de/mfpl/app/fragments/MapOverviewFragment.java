@@ -425,7 +425,7 @@ public class MapOverviewFragment extends Fragment implements MapboxMap.OnCameraI
 
         dataRequest.setListener(new DataRequest.Listener() {
             @Override
-            public void onSuccess(Delivery delivery) {
+            public void onSuccess(Delivery delivery, double duration) {
                 currentStopList = delivery.getStops();
 
                 // create marker feature list
@@ -444,7 +444,7 @@ public class MapOverviewFragment extends Fragment implements MapboxMap.OnCameraI
             }
 
             @Override
-            public void onError(Throwable throwable) {
+            public void onError(Throwable throwable, double duration) {
                 showNetworkErrorDialog(() -> loadStationData(cameraPosition));
             }
         }).loadStops(new Position().setLatitude(cameraPosition.target.getLatitude()).setLongitude(cameraPosition.target.getLongitude()), 35000, filter);

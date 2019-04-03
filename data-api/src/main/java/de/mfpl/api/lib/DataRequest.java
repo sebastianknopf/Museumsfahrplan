@@ -64,50 +64,58 @@ public final class DataRequest {
 
     private void executeCall(Call<Container> apiCall) {
         if(this.isAsync) {
+
+            final long startTime = System.currentTimeMillis();
             apiCall.enqueue(new Callback<Container>() {
                 @Override
                 public void onResponse(Call<Container> call, Response<Container> response) {
                     if(response.isSuccessful()) {
                         Delivery delivery = response.body().getDelivery();
                         if(delivery.getError() == null) {
-                            triggerListenerSuccess(delivery);
+                            long endTime = System.currentTimeMillis() - startTime;
+                            triggerListenerSuccess(delivery, endTime / 1000.0);
                         } else {
-                            triggerListenerError(new Exception(delivery.getError().toString()));
+                            long endTime = System.currentTimeMillis() - startTime;
+                            triggerListenerError(new Exception(delivery.getError().toString()), endTime / 1000.0);
                         }
                     } else {
-                        triggerListenerError(new Exception(response.errorBody().toString()));
+                        long endTime = System.currentTimeMillis() - startTime;
+                        triggerListenerError(new Exception(String.valueOf(response.code())), endTime / 1000.0);
                     }
                 }
 
                 @Override
                 public void onFailure(Call<Container> call, Throwable t) {
-                    triggerListenerError(t);
+                    long endTime = System.currentTimeMillis() - startTime;
+                    triggerListenerError(t, endTime / 1000.0);
                 }
             });
         } else {
             try {
+                long startTime = System.currentTimeMillis();
                 Delivery delivery = apiCall.execute().body().getDelivery();
+                long endTime = System.currentTimeMillis() - startTime;
 
                 if(delivery.getError() == null) {
-                    triggerListenerSuccess(delivery);
+                    triggerListenerSuccess(delivery, endTime / 1000.0);
                 } else {
-                    triggerListenerError(new Exception(delivery.getError().toString()));
+                    triggerListenerError(new Exception(delivery.getError().toString()), endTime / 1000.0);
                 }
             } catch (Exception e) {
-                this.triggerListenerError(e);
+                this.triggerListenerError(e, 0);
             }
         }
     }
 
-    private void triggerListenerSuccess(Delivery delivery) {
+    private void triggerListenerSuccess(Delivery delivery, double duration) {
         if(this.listener != null) {
-            this.listener.onSuccess(delivery);
+            this.listener.onSuccess(delivery, duration);
         }
     }
 
-    private void triggerListenerError(Throwable throwable) {
+    private void triggerListenerError(Throwable throwable, double duration) {
         if(this.listener != null) {
-            this.listener.onError(throwable);
+            this.listener.onError(throwable, duration);
         }
     }
 
@@ -276,8 +284,8 @@ public final class DataRequest {
 
     public interface Listener {
 
-        void onSuccess(Delivery delivery);
-        void onError(Throwable throwable);
+        void onSuccess(Delivery delivery, double duration);
+        void onError(Throwable throwable, double duration);
 
     }
 

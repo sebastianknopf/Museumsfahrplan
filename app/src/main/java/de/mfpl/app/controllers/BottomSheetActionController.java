@@ -58,7 +58,7 @@ public final class BottomSheetActionController {
         this.components.layProgressView.setVisibility(View.VISIBLE);
         dataRequest.setListener(new DataRequest.Listener() {
             @Override
-            public void onSuccess(Delivery delivery) {
+            public void onSuccess(Delivery delivery, double duration) {
                 // check api errors here
                 if(delivery.getError() != null) {
                     components.progressBar.setVisibility(View.GONE);
@@ -90,7 +90,7 @@ public final class BottomSheetActionController {
             }
 
             @Override
-            public void onError(Throwable throwable) {
+            public void onError(Throwable throwable, double duration) {
                 components.progressBar.setVisibility(View.GONE);
                 components.layErrorView.setVisibility(View.VISIBLE);
 

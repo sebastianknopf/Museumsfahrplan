@@ -446,7 +446,7 @@ public class SearchInputFragment extends Fragment implements OnRouteItemClickLis
         this.setRouteSkeletonAdapter();
         dataRequest.setListener(new DataRequest.Listener() {
             @Override
-            public void onSuccess(Delivery delivery) {
+            public void onSuccess(Delivery delivery, double duration) {
                 // check for api errors
                 if(delivery.getError() != null) {
                     showNetworkErrorDialog(null);
@@ -468,7 +468,7 @@ public class SearchInputFragment extends Fragment implements OnRouteItemClickLis
             }
 
             @Override
-            public void onError(Throwable throwable) {
+            public void onError(Throwable throwable, double duration) {
                 showNetworkErrorDialog(() -> loadRouteResults());
             }
         }).loadRoutes(new Position().setLatitude(this.currentSearchLatitude).setLongitude(this.currentSearchLongitude), this.currentSearchRadius, filter);

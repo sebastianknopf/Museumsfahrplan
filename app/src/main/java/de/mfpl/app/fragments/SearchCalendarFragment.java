@@ -203,7 +203,7 @@ public class SearchCalendarFragment extends Fragment implements OnCalendarItemCl
 
         dataRequest.setListener(new DataRequest.Listener() {
             @Override
-            public void onSuccess(Delivery delivery) {
+            public void onSuccess(Delivery delivery, double duration) {
                 // check for api errors
                 if(delivery.getError() != null) {
                     showNetworkErrorDialog(null);
@@ -226,7 +226,7 @@ public class SearchCalendarFragment extends Fragment implements OnCalendarItemCl
             }
 
             @Override
-            public void onError(Throwable throwable) {
+            public void onError(Throwable throwable, double duration) {
                 showNetworkErrorDialog(() -> loadCalendar());
             }
         }).loadCalendar(startDate, endDate, filter);
