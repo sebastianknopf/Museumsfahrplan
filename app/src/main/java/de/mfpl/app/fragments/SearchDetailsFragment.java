@@ -247,6 +247,6 @@ public class SearchDetailsFragment extends Fragment implements OnTripItemClickLi
             public void onError(Throwable throwable, double duration) {
                 showNetworkErrorDialog(() -> loadRouteTrips());
             }
-        }).loadTrips(this.currentSearchRouteId, filter);
+        }).loadTripsByRouteId(this.currentSearchRouteId, filter);
     }
 }

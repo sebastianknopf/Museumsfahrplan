@@ -106,6 +106,9 @@ public final class Request {
         @SerializedName("include_full_stop_times")
         private boolean includeFullStopTimes = false;
 
+        @SerializedName("include_hidden_trips")
+        private boolean includeHiddenTrips = false;
+
         @SerializedName("include_realtime")
         private boolean includeRealtime = false;
 
@@ -170,6 +173,14 @@ public final class Request {
         public Options setIncludeAgency(boolean includeAgency) {
             this.includeAgency = includeAgency;
             return this;
+        }
+
+        public boolean isIncludeHiddenTrips() {
+            return this.includeHiddenTrips;
+        }
+
+        public void setIncludeHiddenTrips(boolean includeHiddenTrips) {
+            this.includeHiddenTrips = includeHiddenTrips;
         }
 
         public int getLimit() {

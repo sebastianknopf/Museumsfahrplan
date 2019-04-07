@@ -199,7 +199,7 @@ public final class DataRequest {
         this.executeCall(apiCall);
     }
 
-    public void loadTrips(String routeId, Request.Filter filter) {
+    public void loadTripsByRouteId(String routeId, Request.Filter filter) {
         Request request = new Request();
         request.setRouteId(routeId);
 
@@ -208,6 +208,26 @@ public final class DataRequest {
         options.setIncludeStops(true);
         options.setIncludeRoutes(true);
         options.setIncludeAgency(true);
+        options.setIncludeRealtime(true);
+        options.setLimit(this.defaultLimit);
+
+        Container requestContainer = this.createRequestContainer(request, options, filter);
+
+        DataAPI dataApi = this.createClient();
+        Call<Container> apiCall = dataApi.tripInformationService(requestContainer);
+        this.executeCall(apiCall);
+    }
+
+    public void loadTripsByBlockId(String blockId, Request.Filter filter) {
+        Request request = new Request();
+        request.setBlockId(blockId);
+
+        Request.Options options = new Request.Options();
+        options.setIncludeFullStopTimes(true);
+        options.setIncludeStops(true);
+        options.setIncludeRoutes(true);
+        options.setIncludeAgency(true);
+        options.setIncludeHiddenTrips(true);
         options.setIncludeRealtime(true);
         options.setLimit(this.defaultLimit);
 
