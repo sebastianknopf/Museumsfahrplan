@@ -51,7 +51,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="12:19"
-                android:textAppearance="@style/TextAppearance.Medium.Primary"
+                android:textAppearance="@style/TextAppearance.Medium"
+                android:textColor="@color/colorPrimaryDAY"
+                android:visibility="gone"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintBottom_toTopOf="@id/lblStopDeparture"
@@ -62,7 +64,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="22:19"
-                android:textAppearance="@style/TextAppearance.Medium.Primary"
+                android:textAppearance="@style/TextAppearance.Medium"
                 android:textColor="@color/colorPrimaryDAY"
                 app:layout_constraintTop_toBottomOf="@id/lblStopArrival"
                 app:layout_constraintLeft_toLeftOf="parent"
@@ -71,17 +73,53 @@
 
         </android.support.constraint.ConstraintLayout>
 
+        <!-- layout for stop realtime information -->
+        <android.support.constraint.ConstraintLayout
+            android:id="@+id/layoutStopTimeRealtime"
+            android:layout_width="40dp"
+            android:layout_height="match_parent"
+            android:visibility="gone">
+
+            <TextView
+                android:id="@+id/lblStopArrivalDelay"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/default_app_space_small"
+                android:layout_marginBottom="8dp"
+                android:text="+ 11"
+                android:textAppearance="@style/TextAppearance.Small.Accent"
+                android:visibility="gone"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintBottom_toTopOf="@id/lblStopDepartureDelay"
+                app:layout_constraintVertical_chainStyle="packed" />
+
+            <TextView
+                android:id="@+id/lblStopDepartureDelay"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/default_app_space_small"
+                android:text="+ 1"
+                android:textAppearance="@style/TextAppearance.Small.Accent"
+                app:layout_constraintTop_toBottomOf="@id/lblStopArrivalDelay"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintVertical_chainStyle="packed" />
+
+        </android.support.constraint.ConstraintLayout>
+
         <!-- layout for stop information - must always be greather in height than the time layout!!! -->
         <android.support.constraint.ConstraintLayout
+            android:id="@+id/layoutStopTimeStation"
             android:layout_width="0dp"
             android:layout_weight="1"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:layout_marginLeft="@dimen/default_app_space_small">
 
            <TextView
                 android:id="@+id/lblStopName"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="12dp"
                 android:text="Haltestelle"
                 android:textAppearance="@style/TextAppearance.Medium"
                 app:layout_constraintTop_toTopOf="parent"
@@ -94,15 +132,14 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:visibility="gone"
-                app:layout_constraintTop_toBottomOf="@id/lblTripName"
-                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/lblStopName"
+                app:layout_constraintBottom_toTopOf="@id/lblStopDescription"
                 app:layout_constraintVertical_chainStyle="packed">
 
                 <ImageView
                     android:id="@+id/imgStopScheduleInfoIcon"
                     android:layout_width="16dp"
                     android:layout_height="16dp"
-                    android:layout_marginLeft="12dp"
                     android:src="@drawable/ic_warning"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintLeft_toLeftOf="parent"
@@ -113,6 +150,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="6dp"
+                    android:text="Entfällt"
                     android:textAppearance="@style/TextAppearance.Small.ErrorText"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintLeft_toRightOf="@id/imgStopScheduleInfoIcon"
@@ -121,9 +159,20 @@
 
             </android.support.constraint.ConstraintLayout>
 
+            <TextView
+                android:id="@+id/lblStopDescription"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="12dp"
+                android:visibility="gone"
+                android:text="This is a test description text for information and other purposes"
+                android:textAppearance="@style/TextAppearance.Small.Secondary"
+                app:layout_constraintTop_toBottomOf="@id/layoutStopTimeScheduleInfo"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintVertical_chainStyle="packed"/>
+
         </android.support.constraint.ConstraintLayout>
-
-
 
     </LinearLayout>
 

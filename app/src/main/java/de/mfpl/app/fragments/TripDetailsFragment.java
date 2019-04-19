@@ -11,9 +11,9 @@ import android.support.annotation.StringRes;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
+import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -38,6 +38,7 @@ import de.mfpl.api.lib.data.Position;
 import de.mfpl.api.lib.data.Shape;
 import de.mfpl.api.lib.data.StopTime;
 import de.mfpl.api.lib.data.Trip;
+import de.mfpl.api.lib.data.TripUpdate;
 import de.mfpl.app.R;
 import de.mfpl.app.adapters.AlertListAdapter;
 import de.mfpl.app.adapters.StopTimesAdapter;
@@ -109,18 +110,22 @@ public class TripDetailsFragment extends Fragment {
         // init map view
         this.components.mapView.onCreate(savedInstanceState);
 
+        // determine if we've double pane or single pane layout
+        // "hack around" - there seems to be no default value for databinding variables
+        DisplayMetrics dm = this.getContext().getResources().getDisplayMetrics();
+        int dpWidth = (int) (dm.widthPixels / dm.density);
+        if(dpWidth > 600) {
+            this.components.setDoublePane(true);
+            this.components.setMapVisible(true);
+        }
+
         // set action controller for trip details view
-        this.components.layoutSwipeRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                loadTripDetails(currentTripId, currentTripDate);
-            }
-        });
+        this.components.layoutSwipeRefresh.setOnRefreshListener(() -> loadTripDetails(currentTripId, currentTripDate));
 
         // initiate loading of trip times the first time
         if(this.resultTrip != null) {
-            this.setTripDetails(this.resultTrip);
-            this.setStopTimesAdapter(this.resultTrip.getStopTimes(), this.resultTrip.getRoute().getRouteColor());
+            this.setTripDetails(this.resultTrip, this.resultTrip.getRoute().getRouteColor());
+            this.setTripDetailsAdapter(this.resultTrip, this.resultTrip.getRoute().getRouteColor());
 
             if(this.resultTrip.getRealtime() != null && this.resultTrip.getRealtime().hasAlerts()) {
                 this.setAlertAdapter(this.resultTrip.getRealtime().getAlerts());
@@ -259,24 +264,42 @@ public class TripDetailsFragment extends Fragment {
         }).show();
     }
 
-    private void setTripDetails(Trip trip) {
+    private void setTripDetails(Trip trip, String colorString) {
+        // parse route color
+        int routeColor = ContextCompat.getColor(this.getContext(), R.color.colorAccentDAY);
+        try {
+            if(!colorString.startsWith("#")) {
+                routeColor = Color.parseColor("#" + colorString);
+            } else {
+                routeColor = Color.parseColor(colorString);
+            }
+        } catch(Exception ignored) {
+        }
+
         String tripNameString = trip.getTripHeadsign();
         if (trip.getTripShortName() != null && !trip.getTripShortName().equals("")) {
             tripNameString = trip.getTripShortName() + " " + tripNameString;
         }
         this.components.lblTripName.setText(tripNameString);
+        this.components.lblTripName.setTextColor(routeColor);
 
         // trip information text
-        // todo: display trip schedule relationship in next few versions
-        /*if(trip.getRealtime() != null && trip.getRealtime().getTripUpdate()) {
-
-        }*/
-        int currentDateInt = Integer.parseInt(DateTimeFormat.from(new Date()).to(DateTimeFormat.YYYYMMDD));
-        if(currentDateInt >= Integer.parseInt(DateTimeFormat.from(this.currentTripDate).to(DateTimeFormat.YYYYMMDD))) {
-            Date lastArrivalTime = DateTimeFormat.from(trip.getStopTimes().get(trip.getStopTimes().size() - 1).getArrivalTime(), DateTimeFormat.HHMMSS).toDate();
-            if(lastArrivalTime.before(new Date())) {
-                this.components.lblTripInformation.setVisibility(View.VISIBLE);
-                this.components.lblTripInformation.setText(R.string.str_trip_already_departed);
+        if(trip.hasTripUpdate() && trip.getTripUpdate().getScheduleRelationship() == TripUpdate.ScheduleRelationship.CANCELED) {
+            this.components.layoutTripInformation.setVisibility(View.VISIBLE);
+            this.components.lblTripInformation.setText(R.string.str_trip_cancelled);
+        } else if(trip.hasTripUpdate() && trip.getTripUpdate().getScheduleRelationship() == TripUpdate.ScheduleRelationship.ADDED) {
+            this.components.layoutTripInformation.setVisibility(View.VISIBLE);
+            this.components.lblTripInformation.setText(R.string.str_trip_added);
+        } else {
+            int currentDateInt = Integer.parseInt(DateTimeFormat.from(new Date()).to(DateTimeFormat.YYYYMMDD));
+            if(currentDateInt >= Integer.parseInt(DateTimeFormat.from(this.currentTripDate).to(DateTimeFormat.YYYYMMDD))) {
+                Date lastArrivalTime = DateTimeFormat.from(trip.getStopTimes().get(trip.getStopTimes().size() - 1).getArrivalTime(), DateTimeFormat.HHMMSS).toDate();
+                if(lastArrivalTime.before(new Date())) {
+                    this.components.lblTripInformation.setVisibility(View.VISIBLE);
+                    this.components.lblTripInformation.setText(R.string.str_trip_already_departed);
+                } else {
+                    this.components.layoutTripInformation.setVisibility(View.GONE);
+                }
             }
         }
 
@@ -374,13 +397,13 @@ public class TripDetailsFragment extends Fragment {
         });
     }
 
-    private void setStopTimesAdapter(List<StopTime> stopTimesList, String colorString) {
-        StopTimesAdapter stopTimesAdapter = new StopTimesAdapter(getContext(), stopTimesList);
+    private void setTripDetailsAdapter(Trip trip, String colorString) {
+        StopTimesAdapter stopTimesAdapter = new StopTimesAdapter(getContext(), trip);
 
         // parse route color
         int tripColor = ContextCompat.getColor(this.getContext(), R.color.colorAccentDAY);
         try {
-            //tripColor = Color.parseColor((!colorString.startsWith("#") ? "#" : "") + colorString);
+            tripColor = Color.parseColor((!colorString.startsWith("#") ? "#" : "") + colorString);
         } catch(Exception ignored) {
         }
 
@@ -526,10 +549,10 @@ public class TripDetailsFragment extends Fragment {
                 components.layoutTripDetailsError.setVisibility(View.GONE);
 
                 // display basic trip information
-                setTripDetails(resultTrip);
+                setTripDetails(resultTrip, resultTrip.getRoute().getRouteColor());
 
                 // create trip timeline here...
-                setStopTimesAdapter(resultTrip.getStopTimes(), resultTrip.getRoute().getRouteColor());
+                setTripDetailsAdapter(resultTrip, resultTrip.getRoute().getRouteColor());
 
                 // display trip assigned alerts
                 if (resultTrip.getRealtime().hasAlerts()) {

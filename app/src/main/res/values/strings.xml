@@ -74,6 +74,8 @@
     <string name="str_trip_details_bikes_no">Keine Fahrradmitnahme</string>
     <string name="str_trip_details_na">Keine Informationen</string>
     <string name="str_trip_already_departed">Die Fahrt liegt bereits in der Vergangenheit!</string>
+    <string name="str_trip_cancelled">Fahrtausfall</string>
+    <string name="str_trip_added">Zusatzfahrt</string>
 
     <!-- FavoritesFragment -->
     <string name="str_favorites_title">Favoriten</string>
@@ -139,6 +141,7 @@
     <string name="str_stoptime_item_change_no_entrance">Kein Einstieg</string>
     <string name="str_stoptime_item_change_no_exit">Kein Ausstieg</string>
     <string name="str_stoptime_item_change_demand">Bedarfshalt</string>
+    <string name="str_stoptime_item_skipped">Entfällt</string>
 
     <!-- ScanActivity -->
     <string name="str_scan_activity_title">Scanner</string>

@@ -7,8 +7,8 @@ android {
         applicationId "de.mfpl.app"
         minSdkVersion 21
         targetSdkVersion 27
-        versionCode 10
-        versionName "v 0.1.0"
+        versionCode 11
+        versionName "Version 0.1.1"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         multiDexEnabled true
 
@@ -25,6 +25,7 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            zipAlignEnabled true
         }
     }
 

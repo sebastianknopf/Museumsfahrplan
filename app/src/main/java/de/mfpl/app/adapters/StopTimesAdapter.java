@@ -2,8 +2,10 @@ package de.mfpl.app.adapters;
 
 import android.content.Context;
 import android.databinding.DataBindingUtil;
+import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
 import android.support.annotation.NonNull;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,6 +15,8 @@ import java.util.Date;
 import java.util.List;
 
 import de.mfpl.api.lib.data.StopTime;
+import de.mfpl.api.lib.data.StopTimeUpdate;
+import de.mfpl.api.lib.data.Trip;
 import de.mfpl.app.R;
 import de.mfpl.app.common.DateTimeFormat;
 import de.mfpl.app.databinding.LayoutListStopTimeItemBinding;
@@ -32,9 +36,18 @@ public final class StopTimesAdapter extends RecyclerView.Adapter<StopTimesAdapte
     private int pointActiveColor = 0xFFFF0000;
     private int pointInactiveColor = 0xFFDDDDDD;
 
-    public StopTimesAdapter(Context context, List<StopTime> stopTimeList) {
+    private boolean isRealtimeTimesAvailable = false;
+
+    public StopTimesAdapter(Context context, Trip trip) {
         this.context = context;
-        this.stopTimeList = stopTimeList;
+
+        this.stopTimeList = trip.getStopTimes();
+        for(StopTime st : this.stopTimeList) {
+            if(st.hasStopTimeUpdate()) {
+                this.isRealtimeTimesAvailable = true;
+                break;
+            }
+        }
     }
 
     @NonNull
@@ -85,27 +98,78 @@ public final class StopTimesAdapter extends RecyclerView.Adapter<StopTimesAdapte
 
         // display stop time information
         if(stopTimeItem != null) {
+            // display realtime area
+            if(this.isRealtimeTimesAvailable) {
+                viewHolder.components.layoutStopTimeRealtime.setVisibility(View.VISIBLE);
+            }
+
             // arrival time - only if not the same like departure time!
             if(!stopTimeItem.getArrivalTime().equals(stopTimeItem.getDepartureTime())) {
                 String arrivalString = DateTimeFormat.from(stopTimeItem.getArrivalTime(), DateTimeFormat.HHMMSS).to(DateTimeFormat.HHMM);
+                viewHolder.components.lblStopArrival.setVisibility(View.VISIBLE);
                 viewHolder.components.lblStopArrival.setText(arrivalString);
+
+                if(stopTimeItem.hasStopTimeUpdate()) {
+                    int arrivalDelay = stopTimeItem.getRealtime().getStopTimeUpdate().getArrivalDelay();
+                    if(arrivalDelay < 4) {
+                        viewHolder.components.lblStopArrivalDelay.setTextColor(ContextCompat.getColor(this.context, R.color.colorAccentDAY));
+                    } else {
+                        viewHolder.components.lblStopArrivalDelay.setTextColor(Color.RED);
+                    }
+
+                    viewHolder.components.lblStopArrivalDelay.setVisibility(View.VISIBLE);
+                    viewHolder.components.lblStopArrivalDelay.setText(String.format("+ %d", arrivalDelay));
+                } else {
+                    viewHolder.components.lblStopArrivalDelay.setVisibility(View.GONE);
+                }
             } else {
                 viewHolder.components.lblStopArrival.setVisibility(View.GONE);
+                viewHolder.components.lblStopArrivalDelay.setVisibility(View.GONE);
             }
 
             // departure time - always
             String departureString = DateTimeFormat.from(stopTimeItem.getDepartureTime(), DateTimeFormat.HHMMSS).to(DateTimeFormat.HHMM);
             viewHolder.components.lblStopDeparture.setText(departureString);
 
+            if(stopTimeItem.hasStopTimeUpdate()) {
+                int departureDelay = stopTimeItem.getRealtime().getStopTimeUpdate().getDepartureDelay();
+                if(departureDelay < 4) {
+                    viewHolder.components.lblStopDepartureDelay.setTextColor(ContextCompat.getColor(this.context, R.color.colorAccentDAY));
+                } else {
+                    viewHolder.components.lblStopDepartureDelay.setTextColor(Color.RED);
+                }
+
+                viewHolder.components.lblStopDepartureDelay.setText(String.format("+ %d", departureDelay));
+            } else {
+                viewHolder.components.lblStopDepartureDelay.setVisibility(View.GONE);
+            }
+
             // stop name
             String stopName = stopTimeItem.getStop().getStopName();
             viewHolder.components.lblStopName.setText(stopName);
 
-            // stop schedule relationship type
-            // todo: add realtime check here when relatime level II is starting, then execute this only, when schedule relationship is not 'cancelled'
-            if(stopTimeItem.getPickupType() == StopTime.ChangeType.DEMAND || stopTimeItem.getDropOffType() == StopTime.ChangeType.DEMAND) {
-                String scheduleInfoString = context.getString(R.string.str_stoptime_item_change_demand);
+            // stop description
+            String stopDesc = stopTimeItem.getStop().getStopDesc();
+            if(!stopDesc.equals("")) {
+                viewHolder.components.lblStopDescription.setVisibility(View.VISIBLE);
+                viewHolder.components.lblStopDescription.setText(stopDesc);
+            } else {
+                viewHolder.components.lblStopDescription.setVisibility(View.GONE);
+            }
 
+            // stop schedule relationship type
+            String scheduleInfoString = null;
+            if(stopTimeItem.getRealtime() != null) {
+                if(stopTimeItem.getRealtime().getStopTimeUpdate() != null && stopTimeItem.getRealtime().getStopTimeUpdate().getScheduleRelationship() == StopTimeUpdate.ScheduleRelationship.SKIPPED) {
+                    scheduleInfoString = this.context.getString(R.string.str_stoptime_item_skipped);
+                }
+            }
+
+            if(scheduleInfoString == null && (stopTimeItem.getPickupType() == StopTime.ChangeType.DEMAND || stopTimeItem.getDropOffType() == StopTime.ChangeType.DEMAND)) {
+                scheduleInfoString = this.context.getString(R.string.str_stoptime_item_change_demand);
+            }
+
+            if(scheduleInfoString != null) {
                 viewHolder.components.layoutStopTimeScheduleInfo.setVisibility(View.VISIBLE);
                 viewHolder.components.lblStopScheduleInfoText.setText(scheduleInfoString);
             } else {

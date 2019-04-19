@@ -7,9 +7,9 @@
 
         <variable name="fragment" type="de.mfpl.app.fragments.TripDetailsFragment" />
 
-        <variable name="doublePane" type="boolean" android:value="false" />
+        <variable name="doublePane" type="boolean" />
 
-        <variable name="mapVisible" type="boolean" android:value="false" />
+        <variable name="mapVisible" type="boolean" />
 
     </data>
 
@@ -39,10 +39,11 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent">
 
-                        <android.support.constraint.ConstraintLayout
+                        <LinearLayout
                             android:id="@+id/layoutTripBasicData"
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content">
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical">
 
                             <TextView
                                 android:id="@+id/lblTripName"
@@ -52,20 +53,39 @@
                                 android:textStyle="bold"
                                 app:layout_constraintTop_toTopOf="parent" />
 
-                            <TextView
-                                android:id="@+id/lblTripInformation"
-                                android:layout_width="wrap_content"
+                            <android.support.constraint.ConstraintLayout
+                                android:id="@+id/layoutTripInformation"
+                                android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:textAppearance="@style/TextAppearance.Small.ErrorText"
-                                android:visibility="gone"
-                                app:layout_constraintTop_toBottomOf="@id/lblTripName"
-                                app:layout_constraintLeft_toLeftOf="parent"/>
+                                android:layout_marginTop="@dimen/default_app_space_small"
+                                android:visibility="gone">
 
-                        </android.support.constraint.ConstraintLayout>
+                                <ImageView
+                                    android:id="@+id/imgTripInformationWarning"
+                                    android:layout_width="16dp"
+                                    android:layout_height="16dp"
+                                    android:src="@drawable/ic_warning"
+                                    app:layout_constraintTop_toTopOf="parent"
+                                    app:layout_constraintLeft_toLeftOf="parent"
+                                    app:layout_constraintBottom_toBottomOf="parent"/>
+
+                                <TextView
+                                    android:id="@+id/lblTripInformation"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginLeft="@dimen/default_app_space_small"
+                                    android:textAppearance="@style/TextAppearance.Small.ErrorText"
+                                    app:layout_constraintLeft_toRightOf="@id/imgTripInformationWarning"/>
+
+                            </android.support.constraint.ConstraintLayout>
+
+                        </LinearLayout>
 
                         <android.support.v4.widget.NestedScrollView
+                            android:id="@+id/scrTripTimeline"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/default_app_space_small"
                             android:layout_below="@id/layoutTripBasicData"
                             android:fillViewport="true">
 

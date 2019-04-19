@@ -1,0 +1,277 @@
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:mapbox="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable name="fragment" type="de.mfpl.app.fragments.TripDetailsFragment" />
+
+        <variable name="doublePane" type="boolean" />
+
+        <variable name="mapVisible" type="boolean" />
+
+    </data>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context="de.mfpl.app.fragments.TripDetailsFragment">
+
+        <android.support.constraint.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <RelativeLayout
+                android:id="@+id/layoutTripDetailsList"
+                android:layout_width="400dp"
+                android:layout_height="match_parent"
+                app:layout_constraintLeft_toLeftOf="parent">
+
+                <android.support.v4.widget.SwipeRefreshLayout
+                    android:id="@+id/layoutSwipeRefresh"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="vertical"
+                        android:padding="@dimen/default_app_space">
+
+                        <RelativeLayout
+                            android:id="@+id/layoutTripDetailsView"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent">
+
+                            <LinearLayout
+                                android:id="@+id/layoutTripBasicData"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="vertical">
+
+                                <TextView
+                                    android:id="@+id/lblTripName"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:textAppearance="@style/TextAppearance.Medium.Accent"
+                                    android:textStyle="bold"
+                                    app:layout_constraintTop_toTopOf="parent" />
+
+                                <android.support.constraint.ConstraintLayout
+                                    android:id="@+id/layoutTripInformation"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="@dimen/default_app_space_small"
+                                    android:visibility="gone">
+
+                                    <ImageView
+                                        android:id="@+id/imgTripInformationWarning"
+                                        android:layout_width="16dp"
+                                        android:layout_height="16dp"
+                                        android:src="@drawable/ic_warning"
+                                        app:layout_constraintTop_toTopOf="parent"
+                                        app:layout_constraintLeft_toLeftOf="parent"
+                                        app:layout_constraintBottom_toBottomOf="parent"/>
+
+                                    <TextView
+                                        android:id="@+id/lblTripInformation"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginLeft="@dimen/default_app_space_small"
+                                        android:textAppearance="@style/TextAppearance.Small.ErrorText"
+                                        app:layout_constraintLeft_toRightOf="@id/imgTripInformationWarning"/>
+
+                                </android.support.constraint.ConstraintLayout>
+
+                            </LinearLayout>
+
+                            <android.support.v4.widget.NestedScrollView
+                                android:id="@+id/scrTripTimeline"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="@dimen/default_app_space_small"
+                                android:layout_below="@id/layoutTripBasicData"
+                                android:fillViewport="true">
+
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:orientation="vertical">
+
+                                    <android.support.v7.widget.RecyclerView
+                                        android:id="@+id/rcvTripDetails"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:scrollbars="vertical" />
+
+                                    <android.support.constraint.ConstraintLayout
+                                        android:id="@+id/layoutTripAccessibility"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginTop="@dimen/default_app_space_small"
+                                        android:layout_marginBottom="@dimen/default_app_space"
+                                        android:visibility="gone">
+
+                                        <ImageView
+                                            android:id="@+id/imgWheelchairAccess"
+                                            android:layout_width="20dp"
+                                            android:layout_height="20dp"
+                                            android:src="@drawable/ic_wheelchair"
+                                            android:tint="@color/colorAccentDAY"
+                                            app:layout_constraintLeft_toLeftOf="parent"/>
+
+                                        <TextView
+                                            android:id="@+id/lblWheelchairAccess"
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:layout_marginStart="@dimen/default_app_space_small"
+                                            android:textAppearance="@style/TextAppearance.Small"
+                                            android:textStyle="bold"
+                                            android:text="@string/str_trip_details_na"
+                                            app:layout_constraintLeft_toRightOf="@id/imgWheelchairAccess"/>
+
+                                        <ImageView
+                                            android:id="@+id/imgBikesAllowed"
+                                            android:layout_width="20dp"
+                                            android:layout_height="20dp"
+                                            android:layout_marginTop="6dp"
+                                            android:src="@drawable/ic_bike"
+                                            android:tint="@color/colorAccentDAY"
+                                            app:layout_constraintLeft_toLeftOf="parent"
+                                            app:layout_constraintTop_toBottomOf="@id/imgWheelchairAccess" />
+
+                                        <TextView
+                                            android:id="@+id/lblBikesAllowed"
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:layout_marginTop="6dp"
+                                            android:layout_marginStart="@dimen/default_app_space_small"
+                                            android:textAppearance="@style/TextAppearance.Small"
+                                            android:textStyle="bold"
+                                            android:text="@string/str_trip_details_na"
+                                            app:layout_constraintLeft_toRightOf="@id/imgBikesAllowed"
+                                            app:layout_constraintTop_toBottomOf="@id/lblWheelchairAccess" />
+
+                                    </android.support.constraint.ConstraintLayout>
+
+                                    <ListView
+                                        android:id="@+id/lstTripAlerts"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content" />
+
+                                </LinearLayout>
+
+                            </android.support.v4.widget.NestedScrollView>
+
+                        </RelativeLayout>
+
+                        <RelativeLayout
+                            android:id="@+id/layoutTripDetailsError"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:visibility="gone">
+
+                            <TextView
+                                android:id="@+id/lblTripDetailsError"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_centerHorizontal="true"
+                                android:textAppearance="@style/TextAppearance.Small.ErrorText" />
+
+                        </RelativeLayout>
+
+                    </LinearLayout>
+
+                </android.support.v4.widget.SwipeRefreshLayout>
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/layoutTripDetailsMap"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                app:layout_constraintLeft_toRightOf="@id/layoutTripDetailsList"
+                app:layout_constraintRight_toRightOf="parent">
+
+                <com.mapbox.mapboxsdk.maps.MapView
+                    android:id="@+id/mapView"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    mapbox:mapbox_cameraTargetLat="51.1657"
+                    mapbox:mapbox_cameraTargetLng="10.4515"
+                    mapbox:mapbox_cameraZoom="5.15"
+                    mapbox:mapbox_cameraZoomMax="15"
+                    mapbox:mapbox_cameraZoomMin="5"
+                    mapbox:mapbox_styleUrl="mapbox://styles/sebastianknopf/cjp042n58ati52so77w931alz"
+                    mapbox:mapbox_uiRotateGestures="false" />
+
+            </RelativeLayout>
+
+        </android.support.constraint.ConstraintLayout>
+
+        <View
+            android:id="@+id/viewFabBackground"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="#50000000"
+            android:visibility="gone"
+            android:alpha="0"
+            android:onClick="@{fragment::viewFabBackgroundClick}" />
+
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/fabFareInfo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="23dp"
+            android:layout_marginBottom="56dp"
+            android:layout_gravity="bottom|end"
+            android:src="@drawable/ic_menu_ticket"
+            android:tint="@android:color/white"
+            android:onClick="@{fragment::fabFareInfoClick}"
+            android:rotation="90"
+            android:visibility="gone"
+            app:fabSize="mini"/>
+
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/fabMapView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="23dp"
+            android:layout_marginBottom="56dp"
+            android:layout_gravity="bottom|end"
+            android:src="@drawable/ic_menu_map"
+            android:tint="@android:color/white"
+            android:onClick="@{fragment::fabMapViewClick}"
+            android:rotation="90"
+            android:visibility="gone"
+            app:fabSize="mini"/>
+
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/fabAddFavorite"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="23dp"
+            android:layout_marginBottom="56dp"
+            android:layout_gravity="bottom|end"
+            android:src="@drawable/ic_menu_favorites"
+            android:tint="@android:color/white"
+            android:onClick="@{fragment::fabAddFavoriteClick}"
+            android:rotation="90"
+            android:visibility="gone"
+            app:fabSize="mini" />
+
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/fabMenu"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/default_app_space"
+            android:layout_marginBottom="56dp"
+            android:layout_gravity="bottom|end"
+            android:src="@drawable/ic_menu_plus"
+            android:tint="@android:color/white"
+            android:onClick="@{fragment::fabMenuClick}" />
+
+    </FrameLayout>
+
+</layout>
