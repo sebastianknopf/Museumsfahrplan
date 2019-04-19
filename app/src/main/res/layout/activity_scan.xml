@@ -36,6 +36,7 @@
             android:onClick="fabTorchToggleClick"
             android:src="@drawable/ic_lightbulb"
             android:tint="@android:color/darker_gray"
+            android:visibility="gone"
             app:backgroundTint="@android:color/white" />
 
     </android.support.design.widget.CoordinatorLayout>

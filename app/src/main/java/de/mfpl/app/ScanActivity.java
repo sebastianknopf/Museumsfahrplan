@@ -59,17 +59,12 @@ public class ScanActivity extends AppCompatActivity{
         this.captureManager = new CaptureManager(this, this.components.barcodeView);
         this.captureManager.initializeFromIntent(this.getIntent(), savedInstanceState);
         this.captureManager.decode();
-
-        // disable flash button
-        if(!this.hasTorchLight()) {
-            this.components.fabTorchToggle.hide();
-        }
     }
 
     @Override
     protected void onStart() {
         super.onStart();
-        this.checkPermissions();
+        this.checkRequirements();
     }
 
     @Override
@@ -100,7 +95,7 @@ public class ScanActivity extends AppCompatActivity{
         if(grantResults.length < 1 || grantResults[0] != PackageManager.PERMISSION_GRANTED) {
             this.finish();
         } else {
-            this.checkPermissions();
+            this.checkRequirements();
         }
     }
 
@@ -159,11 +154,17 @@ public class ScanActivity extends AppCompatActivity{
         return true;
     }
 
-    private void checkPermissions() {
+    private void checkRequirements() {
         if(ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
             if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 requestPermissions(new String[] {Manifest.permission.CAMERA}, PERMISSION_ACCESS_CAMERA);
             }
+
+            return;
+        }
+
+        if(this.hasTorchLight()) {
+            this.components.fabTorchToggle.show();
         }
     }
 }
