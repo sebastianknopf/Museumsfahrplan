@@ -18,36 +18,44 @@
         android:layout_height="match_parent"
         tools:context="de.mfpl.app.fragments.TripDetailsFragment">
 
-        <RelativeLayout
-            android:id="@+id/layoutTripDetailsList"
+        <android.support.constraint.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-            <include
-                android:id="@+id/tripDetailsHolder"
-                layout="@layout/layout_trip_details" />
-
-        </RelativeLayout>
-
-        <RelativeLayout
-            android:id="@+id/layoutTripDetailsMap"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:visibility="gone">
-
-            <com.mapbox.mapboxsdk.maps.MapView
-                android:id="@+id/mapView"
-                android:layout_width="match_parent"
+            <RelativeLayout
+                android:id="@+id/layoutTripDetailsList"
+                android:layout_width="400dp"
                 android:layout_height="match_parent"
-                mapbox:mapbox_cameraTargetLat="51.1657"
-                mapbox:mapbox_cameraTargetLng="10.4515"
-                mapbox:mapbox_cameraZoom="5.15"
-                mapbox:mapbox_cameraZoomMax="15"
-                mapbox:mapbox_cameraZoomMin="5"
-                mapbox:mapbox_styleUrl="mapbox://styles/sebastianknopf/cjp042n58ati52so77w931alz"
-                mapbox:mapbox_uiRotateGestures="false" />
+                app:layout_constraintLeft_toLeftOf="parent">
 
-        </RelativeLayout>
+                <include
+                    android:id="@+id/tripDetailsHolder"
+                    layout="@layout/layout_trip_details" />
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/layoutTripDetailsMap"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                app:layout_constraintLeft_toRightOf="@id/layoutTripDetailsList"
+                app:layout_constraintRight_toRightOf="parent">
+
+                <com.mapbox.mapboxsdk.maps.MapView
+                    android:id="@+id/mapView"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    mapbox:mapbox_cameraTargetLat="51.1657"
+                    mapbox:mapbox_cameraTargetLng="10.4515"
+                    mapbox:mapbox_cameraZoom="5.15"
+                    mapbox:mapbox_cameraZoomMax="15"
+                    mapbox:mapbox_cameraZoomMin="5"
+                    mapbox:mapbox_styleUrl="mapbox://styles/sebastianknopf/cjp042n58ati52so77w931alz"
+                    mapbox:mapbox_uiRotateGestures="false" />
+
+            </RelativeLayout>
+
+        </android.support.constraint.ConstraintLayout>
 
         <View
             android:id="@+id/viewFabBackground"

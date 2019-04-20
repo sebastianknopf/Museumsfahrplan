@@ -12,7 +12,6 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutManager;
 import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -33,23 +32,22 @@ import java.util.List;
 import de.mfpl.api.lib.DataRequest;
 import de.mfpl.api.lib.base.Delivery;
 import de.mfpl.api.lib.base.Request;
-import de.mfpl.api.lib.data.Alert;
 import de.mfpl.api.lib.data.Position;
 import de.mfpl.api.lib.data.Shape;
 import de.mfpl.api.lib.data.StopTime;
 import de.mfpl.api.lib.data.Trip;
-import de.mfpl.api.lib.data.TripUpdate;
 import de.mfpl.app.R;
-import de.mfpl.app.adapters.AlertListAdapter;
-import de.mfpl.app.adapters.StopTimesAdapter;
 import de.mfpl.app.common.DateTimeFormat;
 import de.mfpl.app.common.SettingsManager;
 import de.mfpl.app.common.VectorIconFactory;
+import de.mfpl.app.controllers.TripDetailsActionController;
 import de.mfpl.app.database.ApplicationDatabase;
 import de.mfpl.app.database.Favorite;
 import de.mfpl.app.databinding.FragmentTripDetailsBinding;
 import de.mfpl.app.dialogs.ErrorDialog;
 import de.mfpl.app.listeners.OnFragmentInteractionListener;
+
+import static android.content.res.Configuration.ORIENTATION_PORTRAIT;
 
 public class TripDetailsFragment extends Fragment {
 
@@ -113,23 +111,32 @@ public class TripDetailsFragment extends Fragment {
         // determine if we've double pane or single pane layout
         // "hack around" - there seems to be no default value for databinding variables
         DisplayMetrics dm = this.getContext().getResources().getDisplayMetrics();
-        int dpWidth = (int) (dm.widthPixels / dm.density);
-        if(dpWidth > 600) {
+        int dpWidth, orientation = this.getContext().getResources().getConfiguration().orientation;
+
+        // calculate width depending on screen orientation - simply because the layout is loaded by the
+        // physical width of the screen, there's NO DIFFERENCE between land or port orientation,
+        // the layout is always loaded by the with in port mode!
+        // we need to find also the physical screen width to ensure that our list / map view
+        // will work correctly
+        if(orientation == ORIENTATION_PORTRAIT) {
+            dpWidth = (int) (dm.widthPixels / dm.density);
+        } else {
+            dpWidth = (int) (dm.heightPixels / dm.density);
+        }
+
+        if(dpWidth >= 600) {
             this.components.setDoublePane(true);
             this.components.setMapVisible(true);
         }
 
         // set action controller for trip details view
-        this.components.layoutSwipeRefresh.setOnRefreshListener(() -> loadTripDetails(currentTripId, currentTripDate));
+        this.components.tripDetailsHolder.setActionController(new TripDetailsActionController(this.getContext(), this.components.tripDetailsHolder));
+        //this.components.layoutSwipeRefresh.setOnRefreshListener(() -> loadTripDetails(currentTripId, currentTripDate));
+        this.components.tripDetailsHolder.getActionController().setOnRefreshListener(() -> loadTripDetails(currentTripId, currentTripDate));
 
         // initiate loading of trip times the first time
         if(this.resultTrip != null) {
             this.setTripDetails(this.resultTrip, this.resultTrip.getRoute().getRouteColor());
-            this.setTripDetailsAdapter(this.resultTrip, this.resultTrip.getRoute().getRouteColor());
-
-            if(this.resultTrip.getRealtime() != null && this.resultTrip.getRealtime().hasAlerts()) {
-                this.setAlertAdapter(this.resultTrip.getRealtime().getAlerts());
-            }
         } else {
             this.loadTripDetails(this.currentTripId, this.currentTripDate);
         }
@@ -276,54 +283,7 @@ public class TripDetailsFragment extends Fragment {
         } catch(Exception ignored) {
         }
 
-        String tripNameString = trip.getTripHeadsign();
-        if (trip.getTripShortName() != null && !trip.getTripShortName().equals("")) {
-            tripNameString = trip.getTripShortName() + " " + tripNameString;
-        }
-        this.components.lblTripName.setText(tripNameString);
-        this.components.lblTripName.setTextColor(routeColor);
-
-        // trip information text
-        if(trip.hasTripUpdate() && trip.getTripUpdate().getScheduleRelationship() == TripUpdate.ScheduleRelationship.CANCELED) {
-            this.components.layoutTripInformation.setVisibility(View.VISIBLE);
-            this.components.lblTripInformation.setText(R.string.str_trip_cancelled);
-        } else if(trip.hasTripUpdate() && trip.getTripUpdate().getScheduleRelationship() == TripUpdate.ScheduleRelationship.ADDED) {
-            this.components.layoutTripInformation.setVisibility(View.VISIBLE);
-            this.components.lblTripInformation.setText(R.string.str_trip_added);
-        } else {
-            int currentDateInt = Integer.parseInt(DateTimeFormat.from(new Date()).to(DateTimeFormat.YYYYMMDD));
-            if(currentDateInt >= Integer.parseInt(DateTimeFormat.from(this.currentTripDate).to(DateTimeFormat.YYYYMMDD))) {
-                Date lastArrivalTime = DateTimeFormat.from(trip.getStopTimes().get(trip.getStopTimes().size() - 1).getArrivalTime(), DateTimeFormat.HHMMSS).toDate();
-                if(lastArrivalTime.before(new Date())) {
-                    this.components.lblTripInformation.setVisibility(View.VISIBLE);
-                    this.components.lblTripInformation.setText(R.string.str_trip_already_departed);
-                } else {
-                    this.components.layoutTripInformation.setVisibility(View.GONE);
-                }
-            }
-        }
-
-        // wheelchair and bike information
-        this.components.layoutTripAccessibility.setVisibility(View.VISIBLE);
-        String wheelchairString = this.getString(R.string.str_trip_details_na);
-        String bikeString = this.getString(R.string.str_trip_details_na);
-
-        if(trip.getWheelchairAccessible() == Trip.WheelchairAccessible.NO) {
-            wheelchairString = this.getString(R.string.str_trip_details_wheelchair_no);
-            this.components.lblWheelchairAccess.setTextColor(Color.RED);
-        } else if(trip.getWheelchairAccessible() == Trip.WheelchairAccessible.YES) {
-            wheelchairString = this.getString(R.string.str_trip_details_wheelchair_yes);
-        }
-
-        if(trip.getBikesAllowed() == Trip.BikesAllowed.NO) {
-            bikeString = this.getString(R.string.str_trip_details_bikes_no);
-            this.components.lblBikesAllowed.setTextColor(Color.RED);
-        } else if(trip.getBikesAllowed() == Trip.BikesAllowed.YES) {
-            bikeString = this.getString(R.string.str_trip_details_bikes_yes);
-        }
-
-        this.components.lblWheelchairAccess.setText(wheelchairString);
-        this.components.lblBikesAllowed.setText(bikeString);
+        this.components.tripDetailsHolder.getActionController().displayTripDetails(trip, this.currentTripDate, routeColor);
     }
 
     private void setTripMapView(List<StopTime> stopTimeList, Shape tripShape, final String tripShapeColor) {
@@ -395,39 +355,6 @@ public class TripDetailsFragment extends Fragment {
 
             map.moveCamera(CameraUpdateFactory.newLatLngBounds(latLngBuilder.build(), (int) this.getResources().getDimension(R.dimen.map_boundary_padding)));
         });
-    }
-
-    private void setTripDetailsAdapter(Trip trip, String colorString) {
-        StopTimesAdapter stopTimesAdapter = new StopTimesAdapter(getContext(), trip);
-
-        // parse route color
-        int tripColor = ContextCompat.getColor(this.getContext(), R.color.colorAccentDAY);
-        try {
-            tripColor = Color.parseColor((!colorString.startsWith("#") ? "#" : "") + colorString);
-        } catch(Exception ignored) {
-        }
-
-        // display trip progress with colored line only when the trip is departing today
-        String currentDateString = DateTimeFormat.from(this.currentTripDate).to(DateTimeFormat.YYYYMMDD);
-        if(currentDateString.equals(DateTimeFormat.from(new Date()).to(DateTimeFormat.YYYYMMDD))) {
-            stopTimesAdapter.setLineActiveColor(tripColor);
-        } else {
-            stopTimesAdapter.setLineActiveColor(ContextCompat.getColor(this.getContext(), R.color.colorBackgroundDarkGray));
-        }
-
-        stopTimesAdapter.setPointActiveColor(tripColor);
-        stopTimesAdapter.setPointInactiveColor(tripColor);
-
-        LinearLayoutManager layoutManager = new LinearLayoutManager(this.getContext());
-        layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-        this.components.rcvTripDetails.setLayoutManager(layoutManager);
-        this.components.rcvTripDetails.setHasFixedSize(true);
-        this.components.rcvTripDetails.setAdapter(stopTimesAdapter);
-    }
-
-    private void setAlertAdapter(List<Alert> alertList) {
-        AlertListAdapter alertListAdapter = new AlertListAdapter(getContext(), alertList);
-        this.components.lstTripAlerts.setAdapter(alertListAdapter);
     }
 
     private void showNetworkErrorDialog(ErrorDialog.OnRetryClickListener retryListener) {
@@ -522,13 +449,13 @@ public class TripDetailsFragment extends Fragment {
         Request.Filter filter = new Request.Filter();
         filter.setDate(new Request.Filter.Date().fromJavaDate(tripDate));
         filter.setTime(this.currentTripTime);
-        
-        this.components.layoutSwipeRefresh.setRefreshing(true);
+
+        this.components.tripDetailsHolder.getActionController().setRefreshing(true);
         dataRequest.setListener(new DataRequest.Listener() {
             @Override
             public void onSuccess(Delivery delivery, double duration) {
                 // stop displaying refresh progress bar
-                components.layoutSwipeRefresh.setRefreshing(false);
+                components.tripDetailsHolder.getActionController().setRefreshing(false);
 
                 // check for api errors
                 if (delivery.getError() != null) {
@@ -544,20 +471,8 @@ public class TripDetailsFragment extends Fragment {
 
                 resultTrip = tripList.get(0);
 
-                // display trip details view
-                components.layoutTripDetailsView.setVisibility(View.VISIBLE);
-                components.layoutTripDetailsError.setVisibility(View.GONE);
-
                 // display basic trip information
                 setTripDetails(resultTrip, resultTrip.getRoute().getRouteColor());
-
-                // create trip timeline here...
-                setTripDetailsAdapter(resultTrip, resultTrip.getRoute().getRouteColor());
-
-                // display trip assigned alerts
-                if (resultTrip.getRealtime().hasAlerts()) {
-                    setAlertAdapter(resultTrip.getRealtime().getAlerts());
-                }
 
                 // display trip map view if we're in double pane mode
                 if(components.getDoublePane()) {
@@ -568,7 +483,7 @@ public class TripDetailsFragment extends Fragment {
             @Override
             public void onError(Throwable throwable, double duration) {
                 // stop displaying refresh progress bar and display trip error view
-                components.layoutSwipeRefresh.setRefreshing(false);
+                components.tripDetailsHolder.getActionController().setRefreshing(false);
 
                 showNetworkErrorDialog(() -> loadTripDetails(currentTripId, currentTripDate));
             }
