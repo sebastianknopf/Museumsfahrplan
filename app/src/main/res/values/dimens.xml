@@ -14,9 +14,15 @@
     <dimen name="icon_item_height">64dp</dimen>
 
     <!-- FAB Menu -->
+    <!--<dimen name="fab_menu_level_1">88dp</dimen>
+    <dimen name="fab_menu_level_2">152dp</dimen>
+    <dimen name="fab_menu_level_3">216dp</dimen>-->
+
+    <dimen name="fab_menu_standard_base">56dp</dimen>
+    <dimen name="fab_menu_bottomsheet_base">280dp</dimen>
     <dimen name="fab_menu_level_1">88dp</dimen>
     <dimen name="fab_menu_level_2">152dp</dimen>
-    <dimen name="fab_menu_level_3">216dp</dimen>
+    <dimen name="fab_menu_level_3">216dp</dimen>-->
 
     <!-- MapView -->
     <dimen name="map_polyline_width">2dp</dimen>

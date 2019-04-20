@@ -18,7 +18,130 @@
         android:layout_height="match_parent"
         tools:context="de.mfpl.app.fragments.TripDetailsFragment">
 
-        <android.support.constraint.ConstraintLayout
+        <android.support.design.widget.CoordinatorLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <com.mapbox.mapboxsdk.maps.MapView
+                android:id="@+id/mapView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                mapbox:mapbox_cameraTargetLat="51.1657"
+                mapbox:mapbox_cameraTargetLng="10.4515"
+                mapbox:mapbox_cameraZoom="5.15"
+                mapbox:mapbox_cameraZoomMax="15"
+                mapbox:mapbox_cameraZoomMin="5"
+                mapbox:mapbox_styleUrl="mapbox://styles/sebastianknopf/cjp042n58ati52so77w931alz"
+                mapbox:mapbox_uiRotateGestures="false" />
+
+            <LinearLayout
+                android:id="@+id/tripDetailsBottomSheet"
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#fff"
+                app:layout_behavior="android.support.design.widget.BottomSheetBehavior"
+                app:behavior_hideable="false"
+                app:behavior_peekHeight="300dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                        <ImageButton
+                            android:id="@+id/btnToggle"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="top|center"
+                            android:layout_marginTop="@dimen/default_app_space"
+                            android:background="@null"
+                            android:src="@drawable/ic_arrow_up"
+                            android:onClick="@{fragment::btnToggleClick}" />
+
+                    </LinearLayout>
+
+                    <include
+                        android:id="@+id/tripDetailsHolder"
+                        layout="@layout/layout_trip_details" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <View
+                android:id="@+id/viewFabBackground"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="#50000000"
+                android:visibility="gone"
+                android:alpha="0"
+                android:onClick="@{fragment::viewFabBackgroundClick}" />
+
+            <android.support.design.widget.FloatingActionButton
+                android:id="@+id/fabFareInfo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="23dp"
+                android:layout_marginBottom="@dimen/fab_menu_bottomsheet_base"
+                android:layout_gravity="bottom|end"
+                android:src="@drawable/ic_menu_ticket"
+                android:tint="@android:color/white"
+                android:onClick="@{fragment::fabFareInfoClick}"
+                android:rotation="90"
+                android:alpha="0"
+                android:visibility="gone"
+                app:fabSize="mini"/>
+
+            <android.support.design.widget.FloatingActionButton
+                android:id="@+id/fabMapView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="23dp"
+                android:layout_marginBottom="@dimen/fab_menu_bottomsheet_base"
+                android:layout_gravity="bottom|end"
+                android:src="@drawable/ic_menu_map"
+                android:tint="@android:color/white"
+                android:onClick="@{fragment::fabMapViewClick}"
+                android:rotation="90"
+                android:alpha="0"
+                android:visibility="gone"
+                app:fabSize="mini"/>
+
+            <android.support.design.widget.FloatingActionButton
+                android:id="@+id/fabAddFavorite"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="23dp"
+                android:layout_marginBottom="@dimen/fab_menu_bottomsheet_base"
+                android:layout_gravity="bottom|end"
+                android:src="@drawable/ic_menu_favorites"
+                android:tint="@android:color/white"
+                android:onClick="@{fragment::fabAddFavoriteClick}"
+                android:rotation="90"
+                android:alpha="0"
+                android:visibility="gone"
+                app:fabSize="mini" />
+
+            <android.support.design.widget.FloatingActionButton
+                android:id="@+id/fabMenu"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/default_app_space"
+                android:src="@drawable/ic_menu_plus"
+                android:tint="@android:color/white"
+                android:onClick="@{fragment::fabMenuClick}"
+                app:layout_anchor="@id/tripDetailsBottomSheet"
+                app:layout_anchorGravity="top|end"/>
+
+        </android.support.design.widget.CoordinatorLayout>
+
+        <!--<android.support.constraint.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
@@ -55,69 +178,7 @@
 
             </RelativeLayout>
 
-        </android.support.constraint.ConstraintLayout>
-
-        <View
-            android:id="@+id/viewFabBackground"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="#50000000"
-            android:visibility="gone"
-            android:alpha="0"
-            android:onClick="@{fragment::viewFabBackgroundClick}" />
-
-        <android.support.design.widget.FloatingActionButton
-            android:id="@+id/fabFareInfo"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="23dp"
-            android:layout_marginBottom="56dp"
-            android:layout_gravity="bottom|end"
-            android:src="@drawable/ic_menu_ticket"
-            android:tint="@android:color/white"
-            android:onClick="@{fragment::fabFareInfoClick}"
-            android:rotation="90"
-            android:visibility="gone"
-            app:fabSize="mini"/>
-
-        <android.support.design.widget.FloatingActionButton
-            android:id="@+id/fabMapView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="23dp"
-            android:layout_marginBottom="56dp"
-            android:layout_gravity="bottom|end"
-            android:src="@drawable/ic_menu_map"
-            android:tint="@android:color/white"
-            android:onClick="@{fragment::fabMapViewClick}"
-            android:rotation="90"
-            android:visibility="gone"
-            app:fabSize="mini"/>
-
-        <android.support.design.widget.FloatingActionButton
-            android:id="@+id/fabAddFavorite"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="23dp"
-            android:layout_marginBottom="56dp"
-            android:layout_gravity="bottom|end"
-            android:src="@drawable/ic_menu_favorites"
-            android:tint="@android:color/white"
-            android:onClick="@{fragment::fabAddFavoriteClick}"
-            android:rotation="90"
-            android:visibility="gone"
-            app:fabSize="mini" />
-
-        <android.support.design.widget.FloatingActionButton
-            android:id="@+id/fabMenu"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="@dimen/default_app_space"
-            android:layout_marginBottom="56dp"
-            android:layout_gravity="bottom|end"
-            android:src="@drawable/ic_menu_plus"
-            android:tint="@android:color/white"
-            android:onClick="@{fragment::fabMenuClick}" />
+        </android.support.constraint.ConstraintLayout>-->
 
     </FrameLayout>
 

@@ -7,7 +7,9 @@ import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.StringRes;
+import android.support.design.widget.BottomSheetBehavior;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
@@ -16,6 +18,7 @@ import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 
 import com.mapbox.mapboxsdk.annotations.Icon;
 import com.mapbox.mapboxsdk.annotations.IconFactory;
@@ -64,6 +67,7 @@ public class TripDetailsFragment extends Fragment {
 
     private FragmentTripDetailsBinding components;
     private OnFragmentInteractionListener fragmentInteractionListener;
+    private BottomSheetBehavior bottomSheetBehavior;
 
     private String currentTripId;
     private Date currentTripDate;
@@ -127,11 +131,33 @@ public class TripDetailsFragment extends Fragment {
         if(dpWidth >= 600) {
             this.components.setDoublePane(true);
             this.components.setMapVisible(true);
+
+            if(orientation == ORIENTATION_PORTRAIT) {
+                // setup bottom sheet behaviour
+                this.bottomSheetBehavior = BottomSheetBehavior.from(this.components.tripDetailsBottomSheet);
+                this.bottomSheetBehavior.setBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {
+                    @Override
+                    public void onStateChanged(@NonNull View view, int newState) {
+                        ImageButton toggleButton = components.btnToggle;
+                        if(newState == BottomSheetBehavior.STATE_EXPANDED) {
+                            toggleButton.setImageDrawable(getResources().getDrawable(R.drawable.ic_arrow_down));
+                        } else {
+                            toggleButton.setImageDrawable(getResources().getDrawable(R.drawable.ic_arrow_up));
+                        }
+
+                        hideFabMenu();
+                    }
+
+                    @Override
+                    public void onSlide(@NonNull View view, float v) {
+                        hideFabMenu();
+                    }
+                });
+            }
         }
 
         // set action controller for trip details view
         this.components.tripDetailsHolder.setActionController(new TripDetailsActionController(this.getContext(), this.components.tripDetailsHolder));
-        //this.components.layoutSwipeRefresh.setOnRefreshListener(() -> loadTripDetails(currentTripId, currentTripDate));
         this.components.tripDetailsHolder.getActionController().setOnRefreshListener(() -> loadTripDetails(currentTripId, currentTripDate));
 
         // initiate loading of trip times the first time
@@ -271,6 +297,15 @@ public class TripDetailsFragment extends Fragment {
         }).show();
     }
 
+    public void btnToggleClick(View view) {
+        int currentState = bottomSheetBehavior.getState();
+        if(currentState == BottomSheetBehavior.STATE_EXPANDED) {
+            this.bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+        } else {
+            this.bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
+        }
+    }
+
     private void setTripDetails(Trip trip, String colorString) {
         // parse route color
         int routeColor = ContextCompat.getColor(this.getContext(), R.color.colorAccentDAY);
@@ -398,14 +433,14 @@ public class TripDetailsFragment extends Fragment {
             // todo: enable fare information here if available
             /*if(resultTrip.getFareInfo() != null) {
                 this.components.fabFareInfo.show();
-                this.components.fabFareInfo.animate().translationY(-this.getResources().getDimension(R.dimen.fab_menu_level_3)).rotation(0f);
+                this.components.fabFareInfo.animate().translationY(-this.getResources().getDimension(R.dimen.fab_menu_level_3)).rotation(0f).alpha(1f);
             }*/
 
             this.components.fabMapView.show();
-            this.components.fabMapView.animate().translationY(-this.getResources().getDimension(R.dimen.fab_menu_level_2)).rotation(0f);
+            this.components.fabMapView.animate().translationY(-this.getResources().getDimension(R.dimen.fab_menu_level_2)).rotation(0f).alpha(1f);
 
             this.components.fabAddFavorite.show();
-            this.components.fabAddFavorite.animate().translationY(-this.getResources().getDimension(R.dimen.fab_menu_level_1)).rotation(0f);
+            this.components.fabAddFavorite.animate().translationY(-this.getResources().getDimension(R.dimen.fab_menu_level_1)).rotation(0f).alpha(1f);
         }
     }
 
@@ -414,9 +449,9 @@ public class TripDetailsFragment extends Fragment {
 
         this.components.viewFabBackground.animate().alpha(0f);
 
-        this.components.fabAddFavorite.animate().translationY(0f).rotation(90f);
-        this.components.fabMapView.animate().translationY(0f).rotation(90f);
-        this.components.fabFareInfo.animate().translationY(0f).rotation(90f).setListener(new Animator.AnimatorListener() {
+        this.components.fabAddFavorite.animate().translationY(0f).rotation(90f).alpha(0f);
+        this.components.fabMapView.animate().translationY(0f).rotation(90f).alpha(0f);
+        this.components.fabFareInfo.animate().translationY(0f).rotation(90f).alpha(0f).setListener(new Animator.AnimatorListener() {
             @Override
             public void onAnimationStart(Animator animation) {
             }
